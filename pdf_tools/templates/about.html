@@ -1,0 +1,526 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About SmallPDF.us - PDF Tools & Converters{% endblock %}
+
+{% block meta %}
+<meta name="description" content="Learn about SmallPDF.us, the trusted platform for PDF processing used by millions worldwide. Discover our powerful PDF tools, security features, and commitment to simplifying document workflows.">
+<meta name="keywords" content="pdf tools, pdf converter, pdf editor, pdf compression, merge pdf, split pdf, pdf to word, pdf to jpg">
+<meta name="robots" content="index, follow">
+<meta name="author" content="SmallPDF.us">
+
+<!-- Open Graph Meta Tags -->
+<meta property="og:title" content="About SmallPDF.us - PDF Tools & Converters">
+<meta property="og:description" content="Learn about SmallPDF.us, the trusted platform for PDF processing used by millions worldwide.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://smallpdf.us/about">
+<meta property="og:image" content="{% static 'images/about-og-image.jpg' %}">
+<meta property="og:site_name" content="SmallPDF.us">
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  :root {
+    --primary-color: #4361ee;
+    --primary-dark: #3a0ca3;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1e293b;
+    --gray-900: #0f172a;
+  }
+
+  .hero-section {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 3rem 0;
+    text-align: center;
+  }
+
+  .section {
+    padding: 3rem 0;
+  }
+
+  .section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--gray-900);
+  }
+
+  .section-subtitle {
+    font-size: 1.1rem;
+    color: var(--gray-600);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .tool-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--gray-200);
+    transition: all 0.2s ease;
+  }
+
+  .tool-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+
+  .tool-icon {
+    width: 50px;
+    height: 50px;
+    background: rgba(67, 97, 238, 0.1);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+  }
+
+  .tool-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--gray-900);
+  }
+
+  .tool-description {
+    color: var(--gray-600);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .stats-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    margin: 2rem 0;
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+
+  .stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+  }
+
+  .feature-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .feature-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(67, 97, 238, 0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--primary-color);
+  }
+
+  .feature-content h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--gray-800);
+  }
+
+  .feature-content p {
+    color: var(--gray-600);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .cta-section {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 3rem 0;
+    text-align: center;
+  }
+
+  .cta-button {
+    background: white;
+    color: var(--primary-color);
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-block;
+    margin-top: 1rem;
+    transition: all 0.2s ease;
+  }
+
+  .cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    .section {
+      padding: 2rem 0;
+    }
+    
+    .section-title {
+      font-size: 1.75rem;
+    }
+    
+    .stats-container {
+      gap: 1rem;
+    }
+    
+    .stat-number {
+      font-size: 2rem;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container mx-auto px-4">
+    <h1 class="text-3xl md:text-4xl font-bold mb-3">About SmallPDF.us</h1>
+    <p class="text-lg max-w-2xl mx-auto mb-6 opacity-90">
+      The complete PDF solution trusted by millions worldwide for fast, secure document processing
+    </p>
+    
+    <div class="stats-container">
+      <div class="stat-item">
+        <div class="stat-number">15+</div>
+        <div class="stat-label">PDF Tools</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">200M+</div>
+        <div class="stat-label">Files Processed</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">185+</div>
+        <div class="stat-label">Countries Served</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">99.9%</div>
+        <div class="stat-label">Uptime</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Our Tools Section -->
+<section class="section">
+  <div class="container mx-auto px-4">
+    <h2 class="section-title text-center">Our PDF Tools</h2>
+    <p class="section-subtitle text-center max-w-3xl mx-auto">
+      SmallPDF.us offers a comprehensive suite of PDF tools designed to handle all your document needs with speed, security, and simplicity.
+    </p>
+    
+    <div class="tools-grid">
+      <div class="tool-card">
+        <div class="tool-icon">
+          <i data-lucide="file-text"></i>
+        </div>
+        <h3 class="tool-title">PDF to Word</h3>
+        <p class="tool-description">
+          Convert PDF documents to editable Word files with industry-leading accuracy. Preserves formatting, images, and tables for perfect results.
+        </p>
+      </div>
+      
+      <div class="tool-card">
+        <div class="tool-icon">
+          <i data-lucide="image"></i>
+        </div>
+        <h3 class="tool-title">JPG to PDF</h3>
+        <p class="tool-description">
+          Transform JPG images into professional PDF documents. Perfect for creating photo albums, scanning documents, or preserving images.
+        </p>
+      </div>
+      
+      <div class="tool-card">
+        <div class="tool-icon">
+          <i data-lucide="code"></i>
+        </div>
+        <h3 class="tool-title">HTML to PDF</h3>
+        <p class="tool-description">
+          Convert HTML code or web pages to PDF documents with perfect rendering. Ideal for saving web content, reports, or creating documentation.
+        </p>
+      </div>
+      
+      <div class="tool-card">
+        <div class="tool-icon">
+          <i data-lucide="merge"></i>
+        </div>
+        <h3 class="tool-title">Merge PDF</h3>
+        <p class="tool-description">
+          Combine multiple PDF files into a single document. Arrange pages in any order and create organized, professional documents.
+        </p>
+      </div>
+      
+      <div class="tool-card">
+        <div class="tool-icon">
+          <i data-lucide="scissors"></i>
+        </div>
+        <h3 class="tool-title">Split PDF</h3>
+        <p class="tool-description">
+          Extract specific pages or split large PDFs into smaller documents. Perfect for sharing specific sections or reducing file size.
+        </p>
+      </div>
+      
+      <div class="tool-card">
+        <div class="tool-icon">
+          <i data-lucide="minimize-2"></i>
+        </div>
+        <h3 class="tool-title">Compress PDF</h3>
+        <p class="tool-description">
+          Reduce PDF file size while maintaining quality. Our smart compression algorithms ensure optimal balance between size and clarity.
+        </p>
+      </div>
+      
+      <div class="tool-card">
+        <div class="tool-icon">
+          <i data-lucide="table"></i>
+        </div>
+        <h3 class="tool-title">PDF to Excel</h3>
+        <p class="tool-description">
+          Extract tables from PDF documents into editable Excel spreadsheets. Preserves rows, columns, and data formatting.
+        </p>
+      </div>
+      
+      <div class="tool-card">
+        <div class="tool-icon">
+          <i data-lucide="lock"></i>
+        </div>
+        <h3 class="tool-title">Protect PDF</h3>
+        <p class="tool-description">
+          Secure your PDF documents with password protection and encryption. Control who can view, edit, or print your sensitive information.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Why Choose Us Section -->
+<section class="section bg-gray-50">
+  <div class="container mx-auto px-4">
+    <h2 class="section-title text-center">Why Choose SmallPDF.us</h2>
+    <p class="section-subtitle text-center max-w-3xl mx-auto">
+      We've built our platform with your needs in mind, focusing on security, speed, and ease of use.
+    </p>
+    
+    <div class="feature-list">
+      <div class="feature-item">
+        <div class="feature-icon">
+          <i data-lucide="shield"></i>
+        </div>
+        <div class="feature-content">
+          <h3>Bank-Level Security</h3>
+          <p>Your documents are protected with 256-bit SSL encryption. We automatically delete all files after processing to ensure complete privacy.</p>
+        </div>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">
+          <i data-lucide="zap"></i>
+        </div>
+        <div class="feature-content">
+          <h3>Lightning-Fast Processing</h3>
+          <p>Our optimized cloud infrastructure processes files in seconds, not minutes. Convert, merge, or compress PDFs with minimal waiting time.</p>
+        </div>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">
+          <i data-lucide="check-circle"></i>
+        </div>
+        <div class="feature-content">
+          <h3>Superior Accuracy</h3>
+          <p>Industry-leading 98%+ formatting retention rate with advanced conversion algorithms that preserve layouts, fonts, and images.</p>
+        </div>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">
+          <i data-lucide="monitor"></i>
+        </div>
+        <div class="feature-content">
+          <h3>Cross-Platform Compatible</h3>
+          <p>Works seamlessly on Windows, Mac, Linux, iOS, and Android devices. Access your PDF tools from any browser, anywhere.</p>
+        </div>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">
+          <i data-lucide="user-x"></i>
+        </div>
+        <div class="feature-content">
+          <h3>No Registration Required</h3>
+          <p>Start using our tools immediately without creating an account or providing personal information. Quick, easy, and hassle-free.</p>
+        </div>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">
+          <i data-lucide="clock"></i>
+        </div>
+        <div class="feature-content">
+          <h3>24/7 Availability</h3>
+          <p>Our services are available around the clock with 99.9% uptime guarantee. Process your documents whenever you need to.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="section">
+  <div class="container mx-auto px-4">
+    <h2 class="section-title text-center">How Our PDF Tools Work</h2>
+    <p class="section-subtitle text-center max-w-3xl mx-auto">
+      SmallPDF.us makes document processing simple with just a few clicks
+    </p>
+    
+    <div class="grid md:grid-cols-3 gap-8 mt-8">
+      <div class="text-center">
+        <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4" style="background-color: rgba(67, 97, 238, 0.1);">
+          <span class="text-2xl font-bold" style="color: var(--primary-color);">1</span>
+        </div>
+        <h3 class="text-xl font-semibold mb-3">Upload Your File</h3>
+        <p class="text-gray-600">
+          Simply drag and drop your PDF or other document into the tool of your choice. Our system accepts files up to 100MB.
+        </p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4" style="background-color: rgba(67, 97, 238, 0.1);">
+          <span class="text-2xl font-bold" style="color: var(--primary-color);">2</span>
+        </div>
+        <h3 class="text-xl font-semibold mb-3">Process Instantly</h3>
+        <p class="text-gray-600">
+          Our advanced algorithms process your document in seconds. Convert, compress, merge, or edit with professional-grade accuracy.
+        </p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4" style="background-color: rgba(67, 97, 238, 0.1);">
+          <span class="text-2xl font-bold" style="color: var(--primary-color);">3</span>
+        </div>
+        <h3 class="text-xl font-semibold mb-3">Download Result</h3>
+        <p class="text-gray-600">
+          Download your processed document immediately. Your files are automatically deleted after processing for complete privacy.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Advanced Features Section -->
+<section class="section bg-gray-50">
+  <div class="container mx-auto px-4">
+    <h2 class="section-title text-center">Advanced PDF Features</h2>
+    <p class="section-subtitle text-center max-w-3xl mx-auto">
+      Discover the powerful capabilities that make SmallPDF.us the preferred choice for professionals
+    </p>
+    
+    <div class="grid md:grid-cols-2 gap-8 mt-8">
+      <div class="bg-white p-6 rounded-lg shadow-sm">
+        <h3 class="text-xl font-semibold mb-3">OCR Technology</h3>
+        <p class="text-gray-600 mb-4">
+          Our Optical Character Recognition technology converts scanned documents into searchable, editable text. Extract content from images and make your PDFs fully searchable.
+        </p>
+        <ul class="list-disc pl-5 text-gray-600 space-y-2">
+          <li>Supports 30+ languages</li>
+          <li>98% text recognition accuracy</li>
+          <li>Preserves original document layout</li>
+        </ul>
+      </div>
+      
+      <div class="bg-white p-6 rounded-lg shadow-sm">
+        <h3 class="text-xl font-semibold mb-3">Electronic Signatures</h3>
+        <p class="text-gray-600 mb-4">
+          Sign documents electronically with legally binding signatures. Request signatures from others and track document status in real-time.
+        </p>
+        <ul class="list-disc pl-5 text-gray-600 space-y-2">
+          <li>Legally compliant in most countries</li>
+          <li>Multiple signature types supported</li>
+          <li>Secure authentication process</li>
+        </ul>
+      </div>
+      
+      <div class="bg-white p-6 rounded-lg shadow-sm">
+        <h3 class="text-xl font-semibold mb-3">Batch Processing</h3>
+        <p class="text-gray-600 mb-4">
+          Process multiple files simultaneously with our batch processing feature. Convert, compress, or protect dozens of documents in one operation.
+        </p>
+        <ul class="list-disc pl-5 text-gray-600 space-y-2">
+          <li>Process up to 50 files at once</li>
+          <li>Consistent settings across all documents</li>
+          <li>Bulk download as ZIP archive</li>
+        </ul>
+      </div>
+      
+      <div class="bg-white p-6 rounded-lg shadow-sm">
+        <h3 class="text-xl font-semibold mb-3">Smart PDF Editing</h3>
+        <p class="text-gray-600 mb-4">
+          Edit PDF content directly without converting to other formats. Add, delete, or modify text, images, and pages with precision.
+        </p>
+        <ul class="list-disc pl-5 text-gray-600 space-y-2">
+          <li>In-place text editing</li>
+          <li>Image insertion and manipulation</li>
+          <li>Page reorganization and rotation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+  <div class="container mx-auto px-4">
+    <h2 class="text-2xl md:text-3xl font-bold mb-3">Ready to Transform Your Documents?</h2>
+    <p class="text-lg max-w-2xl mx-auto mb-4 opacity-90">
+      Join millions of users who trust SmallPDF.us for their document processing needs.
+    </p>
+    <a href="{% url 'all_tools' %}" class="cta-button">
+      Explore Our PDF Tools
+    </a>
+  </div>
+</section>
+
+<!-- Lucide Icons Script -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<script>
+  lucide.createIcons();
+</script>
+{% endblock %}

@@ -1,0 +1,437 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Privacy Policy - SmallPDF.us{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-gradient-to-br from-blue-600 to-purple-600 py-16 text-white">
+    <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Privacy Policy</h1>
+            <p class="text-xl opacity-90 mb-6">Your privacy is our priority. Learn how we protect and handle your data.</p>
+            <div class="text-sm opacity-75">
+                <span>Last updated: {% now "F d, Y" %}</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Privacy Policy Content -->
+<section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 md:p-12">
+                
+                <!-- Introduction -->
+                <div class="mb-12">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-6">Our Commitment to Your Privacy</h2>
+                    <p class="text-lg text-gray-600 leading-relaxed mb-6">
+                        At SmallPDF.us, we are committed to protecting your privacy and ensuring the security of your personal information. 
+                        This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website 
+                        and use our PDF processing services.
+                    </p>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-lg">
+                        <p class="text-blue-800 font-semibold mb-2">🔒 Your Data, Your Control</p>
+                        <p class="text-blue-700">
+                            We believe in transparency and give you full control over your data. We never sell your personal information 
+                            to third parties and automatically delete your uploaded files after processing.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Information We Collect -->
+                <div class="mb-12">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Information We Collect</h2>
+                    
+                    <div class="space-y-8">
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">📄 Files You Upload</h3>
+                            <ul class="space-y-2 text-gray-600">
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2 mt-1">•</span>
+                                    <span>PDF files and other documents you upload for processing</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2 mt-1">•</span>
+                                    <span>Metadata associated with uploaded files (file size, type, creation date)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2 mt-1">•</span>
+                                    <span>Processing preferences and settings you select</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">🌐 Automatically Collected Information</h3>
+                            <ul class="space-y-2 text-gray-600">
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2 mt-1">•</span>
+                                    <span>IP address and general location information</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2 mt-1">•</span>
+                                    <span>Browser type, version, and operating system</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2 mt-1">•</span>
+                                    <span>Pages visited, time spent on pages, and usage patterns</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2 mt-1">•</span>
+                                    <span>Referral source and search terms used to find our site</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">👤 Account Information (Optional)</h3>
+                            <ul class="space-y-2 text-gray-600">
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2 mt-1">•</span>
+                                    <span>Email address when you create an account</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2 mt-1">•</span>
+                                    <span>Profile preferences and settings</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2 mt-1">•</span>
+                                    <span>Subscription and billing information for premium services</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- How We Use Your Information -->
+                <div class="mb-12">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">How We Use Your Information</h2>
+                    
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="bg-gray-50 p-6 rounded-xl">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">🛠️ Service Provision</h3>
+                            <ul class="space-y-2 text-gray-600 text-sm">
+                                <li>• Process and convert your PDF files</li>
+                                <li>• Provide technical support and assistance</li>
+                                <li>• Maintain and improve our services</li>
+                                <li>• Remember your preferences and settings</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-gray-50 p-6 rounded-xl">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">📊 Analytics & Improvement</h3>
+                            <ul class="space-y-2 text-gray-600 text-sm">
+                                <li>• Analyze usage patterns and trends</li>
+                                <li>• Improve website performance and functionality</li>
+                                <li>• Develop new features and services</li>
+                                <li>• Monitor for security threats and fraud</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-gray-50 p-6 rounded-xl">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">📧 Communication</h3>
+                            <ul class="space-y-2 text-gray-600 text-sm">
+                                <li>• Send service-related notifications</li>
+                                <li>• Respond to your inquiries and support requests</li>
+                                <li>• Provide updates about our services (with consent)</li>
+                                <li>• Send security alerts when necessary</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-gray-50 p-6 rounded-xl">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">⚖️ Legal Compliance</h3>
+                            <ul class="space-y-2 text-gray-600 text-sm">
+                                <li>• Comply with applicable laws and regulations</li>
+                                <li>• Protect our rights and prevent misuse</li>
+                                <li>• Respond to legal requests and court orders</li>
+                                <li>• Ensure user safety and security</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Security -->
+                <div class="mb-12">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Data Security</h2>
+                    
+                    <div class="bg-gradient-to-r from-green-50 to-blue-50 p-8 rounded-xl border border-green-200">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-6">🔐 Bank-Level Security Measures</h3>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-semibold text-gray-800 mb-3">Encryption & Protection</h4>
+                                <ul class="space-y-2 text-gray-600 text-sm">
+                                    <li>• 256-bit SSL encryption for all data transmission</li>
+                                    <li>• Encrypted storage of all uploaded files</li>
+                                    <li>• Secure server infrastructure with regular updates</li>
+                                    <li>• Multi-layer firewall protection</li>
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-semibold text-gray-800 mb-3">Data Handling</h4>
+                                <ul class="space-y-2 text-gray-600 text-sm">
+                                    <li>• Automatic file deletion within 24 hours</li>
+                                    <li>• No human access to your uploaded content</li>
+                                    <li>• Regular security audits and penetration testing</li>
+                                    <li>• GDPR and CCPA compliant data practices</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- File Deletion Policy -->
+                <div class="mb-12">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">File Deletion Policy</h2>
+                    
+                    <div class="bg-red-50 border border-red-200 p-6 rounded-xl">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 w-8 h-8 bg-red-100 rounded-full flex items-center justify-center mr-4 mt-1">
+                                <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-red-800 mb-2">Automatic File Deletion</h3>
+                                <p class="text-red-700 mb-4">
+                                    All uploaded files are automatically and permanently deleted from our servers within 24 hours of processing. 
+                                    This ensures your sensitive documents never remain on our systems longer than necessary.
+                                </p>
+                                <ul class="space-y-1 text-red-700 text-sm">
+                                    <li>• Processed files: Deleted immediately after download</li>
+                                    <li>• Unprocessed files: Deleted after 24 hours of inactivity</li>
+                                    <li>• Temporary files: Deleted within 1 hour of creation</li>
+                                    <li>• Backup copies: No backup copies are retained</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cookies and Tracking -->
+                <div class="mb-12">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Cookies and Tracking Technologies</h2>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800 mb-3">🍪 Types of Cookies We Use</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full border-collapse border border-gray-300 rounded-lg">
+                                    <thead>
+                                        <tr class="bg-gray-50">
+                                            <th class="border border-gray-300 px-4 py-3 text-left font-semibold">Cookie Type</th>
+                                            <th class="border border-gray-300 px-4 py-3 text-left font-semibold">Purpose</th>
+                                            <th class="border border-gray-300 px-4 py-3 text-left font-semibold">Duration</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-sm">
+                                        <tr>
+                                            <td class="border border-gray-300 px-4 py-3 font-medium">Essential</td>
+                                            <td class="border border-gray-300 px-4 py-3">Website functionality and security</td>
+                                            <td class="border border-gray-300 px-4 py-3">Session/1 year</td>
+                                        </tr>
+                                        <tr class="bg-gray-50">
+                                            <td class="border border-gray-300 px-4 py-3 font-medium">Analytics</td>
+                                            <td class="border border-gray-300 px-4 py-3">Usage statistics and performance monitoring</td>
+                                            <td class="border border-gray-300 px-4 py-3">2 years</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border border-gray-300 px-4 py-3 font-medium">Preferences</td>
+                                            <td class="border border-gray-300 px-4 py-3">Remember your settings and preferences</td>
+                                            <td class="border border-gray-300 px-4 py-3">1 year</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-6 rounded-xl">
+                            <h4 class="font-semibold text-gray-800 mb-3">Cookie Management</h4>
+                            <p class="text-gray-600 mb-3">
+                                You can control and manage cookies through your browser settings. Please note that disabling 
+                                certain cookies may affect the functionality of our website.
+                            </p>
+                            <p class="text-sm text-gray-500">
+                                Most browsers allow you to view, manage, and delete cookies. Visit your browser's help section 
+                                for specific instructions on cookie management.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Third-Party Services -->
+                <div class="mb-12">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Third-Party Services</h2>
+                    
+                    <div class="space-y-6">
+                        <p class="text-gray-600">
+                            We use select third-party services to enhance our website functionality and analyze usage patterns. 
+                            These services have their own privacy policies and data handling practices.
+                        </p>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="border border-gray-200 p-6 rounded-xl">
+                                <h3 class="font-semibold text-gray-800 mb-3">📊 Analytics Services</h3>
+                                <ul class="space-y-2 text-gray-600 text-sm">
+                                    <li>• Google Analytics (anonymized data)</li>
+                                    <li>• Usage statistics and performance monitoring</li>
+                                    <li>• Geographic and demographic insights</li>
+                                    <li>• Website optimization data</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="border border-gray-200 p-6 rounded-xl">
+                                <h3 class="font-semibold text-gray-800 mb-3">🛡️ Security Services</h3>
+                                <ul class="space-y-2 text-gray-600 text-sm">
+                                    <li>• Cloudflare (DDoS protection and CDN)</li>
+                                    <li>• SSL certificate providers</li>
+                                    <li>• Fraud detection and prevention</li>
+                                    <li>• Content delivery network optimization</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Your Rights -->
+                <div class="mb-12">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Your Privacy Rights</h2>
+                    
+                    <div class="bg-blue-50 p-8 rounded-xl border border-blue-200">
+                        <p class="text-blue-800 mb-6">
+                            Under data protection laws like GDPR and CCPA, you have several rights regarding your personal information:
+                        </p>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="font-semibold text-blue-900 mb-3">Data Access & Control</h3>
+                                <ul class="space-y-2 text-blue-800 text-sm">
+                                    <li>• Access your personal data we hold</li>
+                                    <li>• Request correction of inaccurate data</li>
+                                    <li>• Request deletion of your data</li>
+                                    <li>• Data portability rights</li>
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h3 class="font-semibold text-blue-900 mb-3">Processing Control</h3>
+                                <ul class="space-y-2 text-blue-800 text-sm">
+                                    <li>• Object to data processing</li>
+                                    <li>• Restrict certain processing activities</li>
+                                    <li>• Withdraw consent at any time</li>
+                                    <li>• Lodge complaints with authorities</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 p-4 bg-blue-100 rounded-lg">
+                            <p class="text-blue-900 text-sm">
+                                <strong>To exercise your rights:</strong> Contact us at privacy@smallpdf.us with your request. 
+                                We will respond within 30 days and may require identity verification.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- International Data Transfers -->
+                <div class="mb-12">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">International Data Transfers</h2>
+                    <div class="bg-gray-50 p-6 rounded-xl">
+                        <p class="text-gray-600 mb-4">
+                            Our servers are located in secure data centers in the United States and European Union. 
+                            When you use our services, your data may be transferred to and processed in these locations.
+                        </p>
+                        <p class="text-gray-600 text-sm">
+                            We ensure all international data transfers comply with applicable data protection laws and 
+                            implement appropriate safeguards such as Standard Contractual Clauses (SCCs) approved by 
+                            the European Commission.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Data Retention -->
+                <div class="mb-12">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Data Retention</h2>
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-green-500 pl-6">
+                            <h3 class="font-semibold text-gray-800 mb-2">Uploaded Files</h3>
+                            <p class="text-gray-600 text-sm">Automatically deleted within 24 hours of processing</p>
+                        </div>
+                        <div class="border-l-4 border-blue-500 pl-6">
+                            <h3 class="font-semibold text-gray-800 mb-2">Account Information</h3>
+                            <p class="text-gray-600 text-sm">Retained while your account is active, deleted within 30 days of account closure</p>
+                        </div>
+                        <div class="border-l-4 border-yellow-500 pl-6">
+                            <h3 class="font-semibold text-gray-800 mb-2">Analytics Data</h3>
+                            <p class="text-gray-600 text-sm">Anonymized usage data retained for up to 2 years for service improvement</p>
+                        </div>
+                        <div class="border-l-4 border-purple-500 pl-6">
+                            <h3 class="font-semibold text-gray-800 mb-2">Legal Obligations</h3>
+                            <p class="text-gray-600 text-sm">Some data may be retained longer to comply with legal requirements</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Changes to Privacy Policy -->
+                <div class="mb-12">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Changes to This Privacy Policy</h2>
+                    <div class="bg-yellow-50 border border-yellow-200 p-6 rounded-xl">
+                        <p class="text-yellow-800 mb-4">
+                            We may update this Privacy Policy from time to time to reflect changes in our practices, 
+                            technology, legal requirements, or other factors.
+                        </p>
+                        <ul class="space-y-2 text-yellow-800 text-sm">
+                            <li>• We will notify you of any material changes via email or website notice</li>
+                            <li>• Changes become effective 30 days after posting unless otherwise specified</li>
+                            <li>• Continued use of our services constitutes acceptance of the updated policy</li>
+                            <li>• Previous versions are archived and available upon request</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Contact Us</h2>
+                    <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-8 rounded-xl border border-blue-200">
+                        <p class="text-gray-700 mb-6">
+                            If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, 
+                            please don't hesitate to contact us:
+                        </p>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="font-semibold text-gray-800 mb-3">General Inquiries</h3>
+                                <div class="space-y-2 text-gray-600 text-sm">
+                                    <p>📧 <strong>Email:</strong> privacy@smallpdf.us</p>
+                                    <p>🌐 <strong>Website:</strong> smallpdf.us/contact</p>
+                                    <p>📱 <strong>Response Time:</strong> Within 48 hours</p>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h3 class="font-semibold text-gray-800 mb-3">Data Protection Officer</h3>
+                                <div class="space-y-2 text-gray-600 text-sm">
+                                    <p>📧 <strong>Email:</strong> dpo@smallpdf.us</p>
+                                    <p>⚖️ <strong>GDPR Requests:</strong> gdpr@smallpdf.us</p>
+                                    <p>📞 <strong>Phone:</strong> Available upon request</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 p-4 bg-blue-100 rounded-lg">
+                            <p class="text-blue-900 text-sm">
+                                <strong>Note:</strong> For security reasons, we may require identity verification before processing 
+                                certain requests related to your personal data.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

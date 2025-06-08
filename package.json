@@ -1,0 +1,24 @@
+{
+  "name": "smallpdf",
+  "version": "1.0.0",
+  "description": "A PDF tools website with Tailwind CSS",
+  "main": "index.js",
+  "scripts": {
+    "build": "tailwindcss -i ./static/css/tailwind.css -o ./static/css/tailwind.output.css",
+    "watch": "tailwindcss -i ./static/css/tailwind.css -o ./static/css/tailwind.output.css --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "pdf",
+    "tools",
+    "django",
+    "tailwind"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.24",
+    "tailwindcss": "^3.3.2"
+  }
+}

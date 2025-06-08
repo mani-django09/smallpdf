@@ -1,0 +1,460 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}All PDF Tools - SmallPDF.us{% endblock %}
+
+{% block content %}
+<!-- Compact Hero Section -->
+<section class="relative py-12 bg-gradient-to-br from-blue-50 to-purple-50 overflow-hidden">
+    <div class="absolute inset-0">
+        <div class="absolute top-10 left-10 w-32 h-32 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-20"></div>
+        <div class="absolute top-20 right-20 w-32 h-32 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20"></div>
+    </div>
+    
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-3xl md:text-4xl font-bold mb-4 leading-tight">
+                <span class="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                    Complete PDF Toolkit
+                </span>
+            </h1>
+            <p class="text-lg text-gray-600 mb-6 leading-relaxed">
+                Everything you need to work with PDF files in one place. Convert, compress, merge, and transform your documents.
+            </p>
+            
+            <!-- Compact Search Bar -->
+            <div class="max-w-xl mx-auto mb-8">
+                <div class="relative">
+                    <input type="text" id="toolSearch" placeholder="Search tools..." 
+                           class="w-full px-4 py-3 text-base border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 shadow-md">
+                    <button class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-blue-500 to-purple-500 text-white p-2 rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Compact Tools Section -->
+<section class="py-12 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="max-w-7xl mx-auto">
+            <!-- Compact Category Tabs -->
+            <div class="flex flex-wrap justify-center gap-2 mb-8">
+                <button class="category-tab active px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg font-medium text-sm transition-all duration-300" data-category="all">
+                    All Tools
+                </button>
+                <button class="category-tab px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-200 transition-all duration-300" data-category="convert">
+                    Convert
+                </button>
+                <button class="category-tab px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-200 transition-all duration-300" data-category="compress">
+                    Compress
+                </button>
+                <button class="category-tab px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-200 transition-all duration-300" data-category="merge">
+                    Organize
+                </button>
+            </div>
+            
+            <!-- Compact Tools Grid -->
+            <div id="toolsGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                <!-- Merge PDF -->
+                <div class="tool-card group bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-100 overflow-hidden" data-category="merge" data-keywords="merge combine join">
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 bg-gradient-to-r from-red-100 to-red-50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                <svg class="w-5 h-5 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="2" width="9" height="9" rx="1"></rect>
+                                    <rect x="13" y="2" width="9" height="9" rx="1"></rect>
+                                    <rect x="2" y="13" width="9" height="9" rx="1"></rect>
+                                    <rect x="13" y="13" width="9" height="9" rx="1"></rect>
+                                </svg>
+                            </div>
+                            <span class="bg-red-100 text-red-600 text-xs font-bold px-1.5 py-0.5 rounded-full">HOT</span>
+                        </div>
+                        <h3 class="font-bold text-base text-gray-800 mb-2">Merge PDF</h3>
+                        <p class="text-gray-600 mb-3 text-xs leading-relaxed">Combine multiple PDFs into one document.</p>
+                        <a href="{% url 'merge_pdf' %}" class="block w-full text-center bg-gray-50 hover:bg-red-500 hover:text-white text-red-500 font-medium py-2 rounded-lg transition-all duration-300 text-sm">
+                            Merge PDFs
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Compress PDF -->
+                <div class="tool-card group bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-100 overflow-hidden" data-category="compress" data-keywords="compress reduce size optimize">
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 bg-gradient-to-r from-green-100 to-green-50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                <svg class="w-5 h-5 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                            </div>
+                            <span class="bg-green-100 text-green-600 text-xs font-bold px-1.5 py-0.5 rounded-full">HOT</span>
+                        </div>
+                        <h3 class="font-bold text-base text-gray-800 mb-2">Compress PDF</h3>
+                        <p class="text-gray-600 mb-3 text-xs leading-relaxed">Reduce PDF file size while maintaining quality.</p>
+                        <a href="{% url 'compress_pdf' %}" class="block w-full text-center bg-gray-50 hover:bg-green-500 hover:text-white text-green-500 font-medium py-2 rounded-lg transition-all duration-300 text-sm">
+                            Compress PDF
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- PDF to Word -->
+                <div class="tool-card group bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-100 overflow-hidden" data-category="convert" data-keywords="pdf word doc docx convert">
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 bg-gradient-to-r from-blue-100 to-blue-50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                <svg class="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                </svg>
+                            </div>
+                            <span class="bg-blue-100 text-blue-600 text-xs font-bold px-1.5 py-0.5 rounded-full">HOT</span>
+                        </div>
+                        <h3 class="font-bold text-base text-gray-800 mb-2">PDF to Word</h3>
+                        <p class="text-gray-600 mb-3 text-xs leading-relaxed">Convert PDFs to editable Word documents.</p>
+                        <a href="{% url 'pdf_to_word' %}" class="block w-full text-center bg-gray-50 hover:bg-blue-500 hover:text-white text-blue-500 font-medium py-2 rounded-lg transition-all duration-300 text-sm">
+                            Convert to Word
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Word to PDF -->
+                <div class="tool-card group bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-100 overflow-hidden" data-category="convert" data-keywords="word pdf doc docx convert">
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 bg-gradient-to-r from-indigo-100 to-indigo-50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                <svg class="w-5 h-5 text-indigo-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-base text-gray-800 mb-2">Word to PDF</h3>
+                        <p class="text-gray-600 mb-3 text-xs leading-relaxed">Convert Word documents to PDF format.</p>
+                        <a href="{% url 'word_to_pdf' %}" class="block w-full text-center bg-gray-50 hover:bg-indigo-500 hover:text-white text-indigo-500 font-medium py-2 rounded-lg transition-all duration-300 text-sm">
+                            Convert to PDF
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- PDF to JPG -->
+                <div class="tool-card group bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-100 overflow-hidden" data-category="convert" data-keywords="pdf jpg jpeg image convert">
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 bg-gradient-to-r from-yellow-100 to-orange-50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                <svg class="w-5 h-5 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-base text-gray-800 mb-2">PDF to JPG</h3>
+                        <p class="text-gray-600 mb-3 text-xs leading-relaxed">Convert PDF pages to JPG images.</p>
+                        <a href="{% url 'pdf_to_jpg' %}" class="block w-full text-center bg-gray-50 hover:bg-yellow-500 hover:text-white text-yellow-500 font-medium py-2 rounded-lg transition-all duration-300 text-sm">
+                            Convert to JPG
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- JPG to PDF -->
+                <div class="tool-card group bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-100 overflow-hidden" data-category="convert" data-keywords="jpg pdf jpeg image convert">
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 bg-gradient-to-r from-purple-100 to-purple-50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                <svg class="w-5 h-5 text-purple-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-base text-gray-800 mb-2">JPG to PDF</h3>
+                        <p class="text-gray-600 mb-3 text-xs leading-relaxed">Convert JPG images to PDF documents.</p>
+                        <a href="{% url 'jpg_to_pdf' %}" class="block w-full text-center bg-gray-50 hover:bg-purple-500 hover:text-white text-purple-500 font-medium py-2 rounded-lg transition-all duration-300 text-sm">
+                            Convert to PDF
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Compress Image -->
+                <div class="tool-card group bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-100 overflow-hidden relative" data-category="compress" data-keywords="compress image jpg png optimize">
+                    <div class="absolute top-2 right-2">
+                        <span class="bg-gradient-to-r from-pink-500 to-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">NEW</span>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 bg-gradient-to-r from-pink-100 to-pink-50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                <svg class="w-5 h-5 text-pink-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-base text-gray-800 mb-2">Compress Image</h3>
+                        <p class="text-gray-600 mb-3 text-xs leading-relaxed">Optimize images without quality loss.</p>
+                        <a href="{% url 'compress_image' %}" class="block w-full text-center bg-gray-50 hover:bg-pink-500 hover:text-white text-pink-500 font-medium py-2 rounded-lg transition-all duration-300 text-sm">
+                            Compress Images
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Split PDF -->
+                <div class="tool-card group bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-100 overflow-hidden" data-category="merge" data-keywords="split separate divide pages">
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 bg-gradient-to-r from-orange-100 to-orange-50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                <svg class="w-5 h-5 text-orange-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="8" y1="13" x2="16" y2="13"></line>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-base text-gray-800 mb-2">Split PDF</h3>
+                        <p class="text-gray-600 mb-3 text-xs leading-relaxed">Extract pages or split PDF into multiple files.</p>
+                        <a href="#" class="block w-full text-center bg-gray-50 hover:bg-orange-500 hover:text-white text-orange-500 font-medium py-2 rounded-lg transition-all duration-300 text-sm">
+                            Split PDF
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Rotate PDF -->
+                <div class="tool-card group bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-100 overflow-hidden" data-category="merge" data-keywords="rotate turn flip pages">
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 bg-gradient-to-r from-teal-100 to-teal-50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                <svg class="w-5 h-5 text-teal-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-base text-gray-800 mb-2">Rotate PDF</h3>
+                        <p class="text-gray-600 mb-3 text-xs leading-relaxed">Rotate PDF pages to correct orientation.</p>
+                        <a href="#" class="block w-full text-center bg-gray-50 hover:bg-teal-500 hover:text-white text-teal-500 font-medium py-2 rounded-lg transition-all duration-300 text-sm">
+                            Rotate PDF
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- No Results Message -->
+            <div id="noResults" class="hidden text-center py-12">
+                <div class="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.47-.881-6.08-2.33"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">No tools found</h3>
+                <p class="text-gray-600">Try adjusting your search terms or browse all categories.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Compact FAQ Section -->
+<section class="py-12 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <div class="max-w-3xl mx-auto">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+                    Frequently Asked Questions
+                </h2>
+                <p class="text-lg text-gray-600">Quick answers about our PDF tools</p>
+            </div>
+            
+            <div class="space-y-3">
+                <!-- FAQ Item 1 -->
+                <div class="faq-item bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="faq-question p-6 cursor-pointer flex justify-between items-center hover:bg-gray-50 transition-colors duration-300">
+                        <h3 class="font-semibold text-gray-800 text-lg">Are all these tools completely free to use?</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transition-transform duration-300" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="faq-answer px-6 pb-6 hidden">
+                        <p class="text-gray-600 leading-relaxed">Yes, all our essential PDF tools are completely free to use with no hidden costs. You can process files up to 100MB without any limitations. We also offer premium features for users who need larger file support and advanced capabilities.</p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 2 -->
+                <div class="faq-item bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="faq-question p-6 cursor-pointer flex justify-between items-center hover:bg-gray-50 transition-colors duration-300">
+                        <h3 class="font-semibold text-gray-800 text-lg">How secure are my files when using these tools?</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transition-transform duration-300" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="faq-answer px-6 pb-6 hidden">
+                        <p class="text-gray-600 leading-relaxed">Your files are protected with bank-level 256-bit SSL encryption during transmission and processing. All uploaded files are automatically deleted from our servers within hours of processing. We never store, share, or access your documents.</p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 3 -->
+                <div class="faq-item bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="faq-question p-6 cursor-pointer flex justify-between items-center hover:bg-gray-50 transition-colors duration-300">
+                        <h3 class="font-semibold text-gray-800 text-lg">What's the maximum file size I can upload?</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transition-transform duration-300" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="faq-answer px-6 pb-6 hidden">
+                        <p class="text-gray-600 leading-relaxed">Free users can upload files up to 100MB in size. Premium subscribers enjoy higher limits up to 2GB per file, allowing you to work with large documents, presentations, and high-resolution images without restrictions.</p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 4 -->
+                <div class="faq-item bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="faq-question p-6 cursor-pointer flex justify-between items-center hover:bg-gray-50 transition-colors duration-300">
+                        <h3 class="font-semibold text-gray-800 text-lg">Do I need to install any software?</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transition-transform duration-300" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="faq-answer px-6 pb-6 hidden">
+                        <p class="text-gray-600 leading-relaxed">No installation required! All our tools work directly in your web browser. Simply upload your file, process it online, and download the result. This works on any device with an internet connection - desktop, tablet, or mobile.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Compact Call to Action -->
+<section class="py-12 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 text-white relative overflow-hidden">
+    <div class="absolute inset-0 bg-black opacity-10"></div>
+    <div class="container mx-auto px-4 text-center relative z-10">
+        <h2 class="text-2xl md:text-3xl font-bold mb-4">
+            Ready to Start?
+        </h2>
+        <p class="text-lg opacity-90 mb-6 max-w-2xl mx-auto leading-relaxed">
+            Choose any tool above and start processing your PDF files instantly. No registration required!
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
+            <a href="#toolsGrid" class="group relative overflow-hidden bg-white text-blue-600 hover:text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                <span class="relative z-10">Browse All Tools</span>
+                <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </a>
+            <div class="flex items-center space-x-3 text-white/90 text-sm">
+                <div class="flex items-center space-x-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>100% Free</span>
+                </div>
+                <div class="flex items-center space-x-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>No Registration</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Compact JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('toolSearch');
+    const toolCards = document.querySelectorAll('.tool-card');
+    const noResults = document.getElementById('noResults');
+    const categoryTabs = document.querySelectorAll('.category-tab');
+    
+    let activeCategory = 'all';
+    
+    function filterTools() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        let visibleCount = 0;
+        
+        toolCards.forEach(card => {
+            const keywords = card.dataset.keywords.toLowerCase();
+            const title = card.querySelector('h3').textContent.toLowerCase();
+            const description = card.querySelector('p').textContent.toLowerCase();
+            const category = card.dataset.category;
+            
+            const matchesSearch = !searchTerm || 
+                keywords.includes(searchTerm) || 
+                title.includes(searchTerm) || 
+                description.includes(searchTerm);
+            
+            const matchesCategory = activeCategory === 'all' || category === activeCategory;
+            
+            if (matchesSearch && matchesCategory) {
+                card.style.display = 'block';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+        
+        noResults.classList.toggle('hidden', visibleCount > 0);
+    }
+    
+    categoryTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            categoryTabs.forEach(t => {
+                t.classList.remove('active', 'bg-gradient-to-r', 'from-blue-500', 'to-purple-500', 'text-white');
+                t.classList.add('bg-gray-100', 'text-gray-700');
+            });
+            
+            this.classList.add('active', 'bg-gradient-to-r', 'from-blue-500', 'to-purple-500', 'text-white');
+            this.classList.remove('bg-gray-100', 'text-gray-700');
+            
+            activeCategory = this.dataset.category;
+            filterTools();
+        });
+    });
+    
+    searchInput.addEventListener('input', filterTools);
+    
+    // FAQ functionality
+    const faqItems = document.querySelectorAll('.faq-item');
+    
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        const answer = item.querySelector('.faq-answer');
+        const icon = question.querySelector('svg');
+        
+        question.addEventListener('click', () => {
+            const isActive = item.classList.contains('active');
+            
+            faqItems.forEach(otherItem => {
+                if (otherItem !== item && otherItem.classList.contains('active')) {
+                    otherItem.classList.remove('active');
+                    otherItem.querySelector('.faq-answer').classList.add('hidden');
+                    otherItem.querySelector('svg').style.transform = 'rotate(0)';
+                }
+            });
+            
+            if (isActive) {
+                item.classList.remove('active');
+                answer.classList.add('hidden');
+                icon.style.transform = 'rotate(0)';
+            } else {
+                item.classList.add('active');
+                answer.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        });
+    });
+    
+    // Smooth scroll
+    document.querySelector('a[href="#toolsGrid"]').addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('toolsGrid').scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    });
+});
+</script>
+
+{% endblock %}

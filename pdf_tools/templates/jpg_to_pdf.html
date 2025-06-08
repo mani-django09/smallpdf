@@ -1,0 +1,2178 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}JPG to PDF Converter - Free Online Image to PDF Tool | SmallPDF.us{% endblock %}
+
+{% block meta %}
+<meta name="description" content="Convert JPG to PDF online free with SmallPDF.us - the best JPG to PDF converter. Merge JPG to PDF, combine multiple images into one PDF. Fast, secure, and professional results.">
+<meta name="keywords" content="jpg to pdf, convert jpg to pdf, jpg to pdf converter, merge jpg to pdf, combine jpg to pdf, small pdf, image to pdf, online pdf converter, smallpdf.us">
+<meta name="robots" content="index, follow">
+<meta name="author" content="SmallPDF.us">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Open Graph Meta Tags -->
+<meta property="og:title" content="JPG to PDF Converter - Convert JPG to PDF Online Free | SmallPDF.us">
+<meta property="og:description" content="Best JPG to PDF converter online. Merge JPG to PDF, combine multiple images. Free, fast, and secure conversion with SmallPDF.us">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://smallpdf.us/jpg-to-pdf">
+<meta property="og:image" content="{% static 'images/jpg-to-pdf-converter.jpg' %}">
+<meta property="og:site_name" content="SmallPDF.us">
+
+<!-- Twitter Card Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="JPG to PDF Converter - Convert JPG to PDF Free | SmallPDF.us">
+<meta name="twitter:description" content="Professional JPG to PDF converter. Merge and combine JPG to PDF online with SmallPDF.us">
+<meta name="twitter:image" content="{% static 'images/jpg-to-pdf-converter.jpg' %}">
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "JPG to PDF Converter - SmallPDF.us",
+  "description": "Free online JPG to PDF converter to convert, merge, and combine JPG images to PDF documents",
+  "url": "https://smallpdf.us/jpg-to-pdf",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Convert JPG to PDF online free",
+    "Merge JPG to PDF documents", 
+    "Combine multiple JPG images to PDF",
+    "Batch JPG to PDF conversion",
+    "Real-time PDF preview",
+    "Custom page sizes and orientations"
+  ],
+  "provider": {
+    "@type": "Organization",
+    "name": "SmallPDF.us",
+    "url": "https://smallpdf.us"
+  }
+}
+</script>
+
+<!-- Preload critical resources -->
+<link rel="preload" href="{% static 'css/converter.css' %}" as="style">
+<link rel="preload" href="{% static 'js/pdf-lib.min.js' %}" as="script">
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Performance optimized CSS with critical path optimization */
+    :root {
+        --primary-color: #4361ee;
+        --primary-dark: #3a0ca3;
+        --success-color: #10b981;
+        --error-color: #ef4444;
+        --gray-50: #f8fafc;
+        --gray-100: #f1f5f9;
+        --gray-200: #e2e8f0;
+        --gray-300: #cbd5e1;
+        --gray-400: #94a3b8;
+        --gray-500: #64748b;
+        --gray-600: #475569;
+        --gray-700: #334155;
+        --gray-800: #1e293b;
+        --gray-900: #0f172a;
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+    }
+
+    /* Optimized base styles */
+    * {
+        box-sizing: border-box;
+    }
+
+    .main-wrapper {
+        min-height: 100vh;
+        background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-200) 100%);
+        padding: 1rem;
+    }
+    
+    .converter-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 16px;
+        box-shadow: var(--shadow-xl);
+        overflow: hidden;
+        border: 1px solid var(--gray-200);
+    }
+
+    /* Compact header */
+    .tool-header {
+        text-align: center;
+        padding: 1.5rem 1rem;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        color: white;
+        position: relative;
+    }
+    
+    .tool-header h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        line-height: 1.2;
+    }
+    
+    .tool-header p {
+        opacity: 0.9;
+        font-size: 0.95rem;
+        margin: 0;
+        line-height: 1.4;
+    }
+
+    /* Compact content area */
+    .content-area {
+        padding: 1rem;
+    }
+
+    /* Optimized upload area */
+    .upload-area {
+        border: 2px dashed var(--gray-300);
+        border-radius: 12px;
+        padding: 2rem 1rem;
+        text-align: center;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        background: var(--gray-50);
+        margin-bottom: 1rem;
+    }
+    
+    .upload-area:hover, .upload-area.dragover {
+        border-color: var(--primary-color);
+        background: #f0f5ff;
+        transform: translateY(-1px);
+    }
+    
+    .upload-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(67, 97, 238, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        transition: transform 0.2s ease;
+    }
+    
+    .upload-area:hover .upload-icon {
+        transform: scale(1.05);
+    }
+    
+    .upload-icon svg {
+        width: 30px;
+        height: 30px;
+        color: var(--primary-color);
+    }
+
+    .upload-text h3 {
+        font-size: 1.2rem;
+        color: var(--gray-800);
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+    }
+    
+    .upload-text p {
+        color: var(--gray-600);
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+    
+    .upload-btn {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+    }
+    
+    .upload-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+    }
+
+    /* Compact file preview */
+    .file-container {
+        display: none;
+    }
+
+    .file-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.75rem;
+    }
+
+    .file-header h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--gray-800);
+        margin: 0;
+    }
+
+    .add-more-btn {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+        background: var(--gray-100);
+        border: 1px solid var(--gray-300);
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .add-more-btn:hover {
+        background: var(--gray-200);
+    }
+
+    .file-preview-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        max-height: 200px;
+        overflow-y: auto;
+        padding: 0.5rem;
+        background: var(--gray-50);
+        border-radius: 8px;
+        border: 1px solid var(--gray-200);
+    }
+
+    .file-preview-item {
+        background: white;
+        border-radius: 6px;
+        padding: 0.5rem;
+        text-align: center;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.2s ease;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .file-preview-item:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .preview-image {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        border-radius: 4px;
+        margin: 0 auto 0.4rem;
+        display: block;
+        background: var(--gray-100);
+    }
+
+    .file-name {
+        font-size: 0.7rem;
+        font-weight: 500;
+        color: var(--gray-700);
+        margin-bottom: 0.2rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .file-size {
+        font-size: 0.65rem;
+        color: var(--gray-500);
+    }
+
+    .remove-btn {
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        width: 18px;
+        height: 18px;
+        background: var(--error-color);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        font-size: 0.7rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+
+    .remove-btn:hover {
+        background: #dc2626;
+        transform: scale(1.1);
+    }
+
+    /* Real PDF Preview Area - Enhanced */
+    .pdf-preview-section {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: var(--gray-50);
+        border-radius: 8px;
+        border: 1px solid var(--gray-200);
+    }
+
+    .pdf-preview-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.75rem;
+    }
+
+    .pdf-preview-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--gray-800);
+        margin: 0;
+    }
+
+    .pdf-preview-container {
+        background: white;
+        border-radius: 6px;
+        padding: 1rem;
+        box-shadow: var(--shadow-sm);
+        min-height: 150px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Real PDF Canvas Preview */
+    .pdf-canvas-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+        max-height: 140px;
+        overflow-y: auto;
+        padding: 0.5rem;
+        width: 100%;
+    }
+
+    .pdf-page-canvas {
+        border: 1px solid var(--gray-300);
+        border-radius: 4px;
+        box-shadow: var(--shadow-sm);
+        background: white;
+        max-width: 100px;
+        height: auto;
+        transition: transform 0.2s ease;
+    }
+
+    .pdf-page-canvas:hover {
+        transform: scale(1.05);
+        box-shadow: var(--shadow-md);
+    }
+
+    /* Compact options */
+    .options-section {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 0.75rem;
+        margin: 1rem 0;
+        padding: 1rem;
+        background: var(--gray-50);
+        border-radius: 8px;
+        border: 1px solid var(--gray-200);
+    }
+
+    .option-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .option-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--gray-700);
+        margin-bottom: 0.3rem;
+    }
+
+    .option-select {
+        padding: 0.5rem;
+        border: 1px solid var(--gray-300);
+        border-radius: 6px;
+        font-size: 0.8rem;
+        background: white;
+        transition: all 0.2s ease;
+    }
+
+    .option-select:focus {
+        border-color: var(--primary-color);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    }
+
+    /* Compact action buttons */
+    .action-buttons {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+
+    .action-btn {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+    }
+
+    .secondary-btn {
+        background: white;
+        border: 2px solid var(--gray-300);
+        color: var(--gray-600);
+    }
+
+    .secondary-btn:hover {
+        background: var(--gray-50);
+        color: var(--gray-700);
+        border-color: var(--gray-400);
+    }
+
+    .primary-btn {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: white;
+        border: none;
+        box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+    }
+
+    .primary-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+    }
+
+    .primary-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* Optimized loading overlay */
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(4px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+
+    .loading-content {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem 1.5rem;
+        text-align: center;
+        min-width: 280px;
+        box-shadow: var(--shadow-xl);
+        animation: slideInUp 0.3s ease-out;
+    }
+
+    @keyframes slideInUp {
+        from {
+            transform: translateY(50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .loader {
+        width: 40px;
+        height: 40px;
+        position: relative;
+        margin: 0 auto 1rem;
+    }
+
+    .loader::before {
+        content: '';
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 3px solid var(--gray-200);
+        border-top: 3px solid var(--primary-color);
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .loading-progress {
+        width: 100%;
+        height: 4px;
+        background: var(--gray-200);
+        border-radius: 2px;
+        margin: 0.75rem 0;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        width: 0%;
+        height: 100%;
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        border-radius: 2px;
+        transition: width 0.3s ease;
+    }
+
+    /* Compact result section */
+    .pdf-result-section {
+        display: none;
+        margin-top: 1rem;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        border-radius: 12px;
+        border: 2px solid #0ea5e9;
+        animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .pdf-result-header {
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .pdf-result-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .success-icon {
+        width: 24px;
+        height: 24px;
+        background: var(--success-color);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: bounceIn 0.5s ease-out;
+    }
+
+    @keyframes bounceIn {
+        0% { transform: scale(0); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+
+    .pdf-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+        background: rgba(255, 255, 255, 0.7);
+        border-radius: 6px;
+    }
+
+    .pdf-info-item {
+        text-align: center;
+    }
+
+    .pdf-info-label {
+        font-size: 0.7rem;
+        color: var(--gray-600);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .pdf-info-value {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-top: 0.2rem;
+    }
+
+    .download-section {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: center;
+    }
+
+    .download-btn {
+        background: linear-gradient(135deg, var(--success-color), #059669);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .download-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    /* Messages */
+    .message {
+        padding: 0.75rem 1rem;
+        border-radius: 6px;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+        animation: slideIn 0.3s ease;
+    }
+
+    .message-error {
+        background: #fef2f2;
+        color: #dc2626;
+        border-left: 3px solid #dc2626;
+    }
+
+    .message-success {
+        background: #f0fdf4;
+        color: #16a34a;
+        border-left: 3px solid #16a34a;
+    }
+
+    .message-icon {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+    }
+
+    /* Content sections */
+    .content-section {
+        padding: 3rem 1rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-bottom: 0.75rem;
+        line-height: 1.2;
+    }
+
+    .section-subtitle {
+        font-size: 1.1rem;
+        color: var(--gray-600);
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.5;
+    }
+
+    /* Instructions grid */
+    .instructions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .instruction-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: var(--shadow-md);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        text-align: center;
+        border: 1px solid var(--gray-200);
+    }
+
+    .instruction-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .instruction-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(67, 97, 238, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+    }
+
+    .instruction-icon svg {
+        width: 28px;
+        height: 28px;
+        color: var(--primary-color);
+    }
+
+    .instruction-card h3 {
+        font-size: 1.2rem;
+        color: var(--gray-900);
+        margin-bottom: 0.75rem;
+        font-weight: 600;
+    }
+
+    .instruction-card p {
+        color: var(--gray-600);
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    /* Features grid */
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .feature-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: var(--shadow-md);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        text-align: center;
+        border: 1px solid var(--gray-200);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .feature-card::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .feature-card:hover::after {
+        transform: scaleX(1);
+    }
+
+    .feature-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(67, 97, 238, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        transition: all 0.2s ease;
+    }
+
+    .feature-card:hover .feature-icon {
+        background: rgba(67, 97, 238, 0.15);
+        transform: scale(1.05);
+    }
+
+    .feature-icon svg {
+        width: 28px;
+        height: 28px;
+        color: var(--primary-color);
+    }
+
+    .feature-card h3 {
+        font-size: 1.2rem;
+        color: var(--gray-900);
+        margin-bottom: 0.75rem;
+        font-weight: 600;
+    }
+
+    .feature-card p {
+        color: var(--gray-600);
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    /* FAQ Section */
+    .faq-container {
+        max-width: 800px;
+        margin: 2rem auto 0;
+    }
+
+    .faq-item {
+        border-bottom: 1px solid var(--gray-200);
+        margin-bottom: 0.75rem;
+    }
+
+    .faq-question {
+        font-size: 1rem;
+        color: var(--gray-900);
+        font-weight: 600;
+        padding: 1rem 0;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: color 0.2s ease;
+    }
+
+    .faq-question:hover {
+        color: var(--primary-color);
+    }
+
+    .faq-question svg {
+        width: 16px;
+        height: 16px;
+        color: var(--gray-500);
+        transition: transform 0.2s ease;
+    }
+
+    .faq-item.active .faq-question svg {
+        transform: rotate(180deg);
+    }
+
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease, padding 0.3s ease;
+        padding: 0;
+    }
+
+    .faq-item.active .faq-answer {
+        max-height: 300px;
+        padding-bottom: 1rem;
+    }
+
+    .faq-answer p {
+        color: var(--gray-600);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 0.75rem;
+    }
+
+    /* SEO Content */
+    .seo-content {
+        background: var(--gray-50);
+        padding: 3rem 1rem;
+        border-top: 1px solid var(--gray-200);
+    }
+
+    .seo-content h2 {
+        font-size: 1.8rem;
+        color: var(--gray-900);
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+
+    .seo-content h3 {
+        font-size: 1.4rem;
+        color: var(--gray-900);
+        margin: 2rem 0 1rem;
+        font-weight: 600;
+    }
+
+    .seo-content p {
+        color: var(--gray-700);
+        font-size: 1rem;
+        line-height: 1.7;
+        margin-bottom: 1rem;
+    }
+
+    .seo-content ul, .seo-content ol {
+        margin-left: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .seo-content li {
+        color: var(--gray-700);
+        margin-bottom: 0.5rem;
+        line-height: 1.6;
+    }
+
+    /* CTA Section */
+    .cta-section {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: white;
+        text-align: center;
+        padding: 2rem 1rem;
+    }
+
+    .cta-section h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+    }
+
+    .cta-section p {
+        margin-bottom: 1.5rem;
+        opacity: 0.9;
+    }
+
+    .cta-btn {
+        background: white;
+        color: var(--primary-dark);
+        font-weight: 600;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        display: inline-block;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .cta-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+        .main-wrapper {
+            padding: 0.5rem;
+        }
+        
+        .tool-header {
+            padding: 1rem 0.75rem;
+        }
+        
+        .tool-header h1 {
+            font-size: 1.5rem;
+        }
+        
+        .tool-header p {
+            font-size: 0.85rem;
+        }
+        
+        .content-area {
+            padding: 0.75rem;
+        }
+        
+        .upload-area {
+            padding: 1.5rem 0.75rem;
+        }
+        
+        .upload-icon {
+            width: 50px;
+            height: 50px;
+        }
+        
+        .upload-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .upload-text h3 {
+            font-size: 1.1rem;
+        }
+        
+        .upload-text p {
+            font-size: 0.85rem;
+        }
+        
+        .file-preview-grid {
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 0.4rem;
+            max-height: 160px;
+        }
+        
+        .preview-image {
+            width: 60px;
+            height: 60px;
+        }
+        
+        .options-section {
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            padding: 0.75rem;
+        }
+        
+        .action-buttons, .download-section {
+            flex-direction: column;
+        }
+        
+        .pdf-result-section {
+            padding: 1rem;
+        }
+        
+        .pdf-info {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .content-section {
+            padding: 2rem 0.75rem;
+        }
+        
+        .section-title {
+            font-size: 1.6rem;
+        }
+        
+        .section-subtitle {
+            font-size: 1rem;
+        }
+        
+        .instructions-grid, .features-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        
+        .instruction-card, .feature-card {
+            padding: 1.25rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .tool-header h1 {
+            font-size: 1.3rem;
+        }
+        
+        .upload-area {
+            padding: 1rem 0.5rem;
+        }
+        
+        .file-preview-grid {
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+        }
+        
+        .preview-image {
+            width: 50px;
+            height: 50px;
+        }
+        
+        .options-section {
+            grid-template-columns: 1fr;
+        }
+        
+        .section-title {
+            font-size: 1.4rem;
+        }
+    }
+
+    /* Performance optimizations */
+    .file-input {
+        display: none;
+    }
+
+    /* Lazy loading optimization */
+    .lazy-load {
+        display: block; /* Ensure lazy-loaded images are initially hidden */
+        opacity: 0;
+        transition: opacity 0.5s ease; /* Smooth fade-in */
+    }
+
+    .lazy-load.loaded {
+        opacity: 1;
+    }
+
+    /* Critical CSS loaded, non-critical styles can be loaded async */
+    .non-critical {
+        /* Styles that can be loaded after initial render */
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="main-wrapper">
+    <div class="converter-container">
+        <!-- Header -->
+        <div class="tool-header">
+            <h1>JPG to PDF Converter - SmallPDF.us</h1>
+            <p>Convert JPG to PDF online free. Merge and combine multiple JPG images into professional PDF documents</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content-area">
+            <!-- Upload Area -->
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                </div>
+                <div class="upload-text">
+                    <h3>Upload Images</h3>
+                    <p>Drag & drop or click to browse<br>JPG, PNG, GIF, BMP, WebP supported</p>
+                    <button class="upload-btn" id="selectFileBtn">Select Images</button>
+                </div>
+                <input type="file" id="fileInput" class="file-input" accept=".jpg,.jpeg,.png,.gif,.bmp,.webp,image/*" multiple>
+            </div>
+
+            <!-- File Preview Container -->
+            <div class="file-container" id="fileContainer">
+                <div class="file-header">
+                    <h3>Selected Images</h3>
+                    <button class="add-more-btn" id="addMoreBtn">
+                        <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Add More
+                    </button>
+                </div>
+
+                <!-- File Preview Grid -->
+                <div class="file-preview-grid" id="filePreviewGrid">
+                    <!-- Files will be populated here -->
+                </div>
+
+                
+
+                <!-- Options Section -->
+                <div class="options-section">
+                    <div class="option-group">
+                        <label class="option-label" for="pageSize">Page Size</label>
+                        <select class="option-select" id="pageSize">
+                            <option value="auto">Auto</option>
+                            <option value="a4" selected>A4</option>
+                            <option value="letter">Letter</option>
+                            <option value="a3">A3</option>
+                            <option value="a5">A5</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label class="option-label" for="orientation">Orientation</label>
+                        <select class="option-select" id="orientation">
+                            <option value="auto">Auto</option>
+                            <option value="portrait">Portrait</option>
+                            <option value="landscape">Landscape</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label class="option-label" for="margin">Margin</label>
+                        <select class="option-select" id="margin">
+                            <option value="none">None</option>
+                            <option value="small">Small</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="large">Large</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label class="option-label" for="quality">Quality</label>
+                        <select class="option-select" id="quality">
+                            <option value="high" selected>High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label class="option-label" for="combineOption">Output</label>
+                        <select class="option-select" id="combineOption">
+                            <option value="single" selected>Single PDF</option>
+                            <option value="separate">Separate PDFs</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="action-btn secondary-btn" id="clearBtn">
+                        <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                        Clear All
+                    </button>
+                    <button class="action-btn primary-btn" id="convertBtn">
+                        <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        Convert to PDF
+                    </button>
+                </div>
+            </div>
+
+            <!-- PDF Result Section -->
+            <div class="pdf-result-section" id="pdfResultSection">
+                <div class="pdf-result-header">
+                    <h2 class="pdf-result-title">
+                        <div class="success-icon">
+                            <svg style="width: 14px; height: 14px; color: white;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        PDF Created Successfully!
+                    </h2>
+                    <p style="color: #64748b; font-size: 0.9rem; margin: 0;">Your images have been converted to PDF</p>
+                </div>
+
+                <div class="pdf-info" id="pdfInfo">
+                    <div class="pdf-info-item">
+                        <div class="pdf-info-label">Pages</div>
+                        <div class="pdf-info-value" id="totalPages">-</div>
+                    </div>
+                    <div class="pdf-info-item">
+                        <div class="pdf-info-label">Size</div>
+                        <div class="pdf-info-value" id="fileSize">-</div>
+                    </div>
+                    <div class="pdf-info-item">
+                        <div class="pdf-info-label">Format</div>
+                        <div class="pdf-info-value" id="pageFormat">-</div>
+                    </div>
+                    <div class="pdf-info-item">
+                        <div class="pdf-info-label">Quality</div>
+                        <div class="pdf-info-value" id="qualityInfo">-</div>
+                    </div>
+                </div>
+
+                <div class="download-section">
+                    <button class="download-btn" id="downloadPdfBtn">
+                        <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        Download PDF
+                    </button>
+                    <button class="action-btn secondary-btn" id="startOverBtn">
+                        <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        Convert More
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-content">
+        <div class="loader"></div>
+        <h3 style="font-size: 1.1rem; font-weight: 600; color: #1e293b; margin-bottom: 0.5rem;">Converting to PDF...</h3>
+        <p style="color: #64748b; margin-bottom: 1rem; font-size: 0.9rem;">Processing your images</p>
+        <div class="loading-progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <p style="font-size: 0.8rem; color: #64748b; margin: 0.5rem 0 0;" id="loadingStatus">Preparing...</p>
+    </div>
+</div>
+
+<!-- Instructions Section -->
+<section class="content-section" style="background: white;">
+    <div class="section-header">
+        <h2 class="section-title">How to Convert JPG to PDF with SmallPDF.us</h2>
+        <p class="section-subtitle">Learn how to convert JPG to PDF, merge JPG files, and combine multiple images into one PDF document using our professional JPG to PDF converter</p>
+    </div>
+    
+    <div class="instructions-grid">
+        <div class="instruction-card">
+            <div class="instruction-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+            </div>
+            <h3>1. Upload JPG Images</h3>
+            <p>Select your JPG files to convert to PDF using our SmallPDF.us converter. You can upload multiple JPG images to merge into one PDF or create separate PDF files for each image.</p>
+        </div>
+        
+        <div class="instruction-card">
+            <div class="instruction-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+            </div>
+            <h3>2. Configure JPG to PDF Settings</h3>
+            <p>Customize your JPG to PDF conversion with our advanced options. Choose to merge JPG to PDF as a single document or combine JPG files into separate PDFs with custom page sizes and quality settings.</p>
+        </div>
+        
+        <div class="instruction-card">
+            <div class="instruction-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+            </div>
+            <h3>3. Download Your PDF</h3>
+            <p>Complete your JPG to PDF conversion and download your professional PDF document. SmallPDF.us ensures high-quality results whether you convert single JPG to PDF or merge multiple images.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="content-section" style="background: #f8fafc;">
+    <div class="section-header">
+        <h2 class="section-title">Why SmallPDF.us is the Best JPG to PDF Converter</h2>
+        <p class="section-subtitle">Discover why millions choose SmallPDF.us to convert JPG to PDF, merge images, and combine JPG files into professional PDF documents</p>
+    </div>
+    
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+            </div>
+            <h3>Real-time JPG to PDF Preview</h3>
+            <p>See exactly how your JPG to PDF conversion will look with SmallPDF.us real-time preview. Watch as your JPG images transform into professional PDF pages before conversion.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+            </div>
+            <h3>Merge JPG to PDF Easily</h3>
+            <p>Combine multiple JPG images into one PDF document with SmallPDF.us. Our JPG to PDF converter makes it simple to merge JPG files while maintaining image quality and proper formatting.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                </svg>
+            </div>
+            <h3>Batch JPG to PDF Conversion</h3>
+            <p>Convert multiple JPG files to PDF simultaneously with SmallPDF.us batch processing. Upload up to 20 JPG images and choose to combine JPG to PDF or create individual PDF files.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+            </div>
+            <h3>Secure JPG to PDF Processing</h3>
+            <p>SmallPDF.us protects your privacy during JPG to PDF conversion. All uploaded JPG files are encrypted and automatically deleted after processing, ensuring your images remain secure.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+            </div>
+            <h3>Fast JPG to PDF Conversion</h3>
+            <p>Experience lightning-fast JPG to PDF conversion with SmallPDF.us. Our optimized servers process your JPG images and create PDF documents in seconds, not minutes.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                </svg>
+            </div>
+            <h3>Free JPG to PDF Converter</h3>
+            <p>Convert JPG to PDF completely free with SmallPDF.us. No hidden costs, no watermarks, no registration required. Enjoy unlimited JPG to PDF conversions at no charge.</p>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="content-section" style="background: white;">
+    <div class="section-header">
+        <h2 class="section-title">JPG to PDF Converter FAQ - SmallPDF.us</h2>
+        <p class="section-subtitle">Get answers to common questions about converting JPG to PDF, merging images, and using SmallPDF.us</p>
+    </div>
+    
+    <div class="faq-container">
+        <div class="faq-item">
+            <div class="faq-question">
+                How do I convert JPG to PDF online free with SmallPDF.us?
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="faq-answer">
+                <p>To convert JPG to PDF with SmallPDF.us, simply upload your JPG files using our free JPG to PDF converter above. Choose your preferred settings, then click "Convert to PDF". Your JPG to PDF conversion will be completed in seconds, and you can download your PDF document immediately.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                Can I merge JPG to PDF and combine multiple images with SmallPDF.us?
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="faq-answer">
+                <p>Yes! SmallPDF.us makes it easy to merge JPG to PDF. Upload multiple JPG images and select "Single PDF" to combine JPG files into one PDF document. You can also choose "Separate PDFs" to convert each JPG to its own PDF file.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                What makes SmallPDF.us the best JPG to PDF converter?
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="faq-answer">
+                <p>SmallPDF.us offers the most advanced JPG to PDF converter with real-time preview, batch processing to merge JPG to PDF, custom page sizes, and professional quality output. Our small PDF files maintain high image quality while being optimized for sharing and storage.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                Is SmallPDF.us JPG to PDF converter secure and private?
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="faq-answer">
+                <p>Absolutely. SmallPDF.us uses SSL encryption for all JPG to PDF conversions. Your JPG files are automatically deleted after processing, and we never access or store your images. Convert JPG to PDF with complete confidence in your privacy and security.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                How many JPG files can I convert to PDF at once with SmallPDF.us?
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="faq-answer">
+                <p>You can upload up to 20 JPG images at once with SmallPDF.us. Each JPG file can be up to 10MB. This allows you to efficiently merge JPG to PDF or combine multiple JPG files into professional PDF documents in a single conversion process.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                Does SmallPDF.us create small PDF files from JPG images?
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="faq-answer">
+                <p>Yes! SmallPDF.us optimizes your JPG to PDF conversion to create small PDF files without compromising image quality. Our smart compression technology ensures your PDF documents are perfectly sized for sharing, emailing, and storage while maintaining professional appearance.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SEO Content Section -->
+<section class="seo-content">
+    <div class="content-section">
+        <h2>SmallPDF.us - The Ultimate JPG to PDF Converter Online</h2>
+        <p>SmallPDF.us is the leading online platform to <strong>convert JPG to PDF</strong> with professional results. Our advanced <strong>JPG to PDF converter</strong> allows you to effortlessly <strong>merge JPG to PDF</strong> documents, <strong>combine JPG files</strong>, and create <strong>small PDF</strong> files optimized for any purpose. Whether you need to convert a single JPG image or merge multiple JPG files into one PDF, SmallPDF.us delivers exceptional quality and speed.</p>
+        
+        <h3>Why Choose SmallPDF.us for JPG to PDF Conversion?</h3>
+        <p>When you need to <strong>convert JPG to PDF</strong>, SmallPDF.us stands out as the premier choice among online converters. Our <strong>JPG to PDF converter</strong> combines cutting-edge technology with user-friendly design to deliver superior results. Here's what makes SmallPDF.us the best solution to <strong>merge JPG to PDF</strong> and create professional documents:</p>
+        <ul>
+            <li><strong>Advanced JPG to PDF Technology:</strong> Our proprietary algorithms ensure perfect JPG to PDF conversion while creating small PDF files that maintain original image quality</li>
+            <li><strong>Merge JPG to PDF Seamlessly:</strong> Combine multiple JPG images into a single, organized PDF document with SmallPDF.us advanced merging capabilities</li>
+            <li><strong>Real-time Preview:</strong> See exactly how your JPG to PDF conversion will look before processing, ensuring perfect results every time</li>
+            <li><strong>Batch Processing:</strong> Convert up to 20 JPG files simultaneously, making it easy to merge JPG to PDF for large projects</li>
+            <li><strong>Custom PDF Settings:</strong> Choose page sizes, orientations, and margins to create the perfect PDF from your JPG images</li>
+            <li><strong>Small PDF Optimization:</strong> SmallPDF.us creates compact PDF files that are easy to share and store without quality loss</li>
+        </ul>
+        
+        <h3>Professional JPG to PDF Conversion for Every Need</h3>
+        <p>SmallPDF.us serves professionals, students, and individuals who need reliable <strong>JPG to PDF conversion</strong>. Our versatile <strong>JPG to PDF converter</strong> handles diverse requirements, from simple single-image conversions to complex projects that <strong>combine JPG files</strong> into comprehensive PDF documents:</p>
+        <ol>
+            <li><strong>Business Documentation:</strong> Convert JPG receipts, invoices, and contracts to PDF format for professional record-keeping</li>
+            <li><strong>Academic Projects:</strong> Merge JPG images of research materials, charts, and diagrams into organized PDF reports</li>
+            <li><strong>Portfolio Creation:</strong> Combine JPG artwork, photography, and design samples into impressive PDF portfolios</li>
+            <li><strong>Digital Archiving:</strong> Convert JPG photos and documents to PDF for long-term preservation and organization</li>
+            <li><strong>Presentation Materials:</strong> Transform JPG slides and infographics into professional PDF handouts</li>
+            <li><strong>E-book Publishing:</strong> Merge JPG pages into readable PDF format for digital publishing</li>
+        </ol>
+        
+        <h3>How SmallPDF.us Creates Perfect Small PDF Files</h3>
+        <p>Our advanced <strong>JPG to PDF converter</strong> uses intelligent compression to create <strong>small PDF files</strong> without sacrificing quality. When you <strong>convert JPG to PDF</strong> with SmallPDF.us, our system analyzes each image and applies optimal compression settings to ensure your PDF documents are:</p>
+        <ul>
+            <li><strong>Optimally Sized:</strong> Small PDF files that load quickly and are easy to share via email or cloud storage</li>
+            <li><strong>High Quality:</strong> Maintain original JPG image clarity and color accuracy in the final PDF</li>
+            <li><strong>Universally Compatible:</strong> PDF files that open perfectly on any device or PDF reader</li>
+            <li><strong>Print-Ready:</strong> Professional quality suitable for high-resolution printing</li>
+            <li><strong>Web-Optimized:</strong> Fast-loading PDF files perfect for online sharing and viewing</li>
+        </ul>
+        
+        <h3>Advanced Features of SmallPDF.us JPG to PDF Converter</h3>
+        <p>SmallPDF.us offers the most comprehensive set of features for <strong>JPG to PDF conversion</strong>. Our platform goes beyond basic conversion to provide professional-grade tools that <strong>merge JPG to PDF</strong> with precision and flexibility:</p>
+        <ul>
+            <li><strong>Multi-Format Support:</strong> Convert JPG, JPEG, PNG, GIF, BMP, and WebP images to PDF format</li>
+            <li><strong>Flexible Merging Options:</strong> Choose to combine JPG files into one PDF or create separate PDF files for each image</li>
+            <li><strong>Custom Page Layouts:</strong> Select from A4, Letter, A3, A5, or auto-sizing options for perfect PDF formatting</li>
+            <li><strong>Orientation Control:</strong> Set portrait, landscape, or automatic orientation based on image dimensions</li>
+            <li><strong>Margin Adjustment:</strong> Fine-tune spacing with none, small, medium, or large margin settings</li>
+            <li><strong>Quality Optimization:</strong> Balance file size and image quality with high, medium, or low compression settings</li>
+            <li><strong>Real-time Preview:</strong> See your PDF layout before conversion to ensure perfect results</li>
+            <li><strong>Batch Processing:</strong> Handle multiple JPG files simultaneously for efficient workflow</li>
+        </ul>
+        
+        <h3>Security and Privacy with SmallPDF.us</h3>
+        <p>When you <strong>convert JPG to PDF</strong> with SmallPDF.us, your privacy and security are our top priorities. Our secure <strong>JPG to PDF converter</strong> ensures your images and documents remain completely private throughout the conversion process:</p>
+        <ul>
+            <li><strong>SSL Encryption:</strong> All JPG uploads and PDF downloads are protected with 256-bit SSL encryption</li>
+            <li><strong>Automatic File Deletion:</strong> Your JPG images and converted PDF files are automatically deleted within one hour</li>
+            <li><strong>No Registration Required:</strong> Convert JPG to PDF without creating accounts or providing personal information</li>
+            <li><strong>Privacy Compliance:</strong> SmallPDF.us complies with GDPR and international privacy regulations</li>
+            <li><strong>Zero Data Storage:</strong> We never permanently store your JPG files or PDF documents</li>
+            <li><strong>No Human Access:</strong> Automated processing ensures no one can access your files during conversion</li>
+        </ul>
+        
+        <h3>Tips for Optimal JPG to PDF Conversion Results</h3>
+        <p>Maximize the quality of your <strong>JPG to PDF conversion</strong> with these expert tips from SmallPDF.us:</p>
+        <ul>
+            <li><strong>Use High-Resolution JPG Images:</strong> Start with the highest quality JPG files for the best PDF output</li>
+            <li><strong>Organize Images Before Upload:</strong> Arrange JPG files in the desired order before uploading to merge JPG to PDF correctly</li>
+            <li><strong>Choose Appropriate Page Sizes:</strong> Select page dimensions that best fit your JPG image proportions</li>
+            <li><strong>Optimize for Intended Use:</strong> Use high quality for printing, medium for digital sharing, low for web use</li>
+            <li><strong>Consider File Size:</strong> Balance image quality with small PDF file size requirements for your specific needs</li>
+            <li><strong>Preview Before Converting:</strong> Use SmallPDF.us real-time preview to verify layout and formatting</li>
+            <li><strong>Batch Similar Images:</strong> Group JPG files with similar dimensions for consistent PDF page layouts</li>
+        </ul>
+        
+        <h3>SmallPDF.us vs. Other JPG to PDF Converters</h3>
+        <p>SmallPDF.us outperforms other online converters when you need to <strong>convert JPG to PDF</strong> or <strong>merge JPG files</strong>. Here's why SmallPDF.us is the superior choice for <strong>JPG to PDF conversion</strong>:</p>
+        <ul>
+            <li><strong>Superior Quality:</strong> Advanced algorithms create small PDF files with exceptional image clarity</li>
+            <li><strong>Faster Processing:</strong> Optimized servers complete JPG to PDF conversion in seconds, not minutes</li>
+            <li><strong>More Features:</strong> Comprehensive customization options not available in basic converters</li>
+            <li><strong>Better Security:</strong> Enhanced privacy protection and automatic file deletion</li>
+            <li><strong>Real-time Preview:</strong> Unique preview feature shows exact PDF layout before conversion</li>
+            <li><strong>Batch Capabilities:</strong> Handle more files simultaneously than competing services</li>
+            <li><strong>No Limitations:</strong> Unlimited conversions without watermarks or restrictions</li>
+            <li><strong>Mobile Optimized:</strong> Perfect JPG to PDF conversion on any device</li>
+        </ul>
+        
+        <h3>Start Converting JPG to PDF with SmallPDF.us Today</h3>
+        <p>Experience the difference with SmallPDF.us, the most advanced <strong>JPG to PDF converter</strong> available online. Whether you need to convert a single JPG image, <strong>merge JPG to PDF</strong> documents, or <strong>combine JPG files</strong> into professional presentations, SmallPDF.us delivers exceptional results every time. Our commitment to creating <strong>small PDF files</strong> with maximum quality makes us the preferred choice for millions of users worldwide.</p>
+        
+        <p>Join the SmallPDF.us community today and discover why we're the leading platform to <strong>convert JPG to PDF</strong> online. With our free, secure, and feature-rich <strong>JPG to PDF converter</strong>, you'll never need another PDF conversion tool. Start your <strong>JPG to PDF conversion</strong> now and experience the SmallPDF.us difference!</p>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="content-section">
+        <h2>Ready to Convert JPG to PDF with SmallPDF.us?</h2>
+        <p>Join millions who trust SmallPDF.us for professional JPG to PDF conversion. Merge JPG to PDF, combine images, and create small PDF files - all free!</p>
+        <a href="#uploadArea" class="cta-btn">Start Converting JPG to PDF Now</a>
+    </div>
+</section>
+
+<!-- Load PDF-lib for real PDF preview -->
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Performance optimized JavaScript with lazy loading
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const selectFileBtn = document.getElementById('selectFileBtn');
+    const fileContainer = document.getElementById('fileContainer');
+    const filePreviewGrid = document.getElementById('filePreviewGrid');
+    const addMoreBtn = document.getElementById('addMoreBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const convertBtn = document.getElementById('convertBtn');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const pdfPreviewContainer = document.getElementById('pdfPreviewContainer');
+    const pdfResultSection = document.getElementById('pdfResultSection');
+    const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+    const startOverBtn = document.getElementById('startOverBtn');
+    const progressBar = document.getElementById('progressBar');
+    const loadingStatus = document.getElementById('loadingStatus');
+    
+    // Options elements
+    const pageSize = document.getElementById('pageSize');
+    const orientation = document.getElementById('orientation');
+    const margin = document.getElementById('margin');
+    const quality = document.getElementById('quality');
+    const combineOption = document.getElementById('combineOption');
+    
+    // State
+    let selectedFiles = [];
+    let isConverting = false;
+    let convertedPdfBlob = null;
+    let conversionSettings = {};
+
+    // Event Listeners with passive option for better performance
+    selectFileBtn.addEventListener('click', () => fileInput.click());
+    addMoreBtn.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', handleFileSelection);
+    clearBtn.addEventListener('click', clearAllFiles);
+    convertBtn.addEventListener('click', convertToPDF);
+    downloadPdfBtn.addEventListener('click', downloadPDF);
+    startOverBtn.addEventListener('click', startOver);
+
+    // Options change listeners with debouncing
+    let previewTimeout;
+    [pageSize, orientation, margin, quality, combineOption].forEach(element => {
+        element.addEventListener('change', () => {
+            clearTimeout(previewTimeout);
+            previewTimeout = setTimeout(updatePdfPreview, 300);
+        });
+    });
+
+    // Optimized drag and drop
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, preventDefaults, { passive: false });
+    });
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, () => uploadArea.classList.add('dragover'), { passive: true });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, () => uploadArea.classList.remove('dragover'), { passive: true });
+    });
+
+    uploadArea.addEventListener('drop', handleDrop, { passive: false });
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        handleFiles(files);
+    }
+
+    function handleFileSelection(e) {
+        const files = e.target.files;
+        if (files && files.length > 0) {
+            handleFiles(files);
+            fileInput.value = '';
+        }
+    }
+
+    function handleFiles(files) {
+        const validFiles = [];
+        const validExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
+        const maxFileSize = 10 * 1024 * 1024; // 10MB
+        const maxFiles = 20;
+
+        if (selectedFiles.length + files.length > maxFiles) {
+            showMessage(`Maximum ${maxFiles} images allowed.`, 'error');
+            return;
+        }
+
+        for (let file of files) {
+            const fileName = file.name.toLowerCase();
+            const fileExt = '.' + fileName.split('.').pop();
+
+            if (!validExtensions.includes(fileExt)) {
+                showMessage(`Invalid format: ${file.name}`, 'error');
+                continue;
+            }
+
+            if (file.size > maxFileSize) {
+                showMessage(`File too large: ${file.name}`, 'error');
+                continue;
+            }
+
+            const isDuplicate = selectedFiles.some(existingFile => 
+                existingFile.name === file.name && existingFile.size === file.size
+            );
+
+            if (isDuplicate) {
+                showMessage(`Already selected: ${file.name}`, 'error');
+                continue;
+            }
+
+            validFiles.push(file);
+        }
+
+        if (validFiles.length === 0) return;
+
+        selectedFiles = selectedFiles.concat(validFiles);
+        updateFilePreview();
+        updatePdfPreview();
+        showFileContainer();
+
+        if (validFiles.length > 0) {
+            showMessage(`Added ${validFiles.length} image${validFiles.length > 1 ? 's' : ''}.`, 'success');
+        }
+    }
+
+    function updateFilePreview() {
+        filePreviewGrid.innerHTML = '';
+
+        selectedFiles.forEach((file, index) => {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-preview-item';
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                fileItem.innerHTML = `
+                    <img src="${e.target.result}" alt="${file.name}" class="preview-image" loading="lazy" />
+                    <div class="file-name" title="${file.name}">${file.name}</div>
+                    <div class="file-size">${formatFileSize(file.size)}</div>
+                    <button class="remove-btn" onclick="removeFile(${index}); event.stopPropagation();" aria-label="Remove ${file.name}">×</button>
+                `;
+            };
+            reader.readAsDataURL(file);
+
+            filePreviewGrid.appendChild(fileItem);
+        });
+    }
+
+    window.removeFile = function(index) {
+        selectedFiles.splice(index, 1);
+        updateFilePreview();
+        updatePdfPreview();
+
+        if (selectedFiles.length === 0) {
+            showUploadArea();
+        }
+    };
+
+    // Real PDF preview using PDF-lib
+    async function updatePdfPreview() {
+        if (selectedFiles.length === 0) {
+            pdfPreviewContainer.innerHTML = `
+                <div style="text-align: center; color: #6b7280;">
+                    <svg style="width: 48px; height: 48px; margin: 0 auto 8px; opacity: 0.5;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <p style="margin: 0; font-size: 0.9rem;">PDF preview will appear here</p>
+                </div>
+            `;
+            return;
+        }
+
+        try {
+            // Create real PDF preview using PDF-lib
+            const pdfDoc = await PDFLib.PDFDocument.create();
+            const canvasContainer = document.createElement('div');
+            canvasContainer.className = 'pdf-canvas-container';
+
+            for (let i = 0; i < Math.min(selectedFiles.length, 5); i++) { // Limit preview to 5 pages for performance
+                const file = selectedFiles[i];
+                const imageBytes = await file.arrayBuffer();
+                
+                let image;
+                if (file.type.includes('png')) {
+                    image = await pdfDoc.embedPng(imageBytes);
+                } else {
+                    image = await pdfDoc.embedJpg(imageBytes);
+                }
+
+                // Get page settings
+                const pageSizeValue = pageSize.value;
+                const orientationValue = orientation.value;
+                const marginValue = margin.value;
+
+                // Calculate page dimensions
+                let pageWidth, pageHeight;
+                const pageSizes = {
+                    'a4': [595, 842],
+                    'letter': [612, 792],
+                    'a3': [842, 1191],
+                    'a5': [420, 595],
+                    'auto': [image.width, image.height]
+                };
+
+                [pageWidth, pageHeight] = pageSizes[pageSizeValue] || pageSizes['a4'];
+
+                if (orientationValue === 'landscape' && pageSizeValue !== 'auto') {
+                    [pageWidth, pageHeight] = [pageHeight, pageWidth];
+                }
+
+                const page = pdfDoc.addPage([pageWidth, pageHeight]);
+
+                // Calculate margins
+                const marginSizes = { 'none': 0, 'small': 20, 'medium': 40, 'large': 60 };
+                const marginSize = marginSizes[marginValue] || 40;
+
+                // Calculate image dimensions with margins
+                const availableWidth = pageWidth - (2 * marginSize);
+                const availableHeight = pageHeight - (2 * marginSize);
+
+                const imageAspectRatio = image.width / image.height;
+                const availableAspectRatio = availableWidth / availableHeight;
+
+                let drawWidth, drawHeight, drawX, drawY;
+
+                if (imageAspectRatio > availableAspectRatio) {
+                    drawWidth = availableWidth;
+                    drawHeight = availableWidth / imageAspectRatio;
+                    drawX = marginSize;
+                    drawY = marginSize + (availableHeight - drawHeight) / 2;
+                } else {
+                    drawHeight = availableHeight;
+                    drawWidth = availableHeight * imageAspectRatio;
+                    drawX = marginSize + (availableWidth - drawWidth) / 2;
+                    drawY = marginSize;
+                }
+
+                page.drawImage(image, {
+                    x: drawX,
+                    y: drawY,
+                    width: drawWidth,
+                    height: drawHeight,
+                });
+
+                // Create canvas preview
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const scale = 100 / Math.max(pageWidth, pageHeight); // Scale to fit 100px max dimension
+                
+                canvas.width = pageWidth * scale;
+                canvas.height = pageHeight * scale;
+                canvas.className = 'pdf-page-canvas';
+
+                // Draw white background
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Draw image on canvas
+                const img = new Image();
+                img.onload = function() {
+                    ctx.drawImage(img, 
+                        drawX * scale, 
+                        (pageHeight - drawY - drawHeight) * scale, // Flip Y coordinate
+                        drawWidth * scale, 
+                        drawHeight * scale
+                    );
+                };
+                img.src = URL.createObjectURL(file);
+
+                canvasContainer.appendChild(canvas);
+            }
+
+            const combineValue = combineOption.value;
+            const previewTitle = combineValue === 'single' 
+                ? `Single PDF Document (${selectedFiles.length} pages)`
+                : `${selectedFiles.length} Separate PDFs`;
+
+            pdfPreviewContainer.innerHTML = `
+                <div style="text-align: center; margin-bottom: 12px;">
+                    <h5 style="font-weight: 600; color: #1e293b; margin: 0 0 4px;">${previewTitle}</h5>
+                    <p style="font-size: 0.8rem; color: #64748b; margin: 0;">${pageSizeValue.toUpperCase()} • ${orientationValue} • ${marginValue} margin</p>
+                </div>
+            `;
+            pdfPreviewContainer.appendChild(canvasContainer);
+
+        } catch (error) {
+            console.error('PDF preview error:', error);
+            pdfPreviewContainer.innerHTML = `
+                <div style="text-align: center; color: #ef4444;">
+                    <p style="margin: 0; font-size: 0.9rem;">Preview temporarily unavailable</p>
+                </div>
+            `;
+        }
+    }
+
+    function clearAllFiles() {
+        selectedFiles = [];
+        showUploadArea();
+        hidePdfResult();
+        showMessage('All files cleared.', 'success');
+    }
+
+    function startOver() {
+        selectedFiles = [];
+        convertedPdfBlob = null;
+        conversionSettings = {};
+        showUploadArea();
+        hidePdfResult();
+        clearMessages();
+    }
+
+    function updateProgress(percentage, status) {
+        progressBar.style.width = percentage + '%';
+        loadingStatus.textContent = status;
+    }
+
+    function convertToPDF() {
+        if (!selectedFiles || selectedFiles.length === 0) {
+            showMessage('Please select at least one image file.', 'error');
+            return;
+        }
+
+        if (isConverting) return;
+
+        isConverting = true;
+        convertBtn.disabled = true;
+        showLoading();
+
+        // Store conversion settings
+        conversionSettings = {
+            page_size: pageSize.value,
+            orientation: orientation.value,
+            margin: margin.value,
+            quality: quality.value,
+            combine_option: combineOption.value
+        };
+
+        // Simulate progress updates
+        let progress = 0;
+        const progressInterval = setInterval(() => {
+            progress += Math.random() * 15;
+            if (progress > 85) {
+                progress = 85;
+                clearInterval(progressInterval);
+            }
+            
+            let status = 'Preparing...';
+            if (progress > 20) status = 'Processing images...';
+            if (progress > 50) status = 'Creating PDF...';
+            if (progress > 75) status = 'Finalizing...';
+            
+            updateProgress(progress, status);
+        }, 200);
+
+        const formData = new FormData();
+        selectedFiles.forEach(file => {
+            formData.append('images', file);
+        });
+        
+        Object.keys(conversionSettings).forEach(key => {
+            formData.append(key, conversionSettings[key]);
+        });
+
+        fetch('/api/jpg-to-pdf/', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            clearInterval(progressInterval);
+            updateProgress(100, 'Complete!');
+            
+            if (!response.ok) {
+                return response.json().then(err => Promise.reject(err));
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            convertedPdfBlob = blob;
+            
+            setTimeout(() => {
+                hideLoading();
+                showPdfResult();
+                updatePdfInfo();
+            }, 1000);
+        })
+        .catch(error => {
+            clearInterval(progressInterval);
+            hideLoading();
+            console.error('Conversion error:', error);
+            showMessage(error.error || 'Conversion failed. Please try again.', 'error');
+        })
+        .finally(() => {
+            isConverting = false;
+            convertBtn.disabled = false;
+        });
+    }
+
+    function updatePdfInfo() {
+        const totalPagesElement = document.getElementById('totalPages');
+        const fileSizeElement = document.getElementById('fileSize');
+        const pageFormatElement = document.getElementById('pageFormat');
+        const qualityInfoElement = document.getElementById('qualityInfo');
+
+        if (totalPagesElement) {
+            totalPagesElement.textContent = conversionSettings.combine_option === 'single' 
+                ? selectedFiles.length 
+                : selectedFiles.length + ' PDFs';
+        }
+
+        if (fileSizeElement && convertedPdfBlob) {
+            fileSizeElement.textContent = formatFileSize(convertedPdfBlob.size);
+        }
+
+        if (pageFormatElement) {
+            pageFormatElement.textContent = conversionSettings.page_size.toUpperCase();
+        }
+
+        if (qualityInfoElement) {
+            qualityInfoElement.textContent = conversionSettings.quality.charAt(0).toUpperCase() + conversionSettings.quality.slice(1);
+        }
+    }
+
+    function downloadPDF() {
+        if (!convertedPdfBlob) {
+            showMessage('No PDF available for download.', 'error');
+            return;
+        }
+
+        const url = window.URL.createObjectURL(convertedPdfBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        
+        if (conversionSettings.combine_option === 'single') {
+            a.download = 'converted_images.pdf';
+        } else {
+            a.download = 'converted_images.zip';
+        }
+        
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+        showMessage('PDF downloaded successfully!', 'success');
+    }
+
+    function showFileContainer() {
+        uploadArea.style.display = 'none';
+        fileContainer.style.display = 'block';
+    }
+
+    function showUploadArea() {
+        uploadArea.style.display = 'block';
+        fileContainer.style.display = 'none';
+    }
+
+    function showLoading() {
+        loadingOverlay.style.display = 'flex';
+        updateProgress(0, 'Preparing...');
+    }
+
+    function hideLoading() {
+        loadingOverlay.style.display = 'none';
+    }
+
+    function showPdfResult() {
+        pdfResultSection.style.display = 'block';
+        fileContainer.style.display = 'none';
+    }
+
+    function hidePdfResult() {
+        pdfResultSection.style.display = 'none';
+    }
+
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function showMessage(message, type = 'error') {
+        clearMessages();
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message message-${type}`;
+        
+        const iconSvg = type === 'error' ? 
+            `<svg class="message-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>` :
+            `<svg class="message-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>`;
+        
+        messageDiv.innerHTML = `${iconSvg}<span>${message}</span>`;
+        
+        const contentArea = document.querySelector('.content-area');
+        contentArea.insertBefore(messageDiv, contentArea.firstChild);
+        
+        setTimeout(() => {
+            if (messageDiv.parentNode) {
+                messageDiv.remove();
+            }
+        }, 5000);
+    }
+
+    function clearMessages() {
+        const messages = document.querySelectorAll('.message');
+        messages.forEach(msg => msg.remove());
+    }
+
+    // Initialize FAQ functionality
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        if (question) {
+            question.addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        }
+    });
+
+    // Initialize lazy loading for images
+    const lazyImages = document.querySelectorAll('.lazy-load');
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('loaded');
+                observer.unobserve(entry.target);
+            }
+        });
+    });
+
+    lazyImages.forEach(img => imageObserver.observe(img));
+
+    // Initialize
+    showUploadArea();
+});
+
+// Service Worker for caching (optional performance enhancement)
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => console.log('SW registered'))
+            .catch(error => console.log('SW registration failed'));
+    });
+}
+</script>
+
+{% endblock %}

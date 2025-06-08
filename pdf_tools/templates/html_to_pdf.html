@@ -1,0 +1,2159 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}HTML to PDF Converter - Free Online HTML to PDF Tool | SmallPDF.us{% endblock %}
+
+{% block meta %}
+<meta name="description" content="Convert HTML to PDF online free with SmallPDF.us - the best HTML to PDF converter. Convert web pages, HTML code, and URLs to PDF documents. Fast, secure, and professional results.">
+<meta name="keywords" content="html to pdf, convert html to pdf, html to pdf converter, web page to pdf, url to pdf, online pdf converter, smallpdf.us, html2pdf">
+<meta name="robots" content="index, follow">
+<meta name="author" content="SmallPDF.us">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Open Graph Meta Tags -->
+<meta property="og:title" content="HTML to PDF Converter - Convert HTML to PDF Online Free | SmallPDF.us">
+<meta property="og:description" content="Best HTML to PDF converter online. Convert web pages, HTML code, and URLs to PDF. Free, fast, and secure conversion with SmallPDF.us">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://smallpdf.us/html-to-pdf">
+<meta property="og:image" content="{% static 'images/html-to-pdf-converter.jpg' %}">
+<meta property="og:site_name" content="SmallPDF.us">
+
+<!-- Twitter Card Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="HTML to PDF Converter - Convert HTML to PDF Free | SmallPDF.us">
+<meta name="twitter:description" content="Professional HTML to PDF converter. Convert web pages and HTML code to PDF online with SmallPDF.us">
+<meta name="twitter:image" content="{% static 'images/html-to-pdf-converter.jpg' %}">
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "HTML to PDF Converter - SmallPDF.us",
+  "description": "Free online HTML to PDF converter to convert web pages, HTML code, and URLs to PDF documents",
+  "url": "https://smallpdf.us/html-to-pdf",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Convert HTML to PDF online free",
+    "Web page to PDF conversion", 
+    "URL to PDF converter",
+    "HTML code to PDF",
+    "Real-time PDF preview",
+    "Custom page sizes and orientations"
+  ],
+  "provider": {
+    "@type": "Organization",
+    "name": "SmallPDF.us",
+    "url": "https://smallpdf.us"
+  }
+}
+</script>
+
+<!-- Preload critical resources -->
+<link rel="preload" href="{% static 'css/converter.css' %}" as="style">
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Performance optimized CSS with critical path optimization */
+    :root {
+        --primary-color: #4361ee;
+        --primary-dark: #3a0ca3;
+        --success-color: #10b981;
+        --error-color: #ef4444;
+        --gray-50: #f8fafc;
+        --gray-100: #f1f5f9;
+        --gray-200: #e2e8f0;
+        --gray-300: #cbd5e1;
+        --gray-400: #94a3b8;
+        --gray-500: #64748b;
+        --gray-600: #475569;
+        --gray-700: #334155;
+        --gray-800: #1e293b;
+        --gray-900: #0f172a;
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+    }
+
+    /* Optimized base styles */
+    * {
+        box-sizing: border-box;
+    }
+
+    .main-wrapper {
+        min-height: 100vh;
+        background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-200) 100%);
+        padding: 1rem;
+    }
+    
+    .converter-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 16px;
+        box-shadow: var(--shadow-xl);
+        overflow: hidden;
+        border: 1px solid var(--gray-200);
+    }
+
+    /* Compact header */
+    .tool-header {
+        text-align: center;
+        padding: 1.5rem 1rem;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        color: white;
+        position: relative;
+    }
+    
+    .tool-header h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        line-height: 1.2;
+    }
+    
+    .tool-header p {
+        opacity: 0.9;
+        font-size: 0.95rem;
+        margin: 0;
+        line-height: 1.4;
+    }
+
+    /* Compact content area */
+    .content-area {
+        padding: 1rem;
+    }
+
+    /* Tab navigation */
+    .tab-navigation {
+        display: flex;
+        background: var(--gray-100);
+        border-radius: 8px;
+        padding: 4px;
+        margin-bottom: 1rem;
+    }
+
+    .tab-btn {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        background: transparent;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: var(--gray-600);
+    }
+
+    .tab-btn.active {
+        background: white;
+        color: var(--primary-color);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .tab-btn:hover:not(.active) {
+        background: var(--gray-200);
+        color: var(--gray-700);
+    }
+
+    /* Tab content */
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    /* HTML input area */
+    .html-input-area {
+        border: 2px dashed var(--gray-300);
+        border-radius: 12px;
+        padding: 1rem;
+        background: var(--gray-50);
+        margin-bottom: 1rem;
+        transition: all 0.2s ease;
+    }
+
+    .html-input-area:hover, .html-input-area:focus-within {
+        border-color: var(--primary-color);
+        background: #f0f5ff;
+    }
+
+    .html-textarea {
+        width: 100%;
+        min-height: 200px;
+        padding: 1rem;
+        border: 1px solid var(--gray-300);
+        border-radius: 8px;
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        resize: vertical;
+        background: white;
+        transition: all 0.2s ease;
+    }
+
+    .html-textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    }
+
+    .html-textarea::placeholder {
+        color: var(--gray-400);
+        font-style: italic;
+    }
+
+    /* URL input area */
+    .url-input-area {
+        border: 2px dashed var(--gray-300);
+        border-radius: 12px;
+        padding: 1.5rem;
+        background: var(--gray-50);
+        margin-bottom: 1rem;
+        text-align: center;
+        transition: all 0.2s ease;
+    }
+
+    .url-input-area:hover, .url-input-area:focus-within {
+        border-color: var(--primary-color);
+        background: #f0f5ff;
+    }
+
+    .url-input-group {
+        display: flex;
+        gap: 0.75rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .url-input {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--gray-300);
+        border-radius: 8px;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+    }
+
+    .url-input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    }
+
+    .url-input::placeholder {
+        color: var(--gray-400);
+    }
+
+    .fetch-btn {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+
+    .fetch-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+    }
+
+    .fetch-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* Real HTML Preview Area */
+    .html-preview-section {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: var(--gray-50);
+        border-radius: 8px;
+        border: 1px solid var(--gray-200);
+    }
+
+    .html-preview-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.75rem;
+    }
+
+    .html-preview-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--gray-800);
+        margin: 0;
+    }
+
+    .preview-toggle {
+        display: flex;
+        background: var(--gray-200);
+        border-radius: 6px;
+        padding: 2px;
+        margin-bottom: 1rem;
+    }
+
+    .preview-toggle-btn {
+        padding: 0.4rem 0.8rem;
+        background: transparent;
+        border: none;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: var(--gray-600);
+    }
+
+    .preview-toggle-btn.active {
+        background: white;
+        color: var(--primary-color);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .html-preview-container {
+        background: white;
+        border-radius: 6px;
+        padding: 1rem;
+        box-shadow: var(--shadow-sm);
+        min-height: 200px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .html-preview-iframe {
+        width: 100%;
+        height: 300px;
+        border: 1px solid var(--gray-300);
+        border-radius: 4px;
+        background: white;
+    }
+
+    .html-preview-code {
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-size: 0.8rem;
+        line-height: 1.4;
+        color: var(--gray-700);
+        background: var(--gray-50);
+        padding: 1rem;
+        border-radius: 4px;
+        overflow-x: auto;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    /* Compact options */
+    .options-section {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 0.75rem;
+        margin: 1rem 0;
+        padding: 1rem;
+        background: var(--gray-50);
+        border-radius: 8px;
+        border: 1px solid var(--gray-200);
+    }
+
+    .option-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .option-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--gray-700);
+        margin-bottom: 0.3rem;
+    }
+
+    .option-select {
+        padding: 0.5rem;
+        border: 1px solid var(--gray-300);
+        border-radius: 6px;
+        font-size: 0.8rem;
+        background: white;
+        transition: all 0.2s ease;
+    }
+
+    .option-select:focus {
+        border-color: var(--primary-color);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    }
+
+    /* Compact action buttons */
+    .action-buttons {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+
+    .action-btn {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+    }
+
+    .secondary-btn {
+        background: white;
+        border: 2px solid var(--gray-300);
+        color: var(--gray-600);
+    }
+
+    .secondary-btn:hover {
+        background: var(--gray-50);
+        color: var(--gray-700);
+        border-color: var(--gray-400);
+    }
+
+    .primary-btn {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: white;
+        border: none;
+        box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+    }
+
+    .primary-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+    }
+
+    .primary-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* Optimized loading overlay */
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(4px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+
+    .loading-content {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem 1.5rem;
+        text-align: center;
+        min-width: 280px;
+        box-shadow: var(--shadow-xl);
+        animation: slideInUp 0.3s ease-out;
+    }
+
+    @keyframes slideInUp {
+        from {
+            transform: translateY(50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .loader {
+        width: 40px;
+        height: 40px;
+        position: relative;
+        margin: 0 auto 1rem;
+    }
+
+    .loader::before {
+        content: '';
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 3px solid var(--gray-200);
+        border-top: 3px solid var(--primary-color);
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .loading-progress {
+        width: 100%;
+        height: 4px;
+        background: var(--gray-200);
+        border-radius: 2px;
+        margin: 0.75rem 0;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        width: 0%;
+        height: 100%;
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        border-radius: 2px;
+        transition: width 0.3s ease;
+    }
+
+    /* Compact result section */
+    .pdf-result-section {
+        display: none;
+        margin-top: 1rem;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        border-radius: 12px;
+        border: 2px solid #0ea5e9;
+        animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .pdf-result-header {
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .pdf-result-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .success-icon {
+        width: 24px;
+        height: 24px;
+        background: var(--success-color);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: bounceIn 0.5s ease-out;
+    }
+
+    @keyframes bounceIn {
+        0% { transform: scale(0); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+
+    .pdf-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+        background: rgba(255, 255, 255, 0.7);
+        border-radius: 6px;
+    }
+
+    .pdf-info-item {
+        text-align: center;
+    }
+
+    .pdf-info-label {
+        font-size: 0.7rem;
+        color: var(--gray-600);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .pdf-info-value {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-top: 0.2rem;
+    }
+
+    .download-section {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: center;
+    }
+
+    .download-btn {
+        background: linear-gradient(135deg, var(--success-color), #059669);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .download-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    /* Messages */
+    .message {
+        padding: 0.75rem 1rem;
+        border-radius: 6px;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+        animation: slideIn 0.3s ease;
+    }
+
+    .message-error {
+        background: #fef2f2;
+        color: #dc2626;
+        border-left: 3px solid #dc2626;
+    }
+
+    .message-success {
+        background: #f0fdf4;
+        color: #16a34a;
+        border-left: 3px solid #16a34a;
+    }
+
+    .message-icon {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+    }
+
+    /* Content sections */
+    .content-section {
+        padding: 3rem 1rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-bottom: 0.75rem;
+        line-height: 1.2;
+    }
+
+    .section-subtitle {
+        font-size: 1.1rem;
+        color: var(--gray-600);
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.5;
+    }
+
+    /* Instructions grid */
+    .instructions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .instruction-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: var(--shadow-md);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        text-align: center;
+        border: 1px solid var(--gray-200);
+    }
+
+    .instruction-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .instruction-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(67, 97, 238, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+    }
+
+    .instruction-icon svg {
+        width: 28px;
+        height: 28px;
+        color: var(--primary-color);
+    }
+
+    .instruction-card h3 {
+        font-size: 1.2rem;
+        color: var(--gray-900);
+        margin-bottom: 0.75rem;
+        font-weight: 600;
+    }
+
+    .instruction-card p {
+        color: var(--gray-600);
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    /* Features grid */
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .feature-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: var(--shadow-md);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        text-align: center;
+        border: 1px solid var(--gray-200);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .feature-card::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .feature-card:hover::after {
+        transform: scaleX(1);
+    }
+
+    .feature-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(67, 97, 238, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        transition: all 0.2s ease;
+    }
+
+    .feature-card:hover .feature-icon {
+        background: rgba(67, 97, 238, 0.15);
+        transform: scale(1.05);
+    }
+
+    .feature-icon svg {
+        width: 28px;
+        height: 28px;
+        color: var(--primary-color);
+    }
+
+    .feature-card h3 {
+        font-size: 1.2rem;
+        color: var(--gray-900);
+        margin-bottom: 0.75rem;
+        font-weight: 600;
+    }
+
+    .feature-card p {
+        color: var(--gray-600);
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    /* FAQ Section */
+    .faq-container {
+        max-width: 800px;
+        margin: 2rem auto 0;
+    }
+
+    .faq-item {
+        border-bottom: 1px solid var(--gray-200);
+        margin-bottom: 0.75rem;
+    }
+
+    .faq-question {
+        font-size: 1rem;
+        color: var(--gray-900);
+        font-weight: 600;
+        padding: 1rem 0;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: color 0.2s ease;
+    }
+
+    .faq-question:hover {
+        color: var(--primary-color);
+    }
+
+    .faq-question svg {
+        width: 16px;
+        height: 16px;
+        color: var(--gray-500);
+        transition: transform 0.2s ease;
+    }
+
+    .faq-item.active .faq-question svg {
+        transform: rotate(180deg);
+    }
+
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease, padding 0.3s ease;
+        padding: 0;
+    }
+
+    .faq-item.active .faq-answer {
+        max-height: 300px;
+        padding-bottom: 1rem;
+    }
+
+    .faq-answer p {
+        color: var(--gray-600);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 0.75rem;
+    }
+
+    /* SEO Content */
+    .seo-content {
+        background: var(--gray-50);
+        padding: 3rem 1rem;
+        border-top: 1px solid var(--gray-200);
+    }
+
+    .seo-content h2 {
+        font-size: 1.8rem;
+        color: var(--gray-900);
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+
+    .seo-content h3 {
+        font-size: 1.4rem;
+        color: var(--gray-900);
+        margin: 2rem 0 1rem;
+        font-weight: 600;
+    }
+
+    .seo-content p {
+        color: var(--gray-700);
+        font-size: 1rem;
+        line-height: 1.7;
+        margin-bottom: 1rem;
+    }
+
+    .seo-content ul, .seo-content ol {
+        margin-left: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .seo-content li {
+        color: var(--gray-700);
+        margin-bottom: 0.5rem;
+        line-height: 1.6;
+    }
+
+    /* CTA Section */
+    .cta-section {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: white;
+        text-align: center;
+        padding: 2rem 1rem;
+    }
+
+    .cta-section h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+    }
+
+    .cta-section p {
+        margin-bottom: 1.5rem;
+        opacity: 0.9;
+    }
+
+    .cta-btn {
+        background: white;
+        color: var(--primary-dark);
+        font-weight: 600;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        display: inline-block;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .cta-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+        .main-wrapper {
+            padding: 0.5rem;
+        }
+        
+        .tool-header {
+            padding: 1rem 0.75rem;
+        }
+        
+        .tool-header h1 {
+            font-size: 1.5rem;
+        }
+        
+        .tool-header p {
+            font-size: 0.85rem;
+        }
+        
+        .content-area {
+            padding: 0.75rem;
+        }
+        
+        .tab-btn {
+            padding: 0.6rem 0.75rem;
+            font-size: 0.8rem;
+        }
+        
+        .html-textarea {
+            min-height: 150px;
+            font-size: 0.8rem;
+        }
+        
+        .url-input-group {
+            flex-direction: column;
+        }
+        
+        .options-section {
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            padding: 0.75rem;
+        }
+        
+        .action-buttons, .download-section {
+            flex-direction: column;
+        }
+        
+        .pdf-result-section {
+            padding: 1rem;
+        }
+        
+        .pdf-info {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .content-section {
+            padding: 2rem 0.75rem;
+        }
+        
+        .section-title {
+            font-size: 1.6rem;
+        }
+        
+        .section-subtitle {
+            font-size: 1rem;
+        }
+        
+        .instructions-grid, .features-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        
+        .instruction-card, .feature-card {
+            padding: 1.25rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .tool-header h1 {
+            font-size: 1.3rem;
+        }
+        
+        .html-textarea {
+            min-height: 120px;
+        }
+        
+        .options-section {
+            grid-template-columns: 1fr;
+        }
+        
+        .section-title {
+            font-size: 1.4rem;
+        }
+    }
+
+    /* Syntax highlighting for HTML preview */
+    .html-syntax {
+        color: var(--gray-700);
+    }
+
+    .html-tag {
+        color: #0066cc;
+        font-weight: 600;
+    }
+
+    .html-attribute {
+        color: #cc6600;
+    }
+
+    .html-string {
+        color: #009900;
+    }
+
+    .html-comment {
+        color: #999999;
+        font-style: italic;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="main-wrapper">
+    <div class="converter-container">
+        <!-- Header -->
+        <div class="tool-header">
+            <h1>HTML to PDF Converter - SmallPDF.us</h1>
+            <p>Convert HTML to PDF online free. Transform web pages, HTML code, and URLs into professional PDF documents</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content-area">
+            <!-- Tab Navigation -->
+            <div class="tab-navigation">
+                <button class="tab-btn active" data-tab="html-code">HTML Code</button>
+                <button class="tab-btn" data-tab="url-convert">Web Page URL</button>
+            </div>
+
+            <!-- HTML Code Tab -->
+            <div class="tab-content active" id="html-code-tab">
+                <div class="html-input-area">
+                    <label for="htmlTextarea" style="display: block; font-weight: 600; color: #374151; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                        Enter HTML Code
+                    </label>
+                    <textarea 
+                        id="htmlTextarea" 
+                        class="html-textarea" 
+                        placeholder="<!DOCTYPE html>
+<html>
+<head>
+    <title>My Document</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1 { color: #333; }
+        p { line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <h1>Welcome to SmallPDF.us</h1>
+    <p>This is a sample HTML document that will be converted to PDF.</p>
+    <p>You can include any HTML content here including:</p>
+    <ul>
+        <li>Text formatting</li>
+        <li>Images</li>
+        <li>Tables</li>
+        <li>Lists</li>
+    </ul>
+</body>
+</html>"
+                    ></textarea>
+                </div>
+            </div>
+
+            <!-- URL Convert Tab -->
+            <div class="tab-content" id="url-convert-tab">
+                <div class="url-input-area">
+                    <h3 style="font-size: 1.1rem; font-weight: 600; color: #374151; margin-bottom: 1rem;">Convert Web Page to PDF</h3>
+                    <p style="color: #6b7280; margin-bottom: 1rem; font-size: 0.9rem;">Enter any website URL to convert it to PDF</p>
+                    <div class="url-input-group">
+                        <input 
+                            type="url" 
+                            id="urlInput" 
+                            class="url-input" 
+                            placeholder="https://example.com"
+                        >
+                        <button class="fetch-btn" id="fetchUrlBtn">
+                            <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-3a5 5 0 00-5-5H5" />
+                            </svg>
+                            Fetch & Preview
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HTML Preview Section -->
+            <div class="html-preview-section" id="htmlPreviewSection">
+                <div class="html-preview-header">
+                    <h3 class="html-preview-title">HTML Preview</h3>
+                    <div class="preview-toggle">
+                        <button class="preview-toggle-btn active" data-preview="rendered">Rendered</button>
+                        <button class="preview-toggle-btn" data-preview="code">Code</button>
+                    </div>
+                </div>
+
+                <div class="html-preview-container">
+                    <iframe id="htmlPreviewIframe" class="html-preview-iframe" style="display: block;"></iframe>
+                    <div id="htmlPreviewCode" class="html-preview-code" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Options Section -->
+            <div class="options-section">
+                <div class="option-group">
+                    <label class="option-label" for="pageSize">Page Size</label>
+                    <select class="option-select" id="pageSize">
+                        <option value="a4" selected>A4</option>
+                        <option value="letter">Letter</option>
+                        <option value="a3">A3</option>
+                        <option value="a5">A5</option>
+                        <option value="legal">Legal</option>
+                    </select>
+                </div>
+                
+                <div class="option-group">
+                    <label class="option-label" for="orientation">Orientation</label>
+                    <select class="option-select" id="orientation">
+                        <option value="portrait" selected>Portrait</option>
+                        <option value="landscape">Landscape</option>
+                    </select>
+                </div>
+                
+                <div class="option-group">
+                    <label class="option-label" for="margin">Margin</label>
+                    <select class="option-select" id="margin">
+                        <option value="none">None</option>
+                        <option value="small">Small</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="large">Large</option>
+                    </select>
+                </div>
+                
+                <div class="option-group">
+                    <label class="option-label" for="scale">Scale</label>
+                    <select class="option-select" id="scale">
+                        <option value="0.8">80%</option>
+                        <option value="0.9">90%</option>
+                        <option value="1.0" selected>100%</option>
+                        <option value="1.1">110%</option>
+                        <option value="1.2">120%</option>
+                    </select>
+                </div>
+                
+                <div class="option-group">
+                    <label class="option-label" for="background">Background</label>
+                    <select class="option-select" id="background">
+                        <option value="true" selected>Include</option>
+                        <option value="false">Remove</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="action-btn secondary-btn" id="clearBtn">
+                    <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    Clear
+                </button>
+                <button class="action-btn primary-btn" id="convertBtn">
+                    <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Convert to PDF
+                </button>
+            </div>
+
+            <!-- PDF Result Section -->
+            <div class="pdf-result-section" id="pdfResultSection">
+                <div class="pdf-result-header">
+                    <h2 class="pdf-result-title">
+                        <div class="success-icon">
+                            <svg style="width: 14px; height: 14px; color: white;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        PDF Created Successfully!
+                    </h2>
+                    <p style="color: #64748b; font-size: 0.9rem; margin: 0;">Your HTML has been converted to PDF</p>
+                </div>
+
+                <div class="pdf-info" id="pdfInfo">
+                    <div class="pdf-info-item">
+                        <div class="pdf-info-label">Method</div>
+                        <div class="pdf-info-value" id="conversionMethod">-</div>
+                    </div>
+                    <div class="pdf-info-item">
+                        <div class="pdf-info-label">Size</div>
+                        <div class="pdf-info-value" id="fileSize">-</div>
+                    </div>
+                    <div class="pdf-info-item">
+                        <div class="pdf-info-label">Format</div>
+                        <div class="pdf-info-value" id="pageFormat">-</div>
+                    </div>
+                    <div class="pdf-info-item">
+                        <div class="pdf-info-label">Scale</div>
+                        <div class="pdf-info-value" id="scaleInfo">-</div>
+                    </div>
+                </div>
+
+                <div class="download-section">
+                    <button class="download-btn" id="downloadPdfBtn">
+                        <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        Download PDF
+                    </button>
+                    <button class="action-btn secondary-btn" id="startOverBtn">
+                        <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        Convert More
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-content">
+        <div class="loader"></div>
+        <h3 style="font-size: 1.1rem; font-weight: 600; color: #1e293b; margin-bottom: 0.5rem;">Converting to PDF...</h3>
+        <p style="color: #64748b; margin-bottom: 1rem; font-size: 0.9rem;">Processing your HTML content</p>
+        <div class="loading-progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <p style="font-size: 0.8rem; color: #64748b; margin: 0.5rem 0 0;" id="loadingStatus">Preparing...</p>
+    </div>
+</div>
+
+<!-- Instructions Section -->
+<section class="content-section" style="background: white;">
+    <div class="section-header">
+        <h2 class="section-title">How to Convert HTML to PDF with SmallPDF.us</h2>
+        <p class="section-subtitle">Learn how to convert HTML to PDF, transform web pages to PDF, and create professional PDF documents from HTML code using our advanced HTML to PDF converter</p>
+    </div>
+    
+    <div class="instructions-grid">
+        <div class="instruction-card">
+            <div class="instruction-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+            </div>
+            <h3>1. Enter HTML Code or URL</h3>
+            <p>Paste your HTML code directly or enter a website URL to convert to PDF. SmallPDF.us supports both HTML code conversion and web page to PDF transformation with real-time preview.</p>
+        </div>
+        
+        <div class="instruction-card">
+            <div class="instruction-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+            </div>
+            <h3>2. Configure PDF Settings</h3>
+            <p>Customize your HTML to PDF conversion with advanced options. Choose page sizes, orientations, margins, scaling, and background settings to create the perfect PDF from your HTML content.</p>
+        </div>
+        
+        <div class="instruction-card">
+            <div class="instruction-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+            </div>
+            <h3>3. Download Your PDF</h3>
+            <p>Complete your HTML to PDF conversion and download your professional PDF document. SmallPDF.us ensures high-quality results whether you convert HTML code or web pages to PDF.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="content-section" style="background: #f8fafc;">
+    <div class="section-header">
+        <h2 class="section-title">Why SmallPDF.us is the Best HTML to PDF Converter</h2>
+        <p class="section-subtitle">Discover why professionals choose SmallPDF.us to convert HTML to PDF, transform web pages to PDF, and create professional PDF documents from HTML content</p>
+    </div>
+    
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+            </div>
+            <h3>Real-time HTML Preview</h3>
+            <p>See exactly how your HTML to PDF conversion will look with SmallPDF.us real-time preview. Watch your HTML content render before converting to PDF for perfect results every time.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+            </div>
+            <h3>Advanced HTML Support</h3>
+            <p>Convert complex HTML to PDF with full CSS support, images, tables, and formatting. SmallPDF.us handles modern HTML5 and CSS3 for professional web page to PDF conversion.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                </svg>
+            </div>
+            <h3>URL to PDF Conversion</h3>
+            <p>Convert any website URL to PDF instantly with SmallPDF.us. Transform web pages to PDF documents while preserving layout, images, and styling for professional results.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+            </div>
+            <h3>Secure HTML Processing</h3>
+            <p>SmallPDF.us protects your privacy during HTML to PDF conversion. All HTML content is processed securely and automatically deleted after conversion, ensuring your data remains private.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+            </div>
+            <h3>Fast HTML to PDF Processing</h3>
+            <p>Experience lightning-fast HTML to PDF conversion with SmallPDF.us. Our optimized servers process your HTML content and create PDF documents in seconds, not minutes.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                </svg>
+            </div>
+            <h3>Free HTML to PDF Converter</h3>
+            <p>Convert HTML to PDF completely free with SmallPDF.us. No hidden costs, no watermarks, no registration required. Enjoy unlimited HTML to PDF conversions at no charge.</p>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="content-section" style="background: white;">
+    <div class="section-header">
+        <h2 class="section-title">HTML to PDF Converter FAQ - SmallPDF.us</h2>
+        <p class="section-subtitle">Get answers to common questions about converting HTML to PDF, web page conversion, and using SmallPDF.us</p>
+    </div>
+    
+    <div class="faq-container">
+        <div class="faq-item">
+            <div class="faq-question">
+                How do I convert HTML to PDF online free with SmallPDF.us?
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="faq-answer">
+                <p>To convert HTML to PDF with SmallPDF.us, simply paste your HTML code in the text area or enter a website URL. Configure your PDF settings, preview the result, then click "Convert to PDF". Your HTML to PDF conversion will be completed in seconds.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                Can I convert web pages to PDF using URLs with SmallPDF.us?
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="faq-answer">
+                <p>Yes! SmallPDF.us supports URL to PDF conversion. Simply switch to the "Web Page URL" tab, enter any website URL, and our HTML to PDF converter will fetch the page content and convert it to a professional PDF document.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                What HTML features are supported in PDF conversion?
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="faq-answer">
+                <p>SmallPDF.us HTML to PDF converter supports modern HTML5, CSS3, images, tables, lists, text formatting, colors, fonts, and most web page elements. Our converter preserves layout and styling for professional PDF results.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                Is SmallPDF.us HTML to PDF converter secure and private?
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="faq-answer">
+                <p>Absolutely. SmallPDF.us uses SSL encryption for all HTML to PDF conversions. Your HTML content is automatically deleted after processing, and we never access or store your data. Convert HTML to PDF with complete confidence in your privacy and security.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                Can I customize page settings for HTML to PDF conversion?
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="faq-answer">
+                <p>Yes! SmallPDF.us offers comprehensive customization options for HTML to PDF conversion. You can adjust page size (A4, Letter, A3, etc.), orientation (portrait/landscape), margins, scaling, and background settings to create the perfect PDF from your HTML content.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                What file size limits apply to HTML to PDF conversion?
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="faq-answer">
+                <p>SmallPDF.us supports HTML content up to 5MB for direct HTML to PDF conversion. For URL to PDF conversion, we can process most standard web pages. Our converter is optimized to handle complex HTML while creating efficient PDF documents.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SEO Content Section -->
+<section class="seo-content">
+    <div class="content-section">
+        <h2>SmallPDF.us - The Ultimate HTML to PDF Converter Online</h2>
+        <p>SmallPDF.us is the leading online platform to <strong>convert HTML to PDF</strong> with professional results. Our advanced <strong>HTML to PDF converter</strong> allows you to effortlessly transform <strong>web pages to PDF</strong> documents, convert HTML code to PDF, and create high-quality PDF files from any HTML content. Whether you need to convert a simple HTML snippet or a complex web page, SmallPDF.us delivers exceptional quality and speed.</p>
+        
+        <h3>Why Choose SmallPDF.us for HTML to PDF Conversion?</h3>
+        <p>When you need to <strong>convert HTML to PDF</strong>, SmallPDF.us stands out as the premier choice among online converters. Our <strong>HTML to PDF converter</strong> combines cutting-edge technology with user-friendly design to deliver superior results. Here's what makes SmallPDF.us the best solution to transform <strong>HTML to PDF</strong> and create professional documents:</p>
+        <ul>
+            <li><strong>Advanced HTML Processing:</strong> Our proprietary algorithms ensure perfect HTML to PDF conversion while preserving all formatting, styles, and layout elements</li>
+            <li><strong>Real-time Preview:</strong> See exactly how your HTML to PDF conversion will look before processing, ensuring perfect results every time</li>
+            <li><strong>Dual Input Methods:</strong> Convert HTML code directly or transform any website URL to PDF with our versatile converter</li>
+            <li><strong>Full CSS Support:</strong> Handle modern HTML5 and CSS3 for professional web page to PDF conversion with complete styling preservation</li>
+            <li><strong>Custom PDF Settings:</strong> Choose page sizes, orientations, margins, and scaling to create the perfect PDF from your HTML content</li>
+            <li><strong>Lightning-Fast Processing:</strong> SmallPDF.us completes HTML to PDF conversion in seconds, not minutes</li>
+        </ul>
+        
+        <h3>Professional HTML to PDF Conversion for Every Need</h3>
+        <p>SmallPDF.us serves professionals, developers, and individuals who need reliable <strong>HTML to PDF conversion</strong>. Our versatile <strong>HTML to PDF converter</strong> handles diverse requirements, from simple HTML snippets to complex web pages that need to be transformed into professional PDF documents:</p>
+        <ol>
+            <li><strong>Web Development:</strong> Convert HTML prototypes, documentation, and code samples to PDF for client presentations and project archives</li>
+            <li><strong>Content Publishing:</strong> Transform blog posts, articles, and web content to PDF format for offline reading and distribution</li>
+            <li><strong>Business Reports:</strong> Convert HTML-based reports, dashboards, and analytics to PDF for professional documentation</li>
+            <li><strong>Educational Materials:</strong> Transform online courses, tutorials, and educational content to PDF for student access</li>
+            <li><strong>Legal Documentation:</strong> Convert web-based contracts, terms, and legal documents to PDF for official records</li>
+            <li><strong>Marketing Materials:</strong> Transform landing pages, newsletters, and promotional content to PDF for print and distribution</li>
+        </ol>
+        
+        <h3>Advanced Features of SmallPDF.us HTML to PDF Converter</h3>
+        <p>SmallPDF.us offers the most comprehensive set of features for <strong>HTML to PDF conversion</strong>. Our platform goes beyond basic conversion to provide professional-grade tools that transform <strong>HTML to PDF</strong> with precision and flexibility:</p>
+        <ul>
+            <li><strong>Dual Conversion Modes:</strong> Convert HTML code directly or fetch and convert any website URL to PDF</li>
+            <li><strong>Real-time HTML Preview:</strong> See rendered HTML and source code views before converting to PDF</li>
+            <li><strong>Advanced CSS Processing:</strong> Full support for modern CSS3, flexbox, grid, and responsive design elements</li>
+            <li><strong>Image and Media Support:</strong> Preserve images, graphics, and media elements in PDF conversion</li>
+            <li><strong>Custom Page Layouts:</strong> Select from A4, Letter, A3, A5, Legal, or custom page sizes for perfect PDF formatting</li>
+            <li><strong>Orientation Control:</strong> Choose portrait or landscape orientation based on your HTML content layout</li>
+            <li><strong>Margin Adjustment:</strong> Fine-tune spacing with customizable margin settings for professional appearance</li>
+            <li><strong>Scaling Options:</strong> Adjust content scaling from 80% to 120% for optimal PDF presentation</li>
+            <li><strong>Background Control:</strong> Choose to include or remove background colors and images in PDF output</li>
+        </ul>
+        
+        <h3>Security and Privacy with SmallPDF.us</h3>
+        <p>When you <strong>convert HTML to PDF</strong> with SmallPDF.us, your privacy and security are our top priorities. Our secure <strong>HTML to PDF converter</strong> ensures your content and documents remain completely private throughout the conversion process:</p>
+        <ul>
+            <li><strong>SSL Encryption:</strong> All HTML content and PDF downloads are protected with 256-bit SSL encryption</li>
+            <li><strong>Automatic Content Deletion:</strong> Your HTML content and converted PDF files are automatically deleted within one hour</li>
+            <li><strong>No Registration Required:</strong> Convert HTML to PDF without creating accounts or providing personal information</li>
+            <li><strong>Privacy Compliance:</strong> SmallPDF.us complies with GDPR and international privacy regulations</li>
+            <li><strong>Zero Data Storage:</strong> We never permanently store your HTML content or PDF documents</li>
+            <li><strong>Secure Processing:</strong> Automated conversion ensures no human access to your content during processing</li>
+        </ul>
+        
+        <h3>Tips for Optimal HTML to PDF Conversion Results</h3>
+        <p>Maximize the quality of your <strong>HTML to PDF conversion</strong> with these expert tips from SmallPDF.us:</p>
+        <ul>
+            <li><strong>Use Clean HTML Code:</strong> Well-structured HTML with proper CSS produces the best PDF conversion results</li>
+            <li><strong>Optimize for Print:</strong> Use print-friendly CSS and avoid complex animations or interactive elements</li>
+            <li><strong>Test Different Page Sizes:</strong> Choose page dimensions that best fit your HTML content layout and purpose</li>
+            <li><strong>Preview Before Converting:</strong> Use SmallPDF.us real-time preview to verify layout and formatting</li>
+            <li><strong>Consider Content Width:</strong> Ensure your HTML content fits well within chosen page margins and orientation</li>
+            <li><strong>Use Web-Safe Fonts:</strong> Stick to standard fonts for consistent PDF rendering across all devices</li>
+            <li><strong>Optimize Images:</strong> Use appropriately sized images to balance quality and PDF file size</li>
+        </ul>
+        
+        <h3>SmallPDF.us vs. Other HTML to PDF Converters</h3>
+        <p>SmallPDF.us outperforms other online converters when you need to <strong>convert HTML to PDF</strong> or transform web pages to PDF. Here's why SmallPDF.us is the superior choice for <strong>HTML to PDF conversion</strong>:</p>
+        <ul>
+            <li><strong>Superior Rendering:</strong> Advanced HTML and CSS processing engines create pixel-perfect PDF documents</li>
+            <li><strong>Faster Processing:</strong> Optimized servers complete HTML to PDF conversion faster than competing services</li>
+            <li><strong>More Features:</strong> Comprehensive customization options not available in basic converters</li>
+            <li><strong>Better Security:</strong> Enhanced privacy protection and automatic content deletion</li>
+            <li><strong>Real-time Preview:</strong> Unique preview feature shows exact PDF layout before conversion</li>
+            <li><strong>Dual Input Methods:</strong> Support for both HTML code and URL conversion in one platform</li>
+            <li><strong>No Limitations:</strong> Unlimited conversions without watermarks or restrictions</li>
+            <li><strong>Mobile Optimized:</strong> Perfect HTML to PDF conversion on any device or platform</li>
+        </ul>
+        
+        <h3>Start Converting HTML to PDF with SmallPDF.us Today</h3>
+        <p>Experience the difference with SmallPDF.us, the most advanced <strong>HTML to PDF converter</strong> available online. Whether you need to convert HTML code, transform web pages to PDF, or create professional PDF documents from HTML content, SmallPDF.us delivers exceptional results every time. Our commitment to quality, security, and user experience makes us the preferred choice for millions of users worldwide.</p>
+        
+        <p>Join the SmallPDF.us community today and discover why we're the leading platform to <strong>convert HTML to PDF</strong> online. With our free, secure, and feature-rich <strong>HTML to PDF converter</strong>, you'll never need another PDF conversion tool. Start your <strong>HTML to PDF conversion</strong> now and experience the SmallPDF.us difference!</p>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="content-section">
+        <h2>Ready to Convert HTML to PDF with SmallPDF.us?</h2>
+        <p>Join millions who trust SmallPDF.us for professional HTML to PDF conversion. Transform web pages, convert HTML code, and create perfect PDF documents - all free!</p>
+        <a href="#html-code-tab" class="cta-btn">Start Converting HTML to PDF Now</a>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Performance optimized JavaScript
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const htmlTextarea = document.getElementById('htmlTextarea');
+    const urlInput = document.getElementById('urlInput');
+    const fetchUrlBtn = document.getElementById('fetchUrlBtn');
+    const htmlPreviewSection = document.getElementById('htmlPreviewSection');
+    const htmlPreviewIframe = document.getElementById('htmlPreviewIframe');
+    const htmlPreviewCode = document.getElementById('htmlPreviewCode');
+    const previewToggleBtns = document.querySelectorAll('.preview-toggle-btn');
+    const clearBtn = document.getElementById('clearBtn');
+    const convertBtn = document.getElementById('convertBtn');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const pdfResultSection = document.getElementById('pdfResultSection');
+    const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+    const startOverBtn = document.getElementById('startOverBtn');
+    const progressBar = document.getElementById('progressBar');
+    const loadingStatus = document.getElementById('loadingStatus');
+    
+    // Options elements
+    const pageSize = document.getElementById('pageSize');
+    const orientation = document.getElementById('orientation');
+    const margin = document.getElementById('margin');
+    const scale = document.getElementById('scale');
+    const background = document.getElementById('background');
+    
+    // State
+    let currentTab = 'html-code';
+    let currentPreview = 'rendered';
+    let isConverting = false;
+    let convertedPdfBlob = null;
+    let conversionSettings = {};
+    let currentHtmlContent = '';
+
+    // Tab switching
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tabId = btn.dataset.tab;
+            switchTab(tabId);
+        });
+    });
+
+    function switchTab(tabId) {
+        currentTab = tabId;
+        
+        // Update tab buttons
+        tabBtns.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.tab === tabId);
+        });
+        
+        // Update tab content
+        tabContents.forEach(content => {
+            content.classList.toggle('active', content.id === `${tabId}-tab`);
+        });
+        
+        // Clear previous content and preview
+        clearContent();
+    }
+
+    // Preview toggle
+    previewToggleBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const previewType = btn.dataset.preview;
+            switchPreview(previewType);
+        });
+    });
+
+    function switchPreview(previewType) {
+        currentPreview = previewType;
+        
+        // Update toggle buttons
+        previewToggleBtns.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.preview === previewType);
+        });
+        
+        // Update preview display
+        if (previewType === 'rendered') {
+            htmlPreviewIframe.style.display = 'block';
+            htmlPreviewCode.style.display = 'none';
+        } else {
+            htmlPreviewIframe.style.display = 'none';
+            htmlPreviewCode.style.display = 'block';
+        }
+    }
+
+    // HTML textarea input with debouncing
+    let previewTimeout;
+    htmlTextarea.addEventListener('input', () => {
+        clearTimeout(previewTimeout);
+        previewTimeout = setTimeout(() => {
+            updateHtmlPreview(htmlTextarea.value);
+        }, 500);
+    });
+
+    // URL fetch functionality
+    fetchUrlBtn.addEventListener('click', fetchUrlContent);
+    urlInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            fetchUrlContent();
+        }
+    });
+
+async function fetchUrlContent() {
+    const url = urlInput.value.trim();
+    
+    if (!url) {
+        showMessage('Please enter a valid URL.', 'error');
+        return;
+    }
+    
+    if (!isValidUrl(url)) {
+        showMessage('Please enter a valid URL starting with http:// or https://', 'error');
+        return;
+    }
+    
+    fetchUrlBtn.disabled = true;
+    fetchUrlBtn.innerHTML = `
+        <div style="width: 14px; height: 14px; border: 2px solid transparent; border-top: 2px solid currentColor; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+        Fetching...
+    `;
+    
+    try {
+        const formData = new FormData();
+        formData.append('url', url);
+        formData.append('fetch_only', 'true');
+        
+        const response = await fetch('/api/html-to-pdf-from-url/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+            }
+        });
+        
+        if (!response.ok) {
+            if (response.headers.get('content-type')?.includes('application/json')) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to fetch URL content');
+            } else {
+                throw new Error('Failed to fetch URL with status: ' + response.status);
+            }
+        }
+        
+        const htmlContent = await response.text();
+        updateHtmlPreview(htmlContent);
+        showMessage('URL content fetched successfully!', 'success');
+        
+    } catch (error) {
+        console.error('URL fetch error:', error);
+        showMessage(error.message || 'Failed to fetch URL content. Please try again.', 'error');
+    } finally {
+        fetchUrlBtn.disabled = false;
+        fetchUrlBtn.innerHTML = `
+            <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-3a5 5 0 00-5-5H5" />
+            </svg>
+            Fetch & Preview
+        `;
+    }
+}
+
+    
+
+    // Fix the HTML preview function to properly render content
+    
+function updateHtmlPreview(htmlContent) {
+    if (!htmlContent.trim()) {
+        htmlPreviewSection.style.display = 'none';
+        currentHtmlContent = '';
+        return;
+    }
+    
+    currentHtmlContent = htmlContent;
+    htmlPreviewSection.style.display = 'block';
+    
+    // Update rendered preview with proper content security
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    
+    // Clear previous content and set new source
+    htmlPreviewIframe.onload = () => {
+        URL.revokeObjectURL(url);
+    };
+    htmlPreviewIframe.src = url;
+    
+    // Update code preview with syntax highlighting
+    htmlPreviewCode.innerHTML = highlightHtml(htmlContent);
+}
+
+    function highlightHtml(html) {
+        // Simple syntax highlighting
+        return html
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/(&lt;\/?[^&\s]*&gt;)/g, '<span class="html-tag">$1</span>')
+            .replace(/(\w+)=/g, '<span class="html-attribute">$1</span>=')
+            .replace(/"([^"]*)"/g, '"<span class="html-string">$1</span>"')
+            .replace(/(&lt;!--.*?--&gt;)/g, '<span class="html-comment">$1</span>');
+    }
+
+    function isValidUrl(string) {
+        try {
+            const url = new URL(string);
+            return url.protocol === 'http:' || url.protocol === 'https:';
+        } catch (_) {
+            return false;
+        }
+    }
+
+    // Clear functionality
+    clearBtn.addEventListener('click', clearContent);
+
+    function clearContent() {
+        htmlTextarea.value = '';
+        urlInput.value = '';
+        currentHtmlContent = '';
+        htmlPreviewSection.style.display = 'none';
+        hidePdfResult();
+        clearMessages();
+    }
+
+    // Convert functionality
+    convertBtn.addEventListener('click', convertToPDF);
+
+    function updateProgress(percentage, status) {
+        progressBar.style.width = percentage + '%';
+        loadingStatus.textContent = status;
+    }
+
+async function convertToPDF() {
+    let htmlContent = '';
+    
+    if (currentTab === 'html-code') {
+        htmlContent = htmlTextarea.value.trim();
+    } else if (currentTab === 'url-convert') {
+        const url = urlInput.value.trim();
+        if (!url) {
+            showMessage('Please enter a URL to convert.', 'error');
+            return;
+        }
+        if (!isValidUrl(url)) {
+            showMessage('Please enter a valid URL starting with http:// or https://', 'error');
+            return;
+        }
+        // For URL conversion, we'll use the URL directly
+        htmlContent = url;
+    }
+    
+    if (!htmlContent) {
+        showMessage('Please enter HTML content or a URL to convert.', 'error');
+        return;
+    }
+    
+    if (isConverting) return;
+    
+    isConverting = true;
+    convertBtn.disabled = true;
+    showLoading();
+    
+    // Store conversion settings
+    conversionSettings = {
+        page_size: pageSize.value,
+        orientation: orientation.value,
+        margin: margin.value,
+        scale: scale.value,
+        background: background.value
+    };
+    
+    // Simulate progress updates
+    let progress = 0;
+    const progressInterval = setInterval(() => {
+        progress += Math.random() * 15;
+        if (progress > 85) {
+            progress = 85;
+            clearInterval(progressInterval);
+        }
+        
+        let status = 'Preparing...';
+        if (progress > 20) status = 'Processing HTML...';
+        if (progress > 50) status = 'Creating PDF...';
+        if (progress > 75) status = 'Finalizing...';
+        
+        updateProgress(progress, status);
+    }, 200);
+    
+    try {
+        const formData = new FormData();
+        
+        if (currentTab === 'html-code') {
+            formData.append('html_content', htmlContent);
+            
+            Object.keys(conversionSettings).forEach(key => {
+                formData.append(key, conversionSettings[key]);
+            });
+            
+            const response = await fetch('/api/html-to-pdf/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                }
+            });
+            
+            if (!response.ok) {
+                if (response.headers.get('content-type')?.includes('application/json')) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Conversion failed');
+                } else {
+                    throw new Error('Conversion failed with status: ' + response.status);
+                }
+            }
+            
+            convertedPdfBlob = await response.blob();
+            
+        } else {
+            // URL conversion
+            formData.append('url', htmlContent);
+            
+            Object.keys(conversionSettings).forEach(key => {
+                formData.append(key, conversionSettings[key]);
+            });
+            
+            const response = await fetch('/api/html-to-pdf-from-url/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                }
+            });
+            
+            if (!response.ok) {
+                if (response.headers.get('content-type')?.includes('application/json')) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'URL conversion failed');
+                } else {
+                    throw new Error('URL conversion failed with status: ' + response.status);
+                }
+            }
+            
+            convertedPdfBlob = await response.blob();
+        }
+        
+        clearInterval(progressInterval);
+        updateProgress(100, 'Complete!');
+        
+        setTimeout(() => {
+            hideLoading();
+            showPdfResult();
+            updatePdfInfo();
+        }, 1000);
+        
+    } catch (error) {
+        clearInterval(progressInterval);
+        hideLoading();
+        console.error('Conversion error:', error);
+        showMessage(error.message || 'Conversion failed. Please try again.', 'error');
+    } finally {
+        isConverting = false;
+        convertBtn.disabled = false;
+    }
+}
+
+    function updatePdfInfo() {
+        const conversionMethodElement = document.getElementById('conversionMethod');
+        const fileSizeElement = document.getElementById('fileSize');
+        const pageFormatElement = document.getElementById('pageFormat');
+        const scaleInfoElement = document.getElementById('scaleInfo');
+
+        if (conversionMethodElement) {
+            conversionMethodElement.textContent = currentTab === 'html-code' ? 'HTML Code' : 'Web Page';
+        }
+
+        if (fileSizeElement && convertedPdfBlob) {
+            fileSizeElement.textContent = formatFileSize(convertedPdfBlob.size);
+        }
+
+        if (pageFormatElement) {
+            pageFormatElement.textContent = conversionSettings.page_size.toUpperCase();
+        }
+
+        if (scaleInfoElement) {
+            scaleInfoElement.textContent = (parseFloat(conversionSettings.scale) * 100) + '%';
+        }
+    }
+
+    // Download functionality
+    downloadPdfBtn.addEventListener('click', downloadPDF);
+
+    function downloadPDF() {
+        if (!convertedPdfBlob) {
+            showMessage('No PDF available for download.', 'error');
+            return;
+        }
+
+        const url = window.URL.createObjectURL(convertedPdfBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = currentTab === 'html-code' ? 'converted_html.pdf' : 'converted_webpage.pdf';
+        
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+        showMessage('PDF downloaded successfully!', 'success');
+    }
+
+    // Start over functionality
+    startOverBtn.addEventListener('click', startOver);
+
+    function startOver() {
+        clearContent();
+        convertedPdfBlob = null;
+        conversionSettings = {};
+        switchTab('html-code');
+    }
+
+    // UI helper functions
+    function showLoading() {
+        loadingOverlay.style.display = 'flex';
+        updateProgress(0, 'Preparing...');
+    }
+
+    function hideLoading() {
+        loadingOverlay.style.display = 'none';
+    }
+
+    function showPdfResult() {
+        pdfResultSection.style.display = 'block';
+    }
+
+    function hidePdfResult() {
+        pdfResultSection.style.display = 'none';
+    }
+
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function showMessage(message, type = 'error') {
+        clearMessages();
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message message-${type}`;
+        
+        const iconSvg = type === 'error' ? 
+            `<svg class="message-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>` :
+            `<svg class="message-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>`;
+        
+        messageDiv.innerHTML = `${iconSvg}<span>${message}</span>`;
+        
+        const contentArea = document.querySelector('.content-area');
+        contentArea.insertBefore(messageDiv, contentArea.firstChild);
+        
+        setTimeout(() => {
+            if (messageDiv.parentNode) {
+                messageDiv.remove();
+            }
+        }, 5000);
+    }
+
+    function clearMessages() {
+        const messages = document.querySelectorAll('.message');
+        messages.forEach(msg => msg.remove());
+    }
+
+    // Initialize FAQ functionality
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        if (question) {
+            question.addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        }
+    });
+
+    // Initialize with sample HTML content
+    const sampleHtml = `<!DOCTYPE html>
+<html>
+<head>
+    <title>Sample Document - SmallPDF.us</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 40px; 
+            line-height: 1.6;
+            color: #333;
+        }
+        h1 { 
+            color: #4361ee; 
+            border-bottom: 2px solid #4361ee;
+            padding-bottom: 10px;
+        }
+        h2 { 
+            color: #3a0ca3; 
+            margin-top: 30px;
+        }
+        p { 
+            margin-bottom: 15px; 
+        }
+        .highlight {
+            background-color: #f0f5ff;
+            padding: 15px;
+            border-left: 4px solid #4361ee;
+            margin: 20px 0;
+        }
+        ul {
+            margin-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to SmallPDF.us HTML to PDF Converter</h1>
+    
+    <p>This is a sample HTML document that demonstrates the capabilities of our HTML to PDF converter. You can replace this content with your own HTML code.</p>
+    
+    <h2>Features Supported</h2>
+    <p>Our HTML to PDF converter supports a wide range of HTML and CSS features:</p>
+    
+    <ul>
+        <li><strong>Text formatting</strong> - Bold, italic, underline, and more</li>
+        <li><strong>CSS styling</strong> - Colors, fonts, margins, and layouts</li>
+        <li><strong>Images and graphics</strong> - Embedded images and SVG graphics</li>
+        <li><strong>Tables and lists</strong> - Structured data presentation</li>
+        <li><strong>Custom fonts</strong> - Web-safe and Google Fonts</li>
+    </ul>
+    
+    <div class="highlight">
+        <h3>💡 Pro Tip</h3>
+        <p>For best results, use clean, well-structured HTML with CSS styles. Avoid complex JavaScript and animations as they won't be preserved in the PDF output.</p>
+    </div>
+    
+    <h2>Getting Started</h2>
+    <p>Simply replace this sample content with your own HTML code, configure your PDF settings, and click "Convert to PDF". It's that easy!</p>
+    
+    <p><em>Thank you for choosing SmallPDF.us for your HTML to PDF conversion needs.</em></p>
+</body>
+</html>`;
+
+    htmlTextarea.value = sampleHtml;
+    updateHtmlPreview(sampleHtml);
+});
+</script>
+
+{% endblock %}
