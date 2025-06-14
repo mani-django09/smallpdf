@@ -20,6 +20,7 @@ import platform
 from datetime import datetime
 from django.views.decorators.http import require_http_methods
 from django.core.mail import send_mail
+import tempfile
 
 # Add these missing imports for contact functionality
 from .models import ContactMessage, ContactSettings
@@ -2999,3 +3000,148 @@ def live_chat_status(request):
         'estimated_wait': '< 2 minutes' if is_business_hours else 'Offline',
         'agents_online': 3 if is_business_hours else 0
     })
+
+# Add this UPDATED sitemap view to your pdf_tools/views.py
+
+from django.http import HttpResponse
+from django.urls import reverse
+from django.utils import timezone
+from datetime import datetime
+
+def sitemap_xml(request):
+    """Generate sitemap.xml with correct domain"""
+    
+    # Get the actual domain from the request
+    domain = request.get_host()
+    protocol = 'https' if request.is_secure() else 'http'
+    
+    # Force your domain for production (replace with your actual domain)
+    if domain == '127.0.0.1:8000' or domain == 'localhost:8000':
+        # For development, use your actual domain
+        base_url = 'https://smallpdf.us'
+    else:
+        # For production, use the request domain
+        base_url = f"{protocol}://{domain}"
+    
+    # Get current date in simple format
+    current_date = datetime.now().strftime('%Y-%m-%d')
+    static_date = '2024-01-01'
+    
+    # Define all URLs with their priorities and change frequencies
+    urls = [
+        # Main pages
+        {'url': '/', 'priority': '1.0', 'changefreq': 'daily', 'lastmod': current_date},
+        {'url': '/tools/', 'priority': '0.9', 'changefreq': 'weekly', 'lastmod': current_date},
+        {'url': '/about/', 'priority': '0.6', 'changefreq': 'monthly', 'lastmod': static_date},
+        {'url': '/contact/', 'priority': '0.7', 'changefreq': 'monthly', 'lastmod': static_date},
+        {'url': '/faq/', 'priority': '0.6', 'changefreq': 'monthly', 'lastmod': static_date},
+        {'url': '/privacy-policy/', 'priority': '0.4', 'changefreq': 'yearly', 'lastmod': static_date},
+        {'url': '/terms-of-service/', 'priority': '0.4', 'changefreq': 'yearly', 'lastmod': static_date},
+        
+        # PDF Tools
+        {'url': '/merge-pdf/', 'priority': '0.9', 'changefreq': 'monthly', 'lastmod': current_date},
+        {'url': '/compress-pdf/', 'priority': '0.9', 'changefreq': 'monthly', 'lastmod': current_date},
+        {'url': '/pdf-to-word/', 'priority': '0.9', 'changefreq': 'monthly', 'lastmod': current_date},
+        {'url': '/word-to-pdf/', 'priority': '0.9', 'changefreq': 'monthly', 'lastmod': current_date},
+        {'url': '/pdf-to-jpg/', 'priority': '0.8', 'changefreq': 'monthly', 'lastmod': current_date},
+        {'url': '/jpg-to-pdf/', 'priority': '0.8', 'changefreq': 'monthly', 'lastmod': current_date},
+        {'url': '/compress-image/', 'priority': '0.8', 'changefreq': 'monthly', 'lastmod': current_date},
+        {'url': '/convert-pdf/', 'priority': '0.8', 'changefreq': 'monthly', 'lastmod': current_date},
+    ]
+    
+    # Generate XML content
+    xml_content = '''<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+'''
+    
+    for url_data in urls:
+        xml_content += f'''    <url>
+        <loc>{base_url}{url_data['url']}</loc>
+        <lastmod>{url_data['lastmod']}</lastmod>
+        <changefreq>{url_data['changefreq']}</changefreq>
+        <priority>{url_data['priority']}</priority>
+    </url>
+'''
+    
+    xml_content += '</urlset>'
+    
+    return HttpResponse(xml_content, content_type='application/xml')
+
+
+def robots_txt(request):
+    """Generate robots.txt with correct domain"""
+    
+    # Get the actual domain from the request
+    domain = request.get_host()
+    protocol = 'https' if request.is_secure() else 'http'
+    
+    # Force your domain for production
+    if domain == '127.0.0.1:8000' or domain == 'localhost:8000':
+        base_url = 'https://smallpdf.us'
+    else:
+        base_url = f"{protocol}://{domain}"
+    
+    robots_content = f"""User-agent: *
+Allow: /
+
+# Allow all tools and important pages
+Allow: /merge-pdf/
+Allow: /compress-pdf/
+Allow: /compress-image/
+Allow: /pdf-to-word/
+Allow: /word-to-pdf/
+Allow: /pdf-to-jpg/
+Allow: /jpg-to-pdf/
+Allow: /convert-pdf/
+Allow: /tools/
+Allow: /about/
+Allow: /contact/
+Allow: /privacy-policy/
+Allow: /terms-of-service/
+Allow: /faq/
+
+# Disallow API endpoints from being crawled
+Disallow: /api/
+Disallow: /admin/
+Disallow: /media/temp_images/
+Disallow: /media/contact_attachments/
+
+# Allow media files but disallow temporary files
+Allow: /media/
+Allow: /static/
+
+# Block certain file types that shouldn't be indexed
+Disallow: *.pdf$
+Disallow: *.doc$
+Disallow: *.docx$
+Disallow: *.jpg$
+Disallow: *.jpeg$
+Disallow: *.png$
+Disallow: *.gif$
+
+# Crawl delay to be respectful
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: {base_url}/sitemap.xml
+
+# Popular search engines
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 2
+
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 1
+"""
+    
+    return HttpResponse(robots_content, content_type='text/plain')
+

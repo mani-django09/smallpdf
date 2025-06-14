@@ -1,351 +1,545 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}SmallPDF.us - Ultimate PDF Conversion & Management Tools{% endblock %}
+{% block title %}Free Online PDF Tools | Convert, Compress, Merge PDFs | SmallPDF.us{% endblock %}
+
+{% block meta_description %}Free online PDF tools to convert, compress, merge PDFs instantly. Convert PDF to Word, JPG to PDF, compress images. No registration required. Fast, secure, 100% free.{% endblock %}
+
+{% block meta_keywords %}free PDF tools, PDF converter, compress PDF, merge PDF, PDF to Word, Word to PDF, JPG to PDF, PDF to JPG, online PDF tools, document converter, image compressor{% endblock %}
+
+{% block og_title %}SmallPDF.us - Free Online PDF Tools | Convert & Compress PDFs Instantly{% endblock %}
+{% block og_description %}Transform your documents with our free online PDF tools. Convert, compress, merge PDFs in seconds. Trusted by millions worldwide. No installation required.{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Enhanced hero section with mobile-first design */
+    .hero-gradient {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #0ea5e9 50%, #8b5cf6 75%, #f43f5e 100%);
+        background-size: 300% 300%;
+        animation: gradient 8s ease infinite;
+    }
+    
+    /* Tool card hover effects optimized for mobile */
+    .tool-card {
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transform: translateY(0);
+        opacity: 1;
+    }
+    
+    .tool-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Mobile-optimized button animations */
+    .quick-action-btn {
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .quick-action-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.5s;
+    }
+    
+    .quick-action-btn:hover::before {
+        left: 100%;
+    }
+    
+    /* Enhanced stats counter animation */
+    .stat-number {
+        font-variant-numeric: tabular-nums;
+    }
+    
+    /* Mobile-optimized testimonial cards */
+    .testimonial-card {
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    /* Enhanced FAQ accordion for mobile */
+    .faq-accordion {
+        scroll-margin-top: 100px; /* Account for sticky header */
+    }
+    
+    /* Performance optimizations */
+    .lazy-load {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.6s ease;
+    }
+    
+    .lazy-load.loaded {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    /* Mobile-specific optimizations */
+    @media (max-width: 640px) {
+        .hero-text {
+            font-size: 1.75rem;
+            line-height: 1.3;
+        }
+        
+        .tool-card {
+            margin-bottom: 1rem;
+        }
+        
+        .quick-action-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .hero-text {
+            font-size: 1.5rem;
+        }
+        
+        .quick-action-grid {
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+        }
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-<section class="bg-blue-600 py-8 relative overflow-hidden">
-    <!-- Background dots pattern -->
-    <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Ccircle cx=\'10\' cy=\'10\' r=\'1\' fill=\'%23FFFFFF\' /%3E%3C/svg%3E'); background-size: 20px 20px;"></div>
-    
-    <div class="container mx-auto px-4 relative z-10">
-        <div class="max-w-4xl mx-auto text-center">
-            <!-- Compact heading -->
-            <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-4 leading-tight">
-                Every tool you need to work with PDFs in one place
-            </h1>
-            <!-- Quick Action Buttons - Responsive grid that stacks on smaller screens -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-wrap md:justify-center gap-2 md:gap-4">
-                <a href="{% url 'merge_pdf' %}" class="bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-medium py-2 px-3 sm:px-4 rounded-lg transition-colors duration-300 flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 sm:mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2" y="2" width="9" height="9" rx="1"></rect>
-                        <rect x="13" y="2" width="9" height="9" rx="1"></rect>
-                        <rect x="2" y="13" width="9" height="9" rx="1"></rect>
-                        <rect x="13" y="13" width="9" height="9" rx="1"></rect>
-                    </svg>
-                    Merge PDF
-                </a>
-                <a href="{% url 'compress_pdf' %}" class="bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-medium py-2 px-3 sm:px-4 rounded-lg transition-colors duration-300 flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 sm:mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="8 17 12 21 16 17"></polyline>
-                        <line x1="12" y1="12" x2="12" y2="21"></line>
-                        <path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"></path>
-                    </svg>
-                    Compress
-                </a>
-                <a href="{% url 'pdf_to_word' %}" class="bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-medium py-2 px-3 sm:px-4 rounded-lg transition-colors duration-300 flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 sm:mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                        <polyline points="14 2 14 8 20 8"></polyline>
-                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                        <line x1="16" y1="17" x2="8" y2="17"></line>
-                    </svg>
-                    PDF to Word
-                </a>
-                <a href="{% url 'pdf_to_jpg' %}" class="bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-medium py-2 px-3 sm:px-4 rounded-lg transition-colors duration-300 flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 sm:mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                        <polyline points="21 15 16 10 5 21"></polyline>
-                    </svg>
-                    PDF to JPG
-                </a>
-                <a href="{% url 'word_to_pdf' %}" class="bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-medium py-2 px-3 sm:px-4 rounded-lg transition-colors duration-300 flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 sm:mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                        <polyline points="14 2 14 8 20 8"></polyline>
-                    </svg>
-                    Word to PDF
-                </a>
-                <a href="{% url 'all_tools' %}" class="bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-medium py-2 px-3 sm:px-4 rounded-lg transition-colors duration-300 flex items-center justify-center col-span-2 sm:col-span-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 sm:mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="12" y1="8" x2="12" y2="16"></line>
-                        <line x1="8" y1="12" x2="16" y2="12"></line>
-                    </svg>
-                    All Tools
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
 
-<!-- Tools Grid Section - Styled to exactly match the I Love PDF Screenshot -->
-<section class="py-12 bg-gray-50">
+   
+<!-- Enhanced Tools Grid Section with mobile-optimized layout -->
+<section class="py-8 sm:py-12 md:py-16 bg-gray-50" id="tools">
     <div class="container mx-auto px-4">
-        <div class="max-w-5xl mx-auto">
-            <!-- Primary Tools Row 1 -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                <!-- Merge PDF -->
-                <div class="bg-white rounded-lg shadow overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-                    <div class="p-6">
+        <div class="max-w-6xl mx-auto">
+            <!-- Section header with better SEO -->
+            <div class="text-center mb-8 sm:mb-12">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
+                    Professional PDF Tools for Every Need
+                </h2>
+                <p class="text-gray-600 text-base sm:text-lg max-w-3xl mx-auto leading-relaxed">
+                    Choose from our comprehensive suite of PDF tools designed for professionals, students, and businesses. 
+                    All tools are free, secure, and work directly in your browser.
+                </p>
+            </div>
+            
+            <!-- Enhanced tools grid with mobile-first responsive design -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+                <!-- Merge PDF Tool -->
+                <article class="tool-card bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2 border border-gray-100 lazy-load">
+                    <div class="p-4 sm:p-6">
                         <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 flex-shrink-0 mr-4 rounded-lg bg-red-100 flex items-center justify-center">
-                                <svg class="w-6 h-6 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 mr-3 sm:mr-4 rounded-lg bg-red-100 flex items-center justify-center">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                     <rect x="2" y="2" width="9" height="9" rx="1"></rect>
                                     <rect x="13" y="2" width="9" height="9" rx="1"></rect>
                                     <rect x="2" y="13" width="9" height="9" rx="1"></rect>
                                     <rect x="13" y="13" width="9" height="9" rx="1"></rect>
                                 </svg>
                             </div>
-                            <h3 class="font-bold text-xl text-gray-800">Merge PDF</h3>
+                            <h3 class="font-bold text-lg sm:text-xl text-gray-800">Merge PDF</h3>
                         </div>
-                        <p class="text-gray-600 mb-4">Combine PDFs in the order you want with the easiest PDF merger available.</p>
-                        <a href="{% url 'merge_pdf' %}" class="block w-full text-center bg-gray-100 hover:bg-red-500 hover:text-white text-red-500 font-medium py-2 rounded transition-colors">
-                            Merge PDF
+                        <p class="text-gray-600 mb-4 text-sm sm:text-base leading-relaxed">
+                            Combine multiple PDF files into a single document in your preferred order. 
+                            Perfect for creating comprehensive reports and presentations.
+                        </p>
+                        <a href="{% url 'merge_pdf' %}" class="block w-full text-center bg-gray-100 hover:bg-red-500 hover:text-white text-red-500 font-medium py-2 sm:py-3 rounded-lg transition-colors duration-300 touch-target focus-ring">
+                            Start Merging
                         </a>
                     </div>
-                </div>
+                </article>
                 
-                <!-- Compress PDF -->
-                <div class="bg-white rounded-lg shadow overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-                    <div class="p-6">
+                <!-- Compress PDF Tool -->
+                <article class="tool-card bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2 border border-gray-100 lazy-load">
+                    <div class="p-4 sm:p-6">
                         <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 flex-shrink-0 mr-4 rounded-lg bg-green-100 flex items-center justify-center">
-                                <svg class="w-6 h-6 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 mr-3 sm:mr-4 rounded-lg bg-green-100 flex items-center justify-center">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                     <polyline points="7 10 12 15 17 10"></polyline>
                                     <line x1="12" y1="15" x2="12" y2="3"></line>
                                 </svg>
                             </div>
-                            <h3 class="font-bold text-xl text-gray-800">Compress PDF</h3>
+                            <h3 class="font-bold text-lg sm:text-xl text-gray-800">Compress PDF</h3>
                         </div>
-                        <p class="text-gray-600 mb-4">Reduce file size while optimizing for maximal PDF quality.</p>
-                        <a href="{% url 'compress_pdf' %}" class="block w-full text-center bg-gray-100 hover:bg-green-500 hover:text-white text-green-500 font-medium py-2 rounded transition-colors">
-                            Compress PDF
+                        <p class="text-gray-600 mb-4 text-sm sm:text-base leading-relaxed">
+                            Reduce PDF file size by up to 90% while maintaining document quality. 
+                            Ideal for email attachments and online sharing.
+                        </p>
+                        <a href="{% url 'compress_pdf' %}" class="block w-full text-center bg-gray-100 hover:bg-green-500 hover:text-white text-green-500 font-medium py-2 sm:py-3 rounded-lg transition-colors duration-300 touch-target focus-ring">
+                            Start Compressing
                         </a>
                     </div>
-                </div>
+                </article>
                 
-                <!-- NEW: Compress Image -->
-                <div class="bg-white rounded-lg shadow overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 relative">
-                    <div class="absolute top-4 right-4">
-                        <span class="bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-full">New!</span>
+                <!-- Compress Image Tool with "New" badge -->
+                <article class="tool-card bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2 border border-gray-100 relative lazy-load">
+                    <div class="absolute top-3 right-3 sm:top-4 sm:right-4">
+                        <span class="bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-lg animate-pulse">
+                            New!
+                        </span>
                     </div>
-                    <div class="p-6">
+                    <div class="p-4 sm:p-6">
                         <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 flex-shrink-0 mr-4 rounded-lg bg-yellow-100 flex items-center justify-center">
-                                <svg class="w-6 h-6 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 mr-3 sm:mr-4 rounded-lg bg-yellow-100 flex items-center justify-center">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                     <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                                     <circle cx="8.5" cy="8.5" r="1.5"></circle>
                                     <polyline points="21 15 16 10 5 21"></polyline>
                                 </svg>
                             </div>
-                            <h3 class="font-bold text-xl text-gray-800">Compress Image</h3>
+                            <h3 class="font-bold text-lg sm:text-xl text-gray-800">Compress Image</h3>
                         </div>
-                        <p class="text-gray-600 mb-4">Reduce image file size while maintaining visual quality. Support for JPG, PNG, and other formats.</p>
-                        <a href="{% url 'compress_image' %}" class="block w-full text-center bg-gray-100 hover:bg-yellow-500 hover:text-white text-yellow-500 font-medium py-2 rounded transition-colors">
-                            Compress Image
+                        <p class="text-gray-600 mb-4 text-sm sm:text-base leading-relaxed">
+                            Optimize JPG, PNG, and other image formats for web and email. 
+                            Smart compression maintains visual quality while reducing file size.
+                        </p>
+                        <a href="{% url 'compress_image' %}" class="block w-full text-center bg-gray-100 hover:bg-yellow-500 hover:text-white text-yellow-500 font-medium py-2 sm:py-3 rounded-lg transition-colors duration-300 touch-target focus-ring">
+                            Start Optimizing
                         </a>
                     </div>
-                </div>
-            </div>
-            
-            <!-- Primary Tools Row 2 -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                <!-- PDF to Word -->
-                <div class="bg-white rounded-lg shadow overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-                    <div class="p-6">
+                </article>
+                
+                <!-- PDF to Word Tool -->
+                <article class="tool-card bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2 border border-gray-100 lazy-load">
+                    <div class="p-4 sm:p-6">
                         <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 flex-shrink-0 mr-4 rounded-lg bg-blue-100 flex items-center justify-center">
-                                <svg class="w-6 h-6 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 mr-3 sm:mr-4 rounded-lg bg-blue-100 flex items-center justify-center">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                     <polyline points="14 2 14 8 20 8"></polyline>
                                     <line x1="16" y1="13" x2="8" y2="13"></line>
                                     <line x1="16" y1="17" x2="8" y2="17"></line>
                                 </svg>
                             </div>
-                            <h3 class="font-bold text-xl text-gray-800">PDF to Word</h3>
+                            <h3 class="font-bold text-lg sm:text-xl text-gray-800">PDF to Word</h3>
                         </div>
-                        <p class="text-gray-600 mb-4">Easily convert your PDF files into easy to edit DOC and DOCX documents.</p>
-                        <a href="{% url 'pdf_to_word' %}" class="block w-full text-center bg-gray-100 hover:bg-blue-500 hover:text-white text-blue-500 font-medium py-2 rounded transition-colors">
-                            PDF to Word
+                        <p class="text-gray-600 mb-4 text-sm sm:text-base leading-relaxed">
+                            Convert PDF documents to editable Word files with 98% accuracy. 
+                            Preserve formatting, tables, and images perfectly.
+                        </p>
+                        <a href="{% url 'pdf_to_word' %}" class="block w-full text-center bg-gray-100 hover:bg-blue-500 hover:text-white text-blue-500 font-medium py-2 sm:py-3 rounded-lg transition-colors duration-300 touch-target focus-ring">
+                            Start Converting
                         </a>
                     </div>
-                </div>
+                </article>
                 
-                <!-- Word to PDF -->
-                <div class="bg-white rounded-lg shadow overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-                    <div class="p-6">
+                <!-- Word to PDF Tool -->
+                <article class="tool-card bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2 border border-gray-100 lazy-load">
+                    <div class="p-4 sm:p-6">
                         <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 flex-shrink-0 mr-4 rounded-lg bg-blue-100 flex items-center justify-center">
-                                <svg class="w-6 h-6 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 mr-3 sm:mr-4 rounded-lg bg-blue-100 flex items-center justify-center">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                     <polyline points="14 2 14 8 20 8"></polyline>
                                 </svg>
                             </div>
-                            <h3 class="font-bold text-xl text-gray-800">Word to PDF</h3>
+                            <h3 class="font-bold text-lg sm:text-xl text-gray-800">Word to PDF</h3>
                         </div>
-                        <p class="text-gray-600 mb-4">Make DOC and DOCX files easy to read by converting them to PDF.</p>
-                        <a href="{% url 'word_to_pdf' %}" class="block w-full text-center bg-gray-100 hover:bg-blue-500 hover:text-white text-blue-500 font-medium py-2 rounded transition-colors">
-                            Word to PDF
+                        <p class="text-gray-600 mb-4 text-sm sm:text-base leading-relaxed">
+                            Transform Word documents into professional PDF files instantly. 
+                            Perfect for sharing documents that maintain their formatting.
+                        </p>
+                        <a href="{% url 'word_to_pdf' %}" class="block w-full text-center bg-gray-100 hover:bg-blue-500 hover:text-white text-blue-500 font-medium py-2 sm:py-3 rounded-lg transition-colors duration-300 touch-target focus-ring">
+                            Start Converting
                         </a>
                     </div>
-                </div>
+                </article>
                 
-                <!-- PDF to JPG -->
-                <div class="bg-white rounded-lg shadow overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-                    <div class="p-6">
+                <!-- PDF to JPG Tool -->
+                <article class="tool-card bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2 border border-gray-100 lazy-load">
+                    <div class="p-4 sm:p-6">
                         <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 flex-shrink-0 mr-4 rounded-lg bg-yellow-100 flex items-center justify-center">
-                                <svg class="w-6 h-6 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 mr-3 sm:mr-4 rounded-lg bg-yellow-100 flex items-center justify-center">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                     <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                                     <circle cx="8.5" cy="8.5" r="1.5"></circle>
                                     <polyline points="21 15 16 10 5 21"></polyline>
                                 </svg>
                             </div>
-                            <h3 class="font-bold text-xl text-gray-800">PDF to JPG</h3>
+                            <h3 class="font-bold text-lg sm:text-xl text-gray-800">PDF to JPG</h3>
                         </div>
-                        <p class="text-gray-600 mb-4">Convert each PDF page into a JPG or extract all images from a PDF.</p>
-                        <a href="{% url 'pdf_to_jpg' %}" class="block w-full text-center bg-gray-100 hover:bg-yellow-500 hover:text-white text-yellow-500 font-medium py-2 rounded transition-colors">
-                            PDF to JPG
+                        <p class="text-gray-600 mb-4 text-sm sm:text-base leading-relaxed">
+                            Extract pages from PDF as high-quality JPG images. 
+                            Choose specific pages or convert all pages with custom resolution.
+                        </p>
+                        <a href="{% url 'pdf_to_jpg' %}" class="block w-full text-center bg-gray-100 hover:bg-yellow-500 hover:text-white text-yellow-500 font-medium py-2 sm:py-3 rounded-lg transition-colors duration-300 touch-target focus-ring">
+                            Start Extracting
                         </a>
                     </div>
-                </div>
+                </article>
             </div>
             
-            <!-- Secondary Tools Row 2 -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- JPG to PDF -->
-                <div class="bg-white rounded-lg shadow overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-                    <div class="p-6">
-                        <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 flex-shrink-0 mr-4 rounded-lg bg-yellow-100 flex items-center justify-center">
-                                <svg class="w-6 h-6 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                    <polyline points="21 15 16 10 5 21"></polyline>
-                                </svg>
-                            </div>
-                            <h3 class="font-bold text-xl text-gray-800">JPG to PDF</h3>
-                        </div>
-                        <p class="text-gray-600 mb-4">Convert JPG images to PDF documents online. Easily adjust orientation and margins.</p>
-                        <a href="{% url 'jpg_to_pdf' %}" class="block w-full text-center bg-gray-100 hover:bg-yellow-500 hover:text-white text-yellow-500 font-medium py-2 rounded transition-colors">
-                            JPG to PDF
-                        </a>
-                    </div>
-                </div>
+            <!-- Call-to-action for more tools -->
+            <div class="text-center mt-8 sm:mt-12">
+                <a href="{% url 'all_tools' %}" class="inline-flex items-center justify-center bg-gradient-to-r from-primary-500 to-accent-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold shadow-glow hover:shadow-glow-lg transition-all duration-300 hover:scale-105 focus-ring text-sm sm:text-base touch-target">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                    Explore All PDF Tools
+                </a>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Header Section To Match I Love PDF -->
-<section class="bg-blue-600 py-12">
-    <div class="container mx-auto px-4">
-        <div class="text-center text-white max-w-3xl mx-auto">
-            <h1 class="text-3xl md:text-4xl font-bold mb-4">Every tool you need to work with PDFs in one place</h1>
-            <p class="text-lg opacity-90">
-                Every tool you need to use PDFs, at your fingertips. All are 100% FREE and easy to use!
-                Merge, compress, convert, and manage PDFs with just a few clicks.
+<!-- Enhanced Trust Indicators Section -->
+<section class="py-8 sm:py-12 bg-primary-600 text-white relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10" aria-hidden="true" style="background-image: url('data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' viewBox=\'0 0 100 100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'10\' fill=\'rgba(255,255,255,0.1)\' /%3E%3C/svg%3E'); background-size: 50px 50px;"></div>
+    
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="text-center mb-6 sm:mb-8">
+            <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mb-2">
+                Trusted by Millions Worldwide
+            </h2>
+            <p class="text-primary-100 text-sm sm:text-base">
+                Join over 12 million users who trust SmallPDF.us for their document processing needs
             </p>
         </div>
+        
+        <!-- Enhanced stats grid with mobile-optimized layout -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 max-w-4xl mx-auto">
+            <div class="text-center">
+                <div class="stat-number text-2xl sm:text-3xl md:text-4xl font-bold mb-1" data-target="4.9">0</div>
+                <div class="text-primary-100 text-xs sm:text-sm font-medium">User Rating</div>
+            </div>
+            <div class="text-center">
+                <div class="stat-number text-2xl sm:text-3xl md:text-4xl font-bold mb-1" data-target="12" data-suffix="M+">0</div>
+                <div class="text-primary-100 text-xs sm:text-sm font-medium">Monthly Users</div>
+            </div>
+            <div class="text-center">
+                <div class="stat-number text-2xl sm:text-3xl md:text-4xl font-bold mb-1" data-target="200" data-suffix="M+">0</div>
+                <div class="text-primary-100 text-xs sm:text-sm font-medium">Files Processed</div>
+            </div>
+            <div class="text-center">
+                <div class="stat-number text-2xl sm:text-3xl md:text-4xl font-bold mb-1" data-target="185" data-suffix="+">0</div>
+                <div class="text-primary-100 text-xs sm:text-sm font-medium">Countries Served</div>
+            </div>
+        </div>
     </div>
 </section>
 
-<style>
-    /* To achieve the exact same hover effects as I Love PDF */
-    .bg-gray-100:hover {
-        transition: all 0.3s ease;
-    }
-</style>
-
-<!-- Optional JavaScript for smooth scrolling and animations -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Add fade-in animation to tools on scroll
-        const toolCards = document.querySelectorAll('.rounded-lg');
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-fadeIn');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, {
-            threshold: 0.1
-        });
-        
-        toolCards.forEach(card => {
-            observer.observe(card);
-        });
-    });
-    
-    // Define the animation
-    document.head.insertAdjacentHTML('beforeend', `
-        <style>
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(10px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-            
-            .animate-fadeIn {
-                animation: fadeIn 0.5s ease-out forwards;
-            }
-        </style>
-    `);
-</script>
-
-<!-- How It Works Section -->
-<section class="py-16 bg-white">
+<!-- Enhanced How It Works Section with mobile-first design -->
+<section class="py-12 sm:py-16 md:py-20 bg-white">
     <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-gray-900 mb-3">How It Works</h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">Process your PDF files in three simple steps</p>
+        <div class="text-center mb-8 sm:mb-12">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
+                How It Works - Simple as 1, 2, 3
+            </h2>
+            <p class="text-gray-600 text-base sm:text-lg max-w-3xl mx-auto leading-relaxed">
+                Transform your documents in three easy steps. No technical knowledge required, 
+                no software to install, just upload and convert.
+            </p>
         </div>
         
-        <div class="flex flex-wrap justify-center">
+        <!-- Enhanced process steps with mobile-optimized design -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-5xl mx-auto">
             <!-- Step 1 -->
-            <div class="p-6 md:w-1/3 sm:w-1/2 w-full">
-                <div class="bg-white rounded-xl shadow-card p-6 text-center relative hover:shadow-card-hover transition-all duration-300 hover:-translate-y-2 border border-gray-100">
-                    <div class="mt-4 mb-6 text-primary-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <article class="text-center group lazy-load">
+                <div class="relative mb-6">
+                    <!-- Step number with enhanced mobile design -->
+                  
+                    <!-- Icon with better mobile sizing -->
+                    <div class="mt-4 mb-6 text-primary-500 group-hover:scale-110 transition-transform duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 sm:h-16 sm:w-16 mx-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                             <polyline points="17 8 12 3 7 8"></polyline>
                             <line x1="12" y1="3" x2="12" y2="15"></line>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Upload Your File</h3>
-                    <p class="text-gray-600">Select the PDF you want to work with by clicking "Upload" or simply drag and drop your file into the designated area.</p>
                 </div>
-            </div>
+                <h3 class="text-lg sm:text-xl font-semibold text-gray-800 mb-3">Upload Your File</h3>
+                <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
+                    Drag and drop your PDF, Word, or image file into our secure upload area. 
+                    We support files up to 100MB and all major document formats.
+                </p>
+            </article>
             
             <!-- Step 2 -->
-            <div class="p-6 md:w-1/3 sm:w-1/2 w-full">
-                <div class="bg-white rounded-xl shadow-card p-6 text-center relative hover:shadow-card-hover transition-all duration-300 hover:-translate-y-2 border border-gray-100">
-                    <div class="mt-4 mb-6 text-primary-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <article class="text-center group lazy-load">
+                <div class="relative mb-6">
+                    
+                    <div class="mt-4 mb-6 text-primary-500 group-hover:scale-110 transition-transform duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 sm:h-16 sm:w-16 mx-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <polygon points="14 2 18 6 7 17 3 17 3 13 14 2"></polygon>
                             <line x1="3" y1="22" x2="21" y2="22"></line>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Choose Options</h3>
-                    <p class="text-gray-600">Select the specific settings and options for your task. Our interface is intuitive and helps you get the exact results you need.</p>
                 </div>
-            </div>
+                <h3 class="text-lg sm:text-xl font-semibold text-gray-800 mb-3">Choose Your Settings</h3>
+                <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
+                    Select quality settings, output format, and any special options. 
+                    Our smart defaults work great, but you have full control over the process.
+                </p>
+            </article>
             
             <!-- Step 3 -->
-            <div class="p-6 md:w-1/3 sm:w-1/2 w-full">
-                <div class="bg-white rounded-xl shadow-card p-6 text-center relative hover:shadow-card-hover transition-all duration-300 hover:-translate-y-2 border border-gray-100">
-                    <div class="mt-4 mb-6 text-primary-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <article class="text-center group lazy-load">
+                <div class="relative mb-6">
+                   
+                    <div class="mt-4 mb-6 text-primary-500 group-hover:scale-110 transition-transform duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 sm:h-16 sm:w-16 mx-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path d="M22 15h-3V3H9v6H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-1a2 2 0 0 0-2-2Z"></path>
                             <path d="M14 15h1"></path>
                             <path d="M6 10v.01"></path>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Download Results</h3>
-                    <p class="text-gray-600">Process your file and download the result. All files are processed in our secure cloud and automatically deleted after completion.</p>
+                </div>
+                <h3 class="text-lg sm:text-xl font-semibold text-gray-800 mb-3">Download Results</h3>
+                <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
+                    Get your converted file instantly. Files are automatically deleted from our servers 
+                    for your privacy and security within 24 hours.
+                </p>
+            </article>
+        </div>
+        
+        <!-- Enhanced CTA with mobile optimization -->
+        <div class="text-center mt-8 sm:mt-12">
+            <a href="{% url 'all_tools' %}" class="inline-flex items-center justify-center bg-gradient-to-r from-primary-500 to-accent-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold shadow-glow hover:shadow-glow-lg transition-all duration-300 hover:scale-105 focus-ring text-sm sm:text-base touch-target">
+                Try It Now - It's Free
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+            </a>
+        </div>
+    </div>
+</section>
+<!-- About SmallPDF.us Section with Rich Content -->
+<section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto">
+            <!-- Section Header -->
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-gray-900 mb-3">About SmallPDF.us</h2>
+                <div class="w-20 h-1 bg-primary-500 mx-auto mb-6"></div>
+            </div>
+            
+            <!-- Rich Content -->
+            <div class="bg-white rounded-xl shadow-sm p-8 md:p-12 border border-gray-100">
+                <!-- Introduction -->
+                <div class="mb-10">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Transforming PDF Management Since 2020</h3>
+                    <p class="text-gray-600 text-lg leading-relaxed mb-6">
+                        SmallPDF.us was born from a simple observation: working with PDF files was unnecessarily complicated. 
+                        We set out to change that by creating a comprehensive platform that makes document management accessible, 
+                        secure, and efficient for everyone.
+                    </p>
+                    <p class="text-gray-600 leading-relaxed">
+                        Today, our suite of PDF tools serves millions of users worldwide, from students and small business owners 
+                        to professionals at Fortune 500 companies. We've processed over 200 million files for users in more than 
+                        185 countries, all while maintaining our core commitment to simplicity and security.
+                    </p>
+                </div>
+                
+                <!-- Our Philosophy -->
+                <div class="mb-10">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Our Philosophy</h3>
+                    <div class="flex items-start mb-6">
+                        <div class="flex-shrink-0 w-10 h-10 bg-primary-50 rounded-full flex items-center justify-center mr-4 mt-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-semibold text-gray-800 mb-2">Simplicity Above All</h4>
+                            <p class="text-gray-600 leading-relaxed">
+                                We believe powerful tools don't need to be complicated. Our user interface is designed to be intuitive,
+                                allowing anyone to convert, compress, merge or edit PDFs without a learning curve. Whether you're a
+                                tech novice or a seasoned professional, our tools work for you, not against you.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start mb-6">
+                        <div class="flex-shrink-0 w-10 h-10 bg-primary-50 rounded-full flex items-center justify-center mr-4 mt-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-semibold text-gray-800 mb-2">Security as a Priority</h4>
+                            <p class="text-gray-600 leading-relaxed">
+                                Your documents often contain sensitive information, which is why security is at the core of everything we do.
+                                We employ bank-level 256-bit SSL encryption, process files on secure servers, and automatically delete all
+                                uploaded documents after processing. Your data never becomes our data.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-10 h-10 bg-primary-50 rounded-full flex items-center justify-center mr-4 mt-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-semibold text-gray-800 mb-2">Efficiency That Matters</h4>
+                            <p class="text-gray-600 leading-relaxed">
+                                Our cloud-based platform is engineered for speed and precision. Most tasks complete in under 10 seconds,
+                                even for large files. We've optimized our processing algorithms to maintain document quality while reducing
+                                file size, preserving the integrity of your work while making it easier to share and store.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Stats Bar -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10 py-6 px-4 bg-gray-50 rounded-lg">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-primary-500 mb-1">15+</div>
+                        <div class="text-gray-600 text-sm">PDF Tools</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-primary-500 mb-1">12M+</div>
+                        <div class="text-gray-600 text-sm">Monthly Users</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-primary-500 mb-1">200M+</div>
+                        <div class="text-gray-600 text-sm">Files Processed</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-primary-500 mb-1">185+</div>
+                        <div class="text-gray-600 text-sm">Countries Served</div>
+                    </div>
+                </div>
+                
+                <!-- Our Commitment -->
+                <div class="mb-10">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Our Commitment to You</h3>
+                    <p class="text-gray-600 leading-relaxed mb-6">
+                        We're more than just a set of tools—we're your partner in productivity. Our commitment goes beyond 
+                        providing software; we're dedicated to continuous improvement based on your feedback. As your needs 
+                        evolve, so do our solutions.
+                    </p>
+                    <p class="text-gray-600 leading-relaxed">
+                        Whether you're a student working on assignments, a small business owner preparing client proposals, 
+                        or part of a large enterprise managing thousands of documents, SmallPDF.us is designed to make your 
+                        work easier, faster, and more secure.
+                    </p>
+                </div>
+                
+                <!-- CTA -->
+                <div class="flex flex-col md:flex-row justify-center gap-4 pt-4 border-t border-gray-100">
+                    <a href="{% url 'all_tools' %}" class="bg-gradient-to-r from-primary-500 to-primary-600 text-white py-3 px-8 rounded-full font-semibold hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 text-center">
+                        Explore Our Tools
+                    </a>
+                    <a href="{% url 'about' %}" class="bg-gray-100 text-gray-800 py-3 px-8 rounded-full font-semibold hover:bg-gray-200 transition-all duration-300 text-center">
+                        Learn More About Us
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-
-<!-- Enhanced "Why Choose SmallPDF.us?" Section with SEO Optimization -->
 <section id="features" class="py-16 bg-gray-50">
     <div class="container mx-auto px-4">
         <div class="text-center mb-12">
@@ -546,549 +740,623 @@
     </div>
 </section>
 
-<!-- About SmallPDF.us Section with Rich Content -->
-<section class="py-16 bg-gray-50">
+<!-- Enhanced Testimonials Section with mobile optimization -->
+<section class="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-white to-gray-50">
     <div class="container mx-auto px-4">
-        <div class="max-w-4xl mx-auto">
-            <!-- Section Header -->
-            <div class="text-center mb-10">
-                <h2 class="text-3xl font-bold text-gray-900 mb-3">About SmallPDF.us</h2>
-                <div class="w-20 h-1 bg-primary-500 mx-auto mb-6"></div>
-            </div>
-            
-            <!-- Rich Content -->
-            <div class="bg-white rounded-xl shadow-sm p-8 md:p-12 border border-gray-100">
-                <!-- Introduction -->
-                <div class="mb-10">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Transforming PDF Management Since 2020</h3>
-                    <p class="text-gray-600 text-lg leading-relaxed mb-6">
-                        SmallPDF.us was born from a simple observation: working with PDF files was unnecessarily complicated. 
-                        We set out to change that by creating a comprehensive platform that makes document management accessible, 
-                        secure, and efficient for everyone.
-                    </p>
-                    <p class="text-gray-600 leading-relaxed">
-                        Today, our suite of PDF tools serves millions of users worldwide, from students and small business owners 
-                        to professionals at Fortune 500 companies. We've processed over 200 million files for users in more than 
-                        185 countries, all while maintaining our core commitment to simplicity and security.
-                    </p>
-                </div>
-                
-                <!-- Our Philosophy -->
-                <div class="mb-10">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Our Philosophy</h3>
-                    <div class="flex items-start mb-6">
-                        <div class="flex-shrink-0 w-10 h-10 bg-primary-50 rounded-full flex items-center justify-center mr-4 mt-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-semibold text-gray-800 mb-2">Simplicity Above All</h4>
-                            <p class="text-gray-600 leading-relaxed">
-                                We believe powerful tools don't need to be complicated. Our user interface is designed to be intuitive,
-                                allowing anyone to convert, compress, merge or edit PDFs without a learning curve. Whether you're a
-                                tech novice or a seasoned professional, our tools work for you, not against you.
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-start mb-6">
-                        <div class="flex-shrink-0 w-10 h-10 bg-primary-50 rounded-full flex items-center justify-center mr-4 mt-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-semibold text-gray-800 mb-2">Security as a Priority</h4>
-                            <p class="text-gray-600 leading-relaxed">
-                                Your documents often contain sensitive information, which is why security is at the core of everything we do.
-                                We employ bank-level 256-bit SSL encryption, process files on secure servers, and automatically delete all
-                                uploaded documents after processing. Your data never becomes our data.
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0 w-10 h-10 bg-primary-50 rounded-full flex items-center justify-center mr-4 mt-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-semibold text-gray-800 mb-2">Efficiency That Matters</h4>
-                            <p class="text-gray-600 leading-relaxed">
-                                Our cloud-based platform is engineered for speed and precision. Most tasks complete in under 10 seconds,
-                                even for large files. We've optimized our processing algorithms to maintain document quality while reducing
-                                file size, preserving the integrity of your work while making it easier to share and store.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Stats Bar -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10 py-6 px-4 bg-gray-50 rounded-lg">
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-primary-500 mb-1">15+</div>
-                        <div class="text-gray-600 text-sm">PDF Tools</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-primary-500 mb-1">12M+</div>
-                        <div class="text-gray-600 text-sm">Monthly Users</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-primary-500 mb-1">200M+</div>
-                        <div class="text-gray-600 text-sm">Files Processed</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-primary-500 mb-1">185+</div>
-                        <div class="text-gray-600 text-sm">Countries Served</div>
-                    </div>
-                </div>
-                
-                <!-- Our Commitment -->
-                <div class="mb-10">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Our Commitment to You</h3>
-                    <p class="text-gray-600 leading-relaxed mb-6">
-                        We're more than just a set of tools—we're your partner in productivity. Our commitment goes beyond 
-                        providing software; we're dedicated to continuous improvement based on your feedback. As your needs 
-                        evolve, so do our solutions.
-                    </p>
-                    <p class="text-gray-600 leading-relaxed">
-                        Whether you're a student working on assignments, a small business owner preparing client proposals, 
-                        or part of a large enterprise managing thousands of documents, SmallPDF.us is designed to make your 
-                        work easier, faster, and more secure.
-                    </p>
-                </div>
-                
-                <!-- CTA -->
-                <div class="flex flex-col md:flex-row justify-center gap-4 pt-4 border-t border-gray-100">
-                    <a href="{% url 'all_tools' %}" class="bg-gradient-to-r from-primary-500 to-primary-600 text-white py-3 px-8 rounded-full font-semibold hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 text-center">
-                        Explore Our Tools
-                    </a>
-                    <a href="{% url 'about' %}" class="bg-gray-100 text-gray-800 py-3 px-8 rounded-full font-semibold hover:bg-gray-200 transition-all duration-300 text-center">
-                        Learn More About Us
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- SEO-Optimized Trust Indicators Section -->
-<section class="py-12 bg-blue-600 text-white relative">
-    <div class="container mx-auto px-4 relative z-10">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            <div class="p-4">
-                <div class="text-4xl font-bold mb-1">4.9/5</div>
-                <div class="text-white/90">Average User Rating</div>
-            </div>
-            <div class="p-4">
-                <div class="text-4xl font-bold mb-1">12M+</div>
-                <div class="text-white/90">Monthly Users</div>
-            </div>
-            <div class="p-4">
-                <div class="text-4xl font-bold mb-1">200M+</div>
-                <div class="text-white/90">Files Processed</div>
-            </div>
-            <div class="p-4">
-                <div class="text-4xl font-bold mb-1">185+</div>
-                <div class="text-white/90">Countries Served</div>
-            </div>
-        </div>
-    </div>
-    
-<!-- Background pattern for visual appeal -->
-<div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' viewBox=\'0 0 100 100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'10\' fill=\'rgba(255,255,255,0.1)\' /%3E%3C/svg%3E'); background-size: 50px 50px;"></div>
-</section>
-
-
-<!-- Testimonials Section -->
-<section id="testimonials" class="py-16 bg-gradient-to-b from-white to-gray-50">
-    <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-gray-900 mb-3">What Our Users Say</h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">See why millions of people choose SmallPDF.us for their document needs</p>
+        <div class="text-center mb-8 sm:mb-12">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
+                What Our Users Say
+            </h2>
+            <p class="text-gray-600 text-base sm:text-lg max-w-3xl mx-auto leading-relaxed">
+                See why millions of people choose SmallPDF.us for their document processing needs. 
+                Real feedback from real users.
+            </p>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Enhanced testimonials grid with mobile-first design -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
             <!-- Testimonial 1 -->
-            <div class="bg-white rounded-xl shadow-sm p-6 relative hover:shadow-md transition-all duration-300 hover:-translate-y-2 border border-gray-100">
-                <div class="absolute -top-4 left-8 bg-white p-2 rounded-full shadow-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <article class="testimonial-card rounded-xl shadow-sm p-4 sm:p-6 relative hover:shadow-md transition-all duration-300 hover:-translate-y-2 border border-gray-100 lazy-load">
+                <div class="absolute -top-3 left-6 sm:left-8 bg-white p-2 rounded-full shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 text-primary-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
                         <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"></path>
                     </svg>
                 </div>
-                <p class="italic text-gray-700 mb-6 mt-2">SmallPDF.us has been a game-changer for our team. The ability to quickly convert PDFs to editable formats has saved us countless hours of manual work.</p>
+                <p class="italic text-gray-700 mb-4 sm:mb-6 mt-2 text-sm sm:text-base leading-relaxed">
+                    "SmallPDF.us has been a game-changer for our team. The ability to quickly convert PDFs to editable formats has saved us countless hours of manual work."
+                </p>
                 <div class="flex items-center">
-                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-primary-600 font-bold mr-4">JD</div>
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-full flex items-center justify-center text-primary-600 font-bold mr-3 sm:mr-4 text-sm sm:text-base">
+                        JD
+                    </div>
                     <div>
-                        <h4 class="font-semibold text-gray-800">John Daniels</h4>
-                        <p class="text-gray-500 text-sm">Marketing Director</p>
-                        <div class="flex mt-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-secondary-500" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-secondary-500" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-secondary-500" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-secondary-500" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-secondary-500" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
+                        <h4 class="font-semibold text-gray-800 text-sm sm:text-base">John Daniels</h4>
+                        <p class="text-gray-500 text-xs sm:text-sm">Marketing Director</p>
+                        <div class="flex mt-1" role="img" aria-label="5 star rating">
+                            <span class="text-yellow-400 text-sm">★★★★★</span>
                         </div>
                     </div>
                 </div>
-            </div>
+            </article>
             
             <!-- Testimonial 2 -->
-            <div class="bg-white rounded-xl shadow-sm p-6 relative hover:shadow-md transition-all duration-300 hover:-translate-y-2 border border-gray-100">
-                <div class="absolute -top-4 left-8 bg-white p-2 rounded-full shadow-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <article class="testimonial-card rounded-xl shadow-sm p-4 sm:p-6 relative hover:shadow-md transition-all duration-300 hover:-translate-y-2 border border-gray-100 lazy-load">
+                <div class="absolute -top-3 left-6 sm:left-8 bg-white p-2 rounded-full shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 text-primary-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
                         <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"></path>
                     </svg>
                 </div>
-                <p class="italic text-gray-700 mb-6 mt-2">I needed to compress a large PDF for email and SmallPDF.us made it incredibly easy. The file size was reduced by over 70% without any noticeable quality loss. Impressive!</p>
+                <p class="italic text-gray-700 mb-4 sm:mb-6 mt-2 text-sm sm:text-base leading-relaxed">
+                    "I needed to compress a large PDF for email and SmallPDF.us made it incredibly easy. The file size was reduced by over 70% without any noticeable quality loss."
+                </p>
                 <div class="flex items-center">
-                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-primary-600 font-bold mr-4">SR</div>
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-pink-100 rounded-full flex items-center justify-center text-secondary-600 font-bold mr-3 sm:mr-4 text-sm sm:text-base">
+                        SR
+                    </div>
                     <div>
-                        <h4 class="font-semibold text-gray-800">Sarah Reynolds</h4>
-                        <p class="text-gray-500 text-sm">Freelance Designer</p>
-                        <div class="flex mt-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-secondary-500" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-secondary-500" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-secondary-500" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-secondary-500" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-secondary-500" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
+                        <h4 class="font-semibold text-gray-800 text-sm sm:text-base">Sarah Reynolds</h4>
+                        <p class="text-gray-500 text-xs sm:text-sm">Freelance Designer</p>
+                        <div class="flex mt-1" role="img" aria-label="5 star rating">
+                            <span class="text-yellow-400 text-sm">★★★★★</span>
                         </div>
                     </div>
                 </div>
-            </div>
+            </article>
             
             <!-- Testimonial 3 -->
-            <div class="bg-white rounded-xl shadow-sm p-6 relative hover:shadow-md transition-all duration-300 hover:-translate-y-2 border border-gray-100">
-                <div class="absolute -top-4 left-8 bg-white p-2 rounded-full shadow-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <article class="testimonial-card rounded-xl shadow-sm p-4 sm:p-6 relative hover:shadow-md transition-all duration-300 hover:-translate-y-2 border border-gray-100 lazy-load">
+                <div class="absolute -top-3 left-6 sm:left-8 bg-white p-2 rounded-full shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 text-primary-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
                         <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"></path>
                     </svg>
                 </div>
-                <p class="italic text-gray-700 mb-6 mt-2">As an educator, I regularly need to merge multiple PDFs for my course materials. SmallPDF.us is so intuitive that I can create perfectly organized documents in minutes.</p>
+                <p class="italic text-gray-700 mb-4 sm:mb-6 mt-2 text-sm sm:text-base leading-relaxed">
+                    "As an educator, I regularly need to merge multiple PDFs for my course materials. SmallPDF.us is so intuitive that I can create perfectly organized documents in minutes."
+                </p>
                 <div class="flex items-center">
-                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-primary-600 font-bold mr-4">MW</div>
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold mr-3 sm:mr-4 text-sm sm:text-base">
+                        MW
+                    </div>
                     <div>
-                        <h4 class="font-semibold text-gray-800">Michael Williams</h4>
-                        <p class="text-gray-500 text-sm">University Professor</p>
-                        <div class="flex mt-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-secondary-500" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-secondary-500" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-secondary-500" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-secondary-500" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-secondary-500" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
+                        <h4 class="font-semibold text-gray-800 text-sm sm:text-base">Michael Williams</h4>
+                        <p class="text-gray-500 text-xs sm:text-sm">University Professor</p>
+                        <div class="flex mt-1" role="img" aria-label="5 star rating">
+                            <span class="text-yellow-400 text-sm">★★★★★</span>
                         </div>
                     </div>
                 </div>
-            </div>
+            </article>
         </div>
     </div>
 </section>
 
-
-<!-- SEO-Enhanced FAQ Section with Schema Markup -->
-<section id="faq" class="py-16 bg-gray-50">
+<!-- Enhanced FAQ Section with mobile-optimized accordion -->
+<section class="py-12 sm:py-16 md:py-20 bg-gray-50 faq-accordion" id="faq">
     <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-gray-900 mb-3">Frequently Asked Questions</h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">Find answers to common questions about our PDF tools and services</p>
+        <div class="text-center mb-8 sm:mb-12">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
+                Frequently Asked Questions
+            </h2>
+            <p class="text-gray-600 text-base sm:text-lg max-w-3xl mx-auto leading-relaxed">
+                Find answers to common questions about our PDF tools and services. 
+                Can't find what you're looking for? Contact our support team.
+            </p>
         </div>
         
-        <div class="max-w-3xl mx-auto">
+        <div class="max-w-4xl mx-auto">
             <!-- FAQ Item 1 -->
-            <div class="faq-item bg-white rounded-lg shadow-sm mb-4 overflow-hidden border border-gray-100">
-                <div class="faq-question p-5 cursor-pointer flex justify-between items-center">
-                    <h3 class="font-semibold text-gray-800">Is SmallPDF.us completely free to use?</h3>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+            <article class="faq-item bg-white rounded-lg shadow-sm mb-3 sm:mb-4 overflow-hidden border border-gray-100 lazy-load">
+                <button class="faq-question w-full p-4 sm:p-5 cursor-pointer flex justify-between items-center text-left hover:bg-gray-50 transition-colors duration-200 focus-ring touch-target" aria-expanded="false">
+                    <h3 class="font-semibold text-gray-800 text-sm sm:text-base pr-4">Is SmallPDF.us completely free to use?</h3>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transition-transform duration-300 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                     </svg>
+                </button>
+                <div class="faq-answer px-4 sm:px-5 pb-4 sm:pb-5 hidden">
+                    <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
+                        Yes, all our essential PDF tools are completely free to use with no hidden fees. 
+                        We offer premium subscriptions with additional features for professionals and businesses 
+                        who need enhanced capabilities, higher file size limits, and batch processing.
+                    </p>
                 </div>
-                <div class="faq-answer px-5 pb-5 hidden">
-                    <p class="text-gray-600">Yes, all our essential PDF tools are completely free to use with no hidden fees. We offer premium subscriptions with additional features for professionals and businesses who need enhanced capabilities, higher file size limits, and batch processing.</p>
-                </div>
-            </div>
+            </article>
             
             <!-- FAQ Item 2 -->
-            <div class="faq-item bg-white rounded-lg shadow-sm mb-4 overflow-hidden border border-gray-100">
-                <div class="faq-question p-5 cursor-pointer flex justify-between items-center">
-                    <h3 class="font-semibold text-gray-800">How secure are my files when using SmallPDF.us?</h3>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+            <article class="faq-item bg-white rounded-lg shadow-sm mb-3 sm:mb-4 overflow-hidden border border-gray-100 lazy-load">
+                <button class="faq-question w-full p-4 sm:p-5 cursor-pointer flex justify-between items-center text-left hover:bg-gray-50 transition-colors duration-200 focus-ring touch-target" aria-expanded="false">
+                    <h3 class="font-semibold text-gray-800 text-sm sm:text-base pr-4">How secure are my files when using SmallPDF.us?</h3>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transition-transform duration-300 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                     </svg>
+                </button>
+                <div class="faq-answer px-4 sm:px-5 pb-4 sm:pb-5 hidden">
+                    <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
+                        Your files are protected with military-grade 256-bit SSL encryption during transmission. 
+                        We automatically delete all uploaded files within hours of processing, and our secure servers 
+                        prevent unauthorized access. We never share your documents with third parties and are fully GDPR compliant.
+                    </p>
                 </div>
-                <div class="faq-answer px-5 pb-5 hidden">
-                    <p class="text-gray-600">Your files are protected with military-grade 256-bit SSL encryption during transmission. We automatically delete all uploaded files within hours of processing, and our secure servers prevent unauthorized access. We never share your documents with third parties and are fully GDPR compliant.</p>
-                </div>
-            </div>
+            </article>
             
             <!-- FAQ Item 3 -->
-            <div class="faq-item bg-white rounded-lg shadow-sm mb-4 overflow-hidden border border-gray-100">
-                <div class="faq-question p-5 cursor-pointer flex justify-between items-center">
-                    <h3 class="font-semibold text-gray-800">What's the maximum file size I can process?</h3>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+            <article class="faq-item bg-white rounded-lg shadow-sm mb-3 sm:mb-4 overflow-hidden border border-gray-100 lazy-load">
+                <button class="faq-question w-full p-4 sm:p-5 cursor-pointer flex justify-between items-center text-left hover:bg-gray-50 transition-colors duration-200 focus-ring touch-target" aria-expanded="false">
+                    <h3 class="font-semibold text-gray-800 text-sm sm:text-base pr-4">What's the maximum file size I can process?</h3>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transition-transform duration-300 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                     </svg>
+                </button>
+                <div class="faq-answer px-4 sm:px-5 pb-4 sm:pb-5 hidden">
+                    <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
+                        Free users can process PDF files up to 100MB in size. Premium subscribers enjoy higher limits 
+                        of up to 2GB per file, allowing you to work with large documents, high-resolution designs, 
+                        and extensive reports. For extremely large files, please contact our support team for custom solutions.
+                    </p>
                 </div>
-                <div class="faq-answer px-5 pb-5 hidden">
-                    <p class="text-gray-600">Free users can process PDF files up to 100MB in size. Premium subscribers enjoy higher limits of up to 2GB per file, allowing you to work with large documents, high-resolution designs, and extensive reports. For extremely large files, please contact our support team for custom solutions.</p>
-                </div>
-            </div>
+            </article>
             
             <!-- FAQ Item 4 -->
-            <div class="faq-item bg-white rounded-lg shadow-sm mb-4 overflow-hidden border border-gray-100">
-                <div class="faq-question p-5 cursor-pointer flex justify-between items-center">
-                    <h3 class="font-semibold text-gray-800">Do I need to create an account to use SmallPDF.us?</h3>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+            <article class="faq-item bg-white rounded-lg shadow-sm mb-3 sm:mb-4 overflow-hidden border border-gray-100 lazy-load">
+                <button class="faq-question w-full p-4 sm:p-5 cursor-pointer flex justify-between items-center text-left hover:bg-gray-50 transition-colors duration-200 focus-ring touch-target" aria-expanded="false">
+                    <h3 class="font-semibold text-gray-800 text-sm sm:text-base pr-4">Do I need to create an account to use SmallPDF.us?</h3>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transition-transform duration-300 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                     </svg>
+                </button>
+                <div class="faq-answer px-4 sm:px-5 pb-4 sm:pb-5 hidden">
+                    <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
+                        No, you can use our basic tools without creating an account. However, registering for a free account 
+                        gives you benefits like access to your processing history, saved settings, and the ability to upgrade 
+                        to premium features when needed. Premium accounts include additional features and higher processing limits.
+                    </p>
                 </div>
-                <div class="faq-answer px-5 pb-5 hidden">
-                    <p class="text-gray-600">No, you can use our basic tools without creating an account. However, registering for a free account gives you benefits like access to your processing history, saved settings, and the ability to upgrade to premium features when needed. Premium accounts include additional features and higher processing limits.</p>
-                </div>
-            </div>
+            </article>
             
             <!-- FAQ Item 5 -->
-            <div class="faq-item bg-white rounded-lg shadow-sm mb-4 overflow-hidden border border-gray-100">
-                <div class="faq-question p-5 cursor-pointer flex justify-between items-center">
-                    <h3 class="font-semibold text-gray-800">How accurate are your PDF conversions?</h3>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+            <article class="faq-item bg-white rounded-lg shadow-sm mb-3 sm:mb-4 overflow-hidden border border-gray-100 lazy-load">
+                <button class="faq-question w-full p-4 sm:p-5 cursor-pointer flex justify-between items-center text-left hover:bg-gray-50 transition-colors duration-200 focus-ring touch-target" aria-expanded="false">
+                    <h3 class="font-semibold text-gray-800 text-sm sm:text-base pr-4">How accurate are your PDF conversions?</h3>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transition-transform duration-300 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                     </svg>
+                </button>
+                <div class="faq-answer px-4 sm:px-5 pb-4 sm:pb-5 hidden">
+                    <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
+                        Our proprietary conversion technology provides industry-leading accuracy with over 98% formatting retention. 
+                        We preserve tables, images, fonts, and complex layouts during conversions, ensuring your documents maintain 
+                        their professional appearance and structure. Our advanced OCR technology accurately extracts text from 
+                        scanned documents with excellent precision.
+                    </p>
                 </div>
-                <div class="faq-answer px-5 pb-5 hidden">
-                    <p class="text-gray-600">Our proprietary conversion technology provides industry-leading accuracy with over 98% formatting retention. We preserve tables, images, fonts, and complex layouts during conversions, ensuring your documents maintain their professional appearance and structure. Our advanced OCR technology accurately extracts text from scanned documents with excellent precision.</p>
-                </div>
-            </div>
+            </article>
+        </div>
+        
+        <!-- Contact support link -->
+        <div class="text-center mt-6 sm:mt-8">
+            <p class="text-gray-600 text-sm sm:text-base mb-4">
+                Still have questions? We're here to help!
+            </p>
+            <a href="{% url 'contact' %}" class="inline-flex items-center justify-center bg-white text-primary-600 border-2 border-primary-600 hover:bg-primary-600 hover:text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 focus-ring touch-target text-sm sm:text-base">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+                Contact Support
+            </a>
         </div>
     </div>
     
-    <!-- SEO Schema Markup (hidden) -->
+    <!-- Enhanced Schema.org FAQ markup for SEO -->
     <script type="application/ld+json">
     {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Is SmallPDF.us completely free to use?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes, all our essential PDF tools are completely free to use with no hidden fees. We offer premium subscriptions with additional features for professionals and businesses who need enhanced capabilities, higher file size limits, and batch processing."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How secure are my files when using SmallPDF.us?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Your files are protected with military-grade 256-bit SSL encryption during transmission. We automatically delete all uploaded files within hours of processing, and our secure servers prevent unauthorized access. We never share your documents with third parties and are fully GDPR compliant."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What's the maximum file size I can process?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Free users can process PDF files up to 100MB in size. Premium subscribers enjoy higher limits of up to 2GB per file, allowing you to work with large documents, high-resolution designs, and extensive reports. For extremely large files, please contact our support team for custom solutions."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Do I need to create an account to use SmallPDF.us?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No, you can use our basic tools without creating an account. However, registering for a free account gives you benefits like access to your processing history, saved settings, and the ability to upgrade to premium features when needed. Premium accounts include additional features and higher processing limits."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How accurate are your PDF conversions?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Our proprietary conversion technology provides industry-leading accuracy with over 98% formatting retention. We preserve tables, images, fonts, and complex layouts during conversions, ensuring your documents maintain their professional appearance and structure. Our advanced OCR technology accurately extracts text from scanned documents with excellent precision."
-          }
-        }
-      ]
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Is SmallPDF.us completely free to use?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, all our essential PDF tools are completely free to use with no hidden fees. We offer premium subscriptions with additional features for professionals and businesses who need enhanced capabilities, higher file size limits, and batch processing."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How secure are my files when using SmallPDF.us?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Your files are protected with military-grade 256-bit SSL encryption during transmission. We automatically delete all uploaded files within hours of processing, and our secure servers prevent unauthorized access. We never share your documents with third parties and are fully GDPR compliant."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What's the maximum file size I can process?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Free users can process PDF files up to 100MB in size. Premium subscribers enjoy higher limits of up to 2GB per file, allowing you to work with large documents, high-resolution designs, and extensive reports."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Do I need to create an account to use SmallPDF.us?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No, you can use our basic tools without creating an account. However, registering for a free account gives you benefits like access to your processing history, saved settings, and the ability to upgrade to premium features when needed."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How accurate are your PDF conversions?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Our proprietary conversion technology provides industry-leading accuracy with over 98% formatting retention. We preserve tables, images, fonts, and complex layouts during conversions, ensuring your documents maintain their professional appearance and structure."
+                }
+            }
+        ]
     }
     </script>
 </section>
 
-<!-- Call to Action Section -->
-<section class="py-16 bg-blue-600 text-white relative overflow-hidden">
-    <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' viewBox=\'0 0 100 100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'10\' fill=\'rgba(255,255,255,0.1)\' /%3E%3C/svg%3E'); background-size: 50px 50px;"></div>
+<!-- Enhanced Final CTA Section with mobile optimization -->
+<section class="py-6 sm:py-8 bg-gradient-to-r from-primary-600 via-accent-600 to-secondary-500 text-white relative overflow-hidden">
+    <!-- Minimal background pattern for performance -->
+    <div class="absolute inset-0 opacity-5" aria-hidden="true" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Ccircle cx=\'30\' cy=\'30\' r=\'8\' fill=\'rgba(255,255,255,0.1)\' /%3E%3C/svg%3E'); background-size: 60px 60px;"></div>
+    
     <div class="container mx-auto px-4 text-center relative z-10">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">Start Managing Your PDFs Today</h2>
-        <p class="text-xl opacity-90 mb-8 max-w-2xl mx-auto">Join millions of satisfied users who simplify their document workflows with SmallPDF.us</p>
-        <a href="{% url 'all_tools' %}" class="inline-block bg-white text-blue-600 hover:bg-blue-100 px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 hover:-translate-y-1 shadow-lg">Explore Our PDF Tools</a>
+        <!-- Ultra-compact heading -->
+        <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mb-2 sm:mb-3 leading-tight">
+            Ready to Transform Your Documents?
+        </h2>
+        <p class="text-sm sm:text-base opacity-90 mb-4 sm:mb-6 max-w-2xl mx-auto">
+            Join millions who simplify their workflows with SmallPDF.us
+        </p>
+        
+        <!-- Compact CTA buttons -->
+        <div class="flex flex-col sm:flex-row gap-3 justify-center items-center max-w-md sm:max-w-lg mx-auto">
+            <a href="{% url 'all_tools' %}" class="w-full sm:w-auto inline-flex items-center justify-center bg-white text-primary-600 hover:bg-gray-100 px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-xl focus-ring touch-target">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                Start Converting Now
+            </a>
+            <a href="{% url 'about' %}" class="w-full sm:w-auto inline-flex items-center justify-center bg-transparent text-white border-2 border-white hover:bg-white hover:text-primary-600 px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base transition-all duration-300 focus-ring touch-target">
+                Learn More
+            </a>
+        </div>
+        
+        <!-- Compact trust indicators -->
+        <div class="flex flex-wrap justify-center items-center gap-3 sm:gap-6 mt-4 sm:mt-6 opacity-80 text-xs sm:text-sm">
+            <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                <span>Secure</span>
+            </div>
+            <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                <span>Fast</span>
+            </div>
+            <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                </svg>
+                <span>Free</span>
+            </div>
+            <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>No Signup</span>
+            </div>
+        </div>
     </div>
 </section>
+{% endblock %}
 
-<!-- JavaScript for FAQ accordion functionality -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // FAQ accordion functionality
-        const faqItems = document.querySelectorAll('.faq-item');
-        
-        faqItems.forEach(item => {
-            const question = item.querySelector('.faq-question');
-            const answer = item.querySelector('.faq-answer');
-            const icon = question.querySelector('svg');
-            
-            question.addEventListener('click', () => {
-                // Check if this item is already active
-                const isActive = item.classList.contains('active');
-                
-                // Close all other items
-                faqItems.forEach(otherItem => {
-                    if (otherItem !== item && otherItem.classList.contains('active')) {
-                        otherItem.classList.remove('active');
-                        otherItem.querySelector('.faq-answer').classList.add('hidden');
-                        otherItem.querySelector('svg').style.transform = 'rotate(0)';
-                    }
-                });
-                
-                // Toggle current item
-                if (isActive) {
-                    item.classList.remove('active');
-                    answer.classList.add('hidden');
-                    icon.style.transform = 'rotate(0)';
-                } else {
-                    item.classList.add('active');
-                    answer.classList.remove('hidden');
-                    icon.style.transform = 'rotate(180deg)';
-                }
-            });
-        });
-        
-        // Open the first FAQ item by default
-        if (faqItems.length > 0) {
-            const firstItem = faqItems[0];
-            firstItem.classList.add('active');
-            firstItem.querySelector('.faq-answer').classList.remove('hidden');
-            firstItem.querySelector('svg').style.transform = 'rotate(180deg)';
-        }
-    });
-</script>
-
-<!-- JavaScript for FAQ accordion functionality -->
 {% block extra_js %}
 <script>
+    // Enhanced JavaScript for mobile-optimized functionality
     document.addEventListener('DOMContentLoaded', function() {
-        // FAQ accordion functionality
-        const faqItems = document.querySelectorAll('.faq-item');
         
-        // First, hide all answer panels initially
-        document.querySelectorAll('.faq-answer').forEach(answer => {
-            answer.style.display = 'none';
+        // Enhanced lazy loading with intersection observer
+        const observerOptions = {
+            root: null,
+            rootMargin: '50px',
+            threshold: 0.1
+        };
+        
+        const lazyObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('loaded');
+                    lazyObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all lazy-load elements
+        document.querySelectorAll('.lazy-load').forEach(element => {
+            lazyObserver.observe(element);
         });
+        
+        // Enhanced FAQ accordion with mobile-optimized animations
+        const faqItems = document.querySelectorAll('.faq-item');
         
         faqItems.forEach(item => {
             const question = item.querySelector('.faq-question');
             const answer = item.querySelector('.faq-answer');
             const icon = question.querySelector('svg');
             
-            question.addEventListener('click', () => {
-                // Check if this item is already active
+            question.addEventListener('click', function() {
                 const isActive = item.classList.contains('active');
                 
-                // Close all other items
+                // Close all other FAQ items with smooth animation
                 faqItems.forEach(otherItem => {
                     if (otherItem !== item && otherItem.classList.contains('active')) {
                         otherItem.classList.remove('active');
-                        otherItem.querySelector('.faq-answer').style.display = 'none';
-                        otherItem.querySelector('svg').style.transform = 'rotate(0)';
+                        const otherAnswer = otherItem.querySelector('.faq-answer');
+                        const otherIcon = otherItem.querySelector('.faq-question svg');
+                        
+                        otherAnswer.style.maxHeight = otherAnswer.scrollHeight + 'px';
+                        otherAnswer.offsetHeight; // Force reflow
+                        otherAnswer.style.maxHeight = '0px';
+                        otherIcon.style.transform = 'rotate(0deg)';
+                        otherItem.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+                        
+                        setTimeout(() => {
+                            otherAnswer.classList.add('hidden');
+                            otherAnswer.style.maxHeight = '';
+                        }, 300);
                     }
                 });
                 
-                // Toggle current item
+                // Toggle current item with enhanced animation
                 if (isActive) {
+                    // Close current item
                     item.classList.remove('active');
-                    answer.style.display = 'none';
-                    icon.style.transform = 'rotate(0)';
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                    answer.offsetHeight; // Force reflow
+                    answer.style.maxHeight = '0px';
+                    icon.style.transform = 'rotate(0deg)';
+                    question.setAttribute('aria-expanded', 'false');
+                    
+                    setTimeout(() => {
+                        answer.classList.add('hidden');
+                        answer.style.maxHeight = '';
+                    }, 300);
                 } else {
+                    // Open current item
                     item.classList.add('active');
-                    answer.style.display = 'block';
+                    answer.classList.remove('hidden');
+                    answer.style.maxHeight = '0px';
+                    answer.offsetHeight; // Force reflow
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
                     icon.style.transform = 'rotate(180deg)';
+                    question.setAttribute('aria-expanded', 'true');
+                    
+                    setTimeout(() => {
+                        answer.style.maxHeight = '';
+                    }, 300);
                 }
             });
         });
         
-        // Open the first FAQ item by default
-        if (faqItems.length > 0) {
-            const firstItem = faqItems[0];
-            firstItem.classList.add('active');
-            firstItem.querySelector('.faq-answer').style.display = 'block';
-            firstItem.querySelector('svg').style.transform = 'rotate(180deg)';
+        // Enhanced stats counter animation with mobile optimization
+        function animateStats() {
+            const stats = document.querySelectorAll('.stat-number');
+            
+            stats.forEach(stat => {
+                const target = parseInt(stat.getAttribute('data-target'));
+                const suffix = stat.getAttribute('data-suffix') || '';
+                const increment = target / 50; // Smoother animation with more steps
+                let current = 0;
+                
+                const updateCounter = () => {
+                    if (current < target) {
+                        current += increment;
+                        if (current > target) current = target;
+                        
+                        // Format number based on size for better mobile display
+                        let displayValue;
+                        if (target >= 1000) {
+                            displayValue = (current / 1).toFixed(1);
+                        } else {
+                            displayValue = current.toFixed(1);
+                        }
+                        
+                        stat.textContent = displayValue + suffix;
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        stat.textContent = target + suffix;
+                    }
+                };
+                
+                updateCounter();
+            });
         }
         
-        // Search functionality
-        const searchInput = document.querySelector('.search-input');
-        const searchButton = document.querySelector('.search-button');
+        // Trigger stats animation when section is visible
+        const statsSection = document.querySelector('.stat-number');
+        if (statsSection) {
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateStats();
+                        statsObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            statsObserver.observe(statsSection);
+        }
         
-        if (searchInput && searchButton) {
-            const handleSearch = function() {
-                const query = searchInput.value.toLowerCase().trim();
-                let redirectURL = '#tools';
+        // Enhanced tool card animations with staggered effect
+        const toolCards = document.querySelectorAll('.tool-card');
+        let cardDelay = 0;
+        
+        toolCards.forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+            
+            // Add hover effect optimization for mobile
+            if ('ontouchstart' in window) {
+                card.addEventListener('touchstart', function() {
+                    this.style.transform = 'translateY(-4px) scale(1.01)';
+                });
                 
-                if (query.includes('word')) {
-                    redirectURL = '{% url "pdf_to_word" %}';
-                } else if (query.includes('jpg') || query.includes('image')) {
-                    redirectURL = '{% url "pdf_to_jpg" %}';
-                } else if (query.includes('compress')) {
-                    redirectURL = '{% url "compress_pdf" %}';
-                } else if (query.includes('merge')) {
-                    redirectURL = '{% url "merge_pdf" %}';
+                card.addEventListener('touchend', function() {
+                    this.style.transform = '';
+                });
+            }
+        });
+        
+        // Enhanced smooth scrolling with mobile optimization
+        const smoothScrollLinks = document.querySelectorAll('a[href^="#"]');
+        
+        smoothScrollLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    const headerHeight = document.querySelector('header').offsetHeight;
+                    const targetPosition = targetElement.offsetTop - headerHeight - 20;
+                    
+                    // Use smooth scroll with fallback for older browsers
+                    if ('scrollBehavior' in document.documentElement.style) {
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    } else {
+                        // Fallback smooth scroll for older browsers
+                        const startPosition = window.pageYOffset;
+                        const distance = targetPosition - startPosition;
+                        const duration = 800;
+                        let start = null;
+                        
+                        function animation(currentTime) {
+                            if (start === null) start = currentTime;
+                            const timeElapsed = currentTime - start;
+                            const run = ease(timeElapsed, startPosition, distance, duration);
+                            window.scrollTo(0, run);
+                            if (timeElapsed < duration) requestAnimationFrame(animation);
+                        }
+                        
+                        function ease(t, b, c, d) {
+                            t /= d / 2;
+                            if (t < 1) return c / 2 * t * t + b;
+                            t--;
+                            return -c / 2 * (t * (t - 2) - 1) + b;
+                        }
+                        
+                        requestAnimationFrame(animation);
+                    }
+                }
+            });
+        });
+        
+        // Enhanced performance optimization for mobile
+        let ticking = false;
+        
+        function updateOnScroll() {
+            // Batch DOM updates for better performance
+            requestAnimationFrame(() => {
+                // Update scroll-dependent elements here
+                ticking = false;
+            });
+        }
+        
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                ticking = true;
+                updateOnScroll();
+            }
+        }, { passive: true });
+        
+        // Enhanced touch gesture support for mobile
+        let touchStartY = 0;
+        let touchEndY = 0;
+        
+        document.addEventListener('touchstart', function(e) {
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+        
+        document.addEventListener('touchend', function(e) {
+            touchEndY = e.changedTouches[0].screenY;
+            handleGesture();
+        }, { passive: true });
+        
+        function handleGesture() {
+            const swipeThreshold = 50;
+            const diff = touchStartY - touchEndY;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    // Swipe up - could trigger additional functionality
                 } else {
-                    redirectURL = '{% url "all_tools" %}';
+                    // Swipe down - could trigger additional functionality
                 }
-                
-                window.location.href = redirectURL;
-            };
-            
-            searchButton.addEventListener('click', handleSearch);
-            
-            searchInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    handleSearch();
-                }
+            }
+        }
+        
+        // Enhanced accessibility improvements
+        document.addEventListener('keydown', function(e) {
+            // Enhance keyboard navigation
+            if (e.key === 'Tab') {
+                document.body.classList.add('keyboard-navigation');
+            }
+        });
+        
+        document.addEventListener('mousedown', function() {
+            document.body.classList.remove('keyboard-navigation');
+        });
+        
+        // Enhanced error handling and fallbacks
+        window.addEventListener('error', function(e) {
+            console.warn('JavaScript error caught:', e.error);
+            // Graceful degradation for critical functionality
+        });
+        
+        // Enhanced performance monitoring
+        if ('performance' in window && 'measure' in window.performance) {
+            window.addEventListener('load', function() {
+                setTimeout(() => {
+                    const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
+                    console.log('Page load time:', loadTime + 'ms');
+                }, 0);
             });
         }
     });
+    
+    // Enhanced utility functions for mobile optimization
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+    
+    function throttle(func, limit) {
+        let inThrottle;
+        return function() {
+            const args = arguments;
+            const context = this;
+            if (!inThrottle) {
+                func.apply(context, args);
+                inThrottle = true;
+                setTimeout(() => inThrottle = false, limit);
+            }
+        };
+    }
 </script>
-{% endblock %}
 {% endblock %}

@@ -1,0 +1,60 @@
+# robots.txt - Create this file in your templates directory
+User-agent: *
+Allow: /
+
+# Allow all tools and important pages
+Allow: /merge-pdf/
+Allow: /compress-pdf/
+Allow: /compress-image/
+Allow: /pdf-to-word/
+Allow: /word-to-pdf/
+Allow: /pdf-to-jpg/
+Allow: /jpg-to-pdf/
+Allow: /convert-pdf/
+Allow: /tools/
+Allow: /about/
+Allow: /contact/
+Allow: /privacy-policy/
+Allow: /terms-of-service/
+
+# Disallow API endpoints from being crawled
+Disallow: /api/
+Disallow: /admin/
+Disallow: /media/temp_images/
+
+# Allow media files but disallow temporary files
+Allow: /media/
+Disallow: /media/temp_images/
+Disallow: /media/contact_attachments/
+
+# Block certain file types that shouldn't be indexed
+Disallow: *.pdf$
+Disallow: *.doc$
+Disallow: *.docx$
+Disallow: *.jpg$
+Disallow: *.jpeg$
+Disallow: *.png$
+Disallow: *.gif$
+
+# Crawl delay to be respectful
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: {{ site_url }}sitemap.xml
+
+# Popular search engines
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 2
+
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 1

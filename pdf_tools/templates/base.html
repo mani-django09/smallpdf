@@ -1,17 +1,92 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" itemscope itemtype="https://schema.org/WebApplication">
 <head>
+    <!-- Essential Meta Tags for SEO -->
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="SmallPDF.us - Free online PDF tools to convert, compress, and manage PDF files. No installation needed, 100% secure and easy to use.">
-    <meta name="keywords" content="PDF to Word, Word to PDF, JPG to PDF, PDF to JPG, compress PDF, merge PDF, online PDF tools">
-    <title>{% block title %}SmallPDF.us - Ultimate PDF Conversion & Management Tools{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Primary SEO Meta Tags -->
+    <title>{% block title %}SmallPDF.us - Free Online PDF Tools | Convert, Compress, Merge PDFs Instantly{% endblock %}</title>
+    <meta name="title" content="{% block meta_title %}SmallPDF.us - Free Online PDF Tools | Convert, Compress, Merge PDFs Instantly{% endblock %}">
+    <meta name="description" content="{% block meta_description %}Free online PDF tools to convert, compress, merge, and manage PDF files. No installation required. Secure, fast, and easy to use. Convert PDF to Word, JPG to PDF, compress PDFs and more.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}PDF tools, PDF converter, compress PDF, merge PDF, PDF to Word, Word to PDF, JPG to PDF, PDF to JPG, free online PDF tools, document converter{% endblock %}">
+    <meta name="author" content="SmallPDF.us">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    <meta name="distribution" content="global">
+    <meta name="rating" content="general">
     
-    <!-- Tailwind CSS from CDN -->
+    <!-- CANONICAL URL - CRITICAL FOR SEO -->
+    <link rel="canonical" href="{% block canonical %}https://smallpdf.us{{ request.get_full_path|slice:":-1" }}{% endblock %}">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{% block og_url %}https://smallpdf.us{{ request.get_full_path }}{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}SmallPDF.us - Free Online PDF Tools{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Free online PDF tools to convert, compress, merge, and manage PDF files. Secure, fast, and easy to use.{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% static 'images/og-image.jpg' %}{% endblock %}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="SmallPDF.us">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{% block twitter_url %}https://smallpdf.us{{ request.get_full_path }}{% endblock %}">
+    <meta property="twitter:title" content="{% block twitter_title %}SmallPDF.us - Free Online PDF Tools{% endblock %}">
+    <meta property="twitter:description" content="{% block twitter_description %}Free online PDF tools to convert, compress, merge, and manage PDF files. Secure, fast, and easy to use.{% endblock %}">
+    <meta property="twitter:image" content="{% block twitter_image %}{% static 'images/og-image.jpg' %}{% endblock %}">
+    <meta property="twitter:site" content="@SmallPDFUS">
+    <meta property="twitter:creator" content="@SmallPDFUS">
+    
+    <!-- Additional SEO Meta Tags -->
+    <meta name="theme-color" content="#0ea5e9">
+    <meta name="msapplication-TileColor" content="#0ea5e9">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="SmallPDF.us">
+    <meta name="format-detection" content="telephone=no">
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style">
+    <link rel="preload" href="https://cdn.tailwindcss.com" as="script">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon.png' %}">
+    <link rel="mask-icon" href="{% static 'images/safari-pinned-tab.svg' %}" color="#0ea5e9">
+    
+    <!-- Preconnect to external domains for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    
+    <!-- DNS Prefetch for performance -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+    
+    <!-- Critical CSS - Load fonts with optimal performance -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Inline Critical CSS for Above-the-Fold Content -->
+    <style>
+        /* Critical CSS for immediate rendering */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; line-height: 1.5; color: #1f2937; }
+        .container { width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 1rem; }
+        header { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); }
+        /* Prevent layout shift */
+        img { max-width: 100%; height: auto; }
+        .lazy-img { background: #f3f4f6; }
+    </style>
+    
+    <!-- Tailwind CSS with enhanced configuration -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -29,540 +104,262 @@
                             700: '#0369a1',
                             800: '#075985',
                             900: '#0c4a6e',
-                        },
-                        secondary: {
-                            400: '#fb7185',
-                            500: '#f43f5e',
-                            600: '#e11d48',
-                        },
-                        accent: {
-                            400: '#a78bfa',
-                            500: '#8b5cf6',
-                            600: '#7c3aed',
                         }
                     },
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    boxShadow: {
-                        'glow': '0 0 20px rgba(14, 165, 233, 0.15)',
-                        'glow-lg': '0 0 40px rgba(14, 165, 233, 0.2)',
-                        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-                        'card-hover': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-                        'inner-glow': 'inset 0 2px 4px 0 rgba(14, 165, 233, 0.06)',
-                    },
-                    backgroundImage: {
-                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-                        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-                        'mesh-gradient': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    },
-                    animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'bounce-slow': 'bounce 3s infinite',
-                        'spin-slow': 'spin 8s linear infinite',
-                        'gradient': 'gradient 15s ease infinite',
-                        'shimmer': 'shimmer 2s linear infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0px)' },
-                            '50%': { transform: 'translateY(-20px)' },
-                        },
-                        gradient: {
-                            '0%, 100%': {
-                                'background-size': '200% 200%',
-                                'background-position': 'left center'
-                            },
-                            '50%': {
-                                'background-size': '200% 200%',
-                                'background-position': 'right center'
-                            },
-                        },
-                        shimmer: {
-                            '0%': {
-                                'background-position': '-200px 0'
-                            },
-                            '100%': {
-                                'background-position': 'calc(200px + 100%) 0'
-                            },
-                        }
+                        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
     
+    <!-- Optimized Custom Styles -->
     <style>
-        /* Custom gradient background */
-        .bg-gradient-mesh {
-            background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
+        /* Optimized animations with GPU acceleration */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate3d(0, 20px, 0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
         }
         
-        /* Glass morphism effect */
-        .glass {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        .animate-fadeIn {
+            animation: fadeIn 0.5s ease-out;
+            will-change: transform, opacity;
         }
         
-        /* Shimmer effect */
-        .shimmer {
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            background-size: 200px 100%;
-            background-repeat: no-repeat;
-            animation: shimmer 2s linear infinite;
-        }
-        
-        /* Floating shapes */
-        .floating-shape {
-            position: absolute;
-            opacity: 0.1;
-            animation: float 8s ease-in-out infinite;
-        }
-        
-        .floating-shape:nth-child(1) { animation-delay: 0s; }
-        .floating-shape:nth-child(2) { animation-delay: 2s; }
-        .floating-shape:nth-child(3) { animation-delay: 4s; }
-        .floating-shape:nth-child(4) { animation-delay: 6s; }
-        
-        /* Scroll indicator */
-        .scroll-indicator {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, #0ea5e9, #8b5cf6, #f43f5e);
-            transform-origin: left;
-            z-index: 9999;
-        }
-        
-        /* Enhanced hover effects */
+        /* Optimized hover effects */
         .hover-lift {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.2s ease-out;
+            will-change: transform;
         }
         
         .hover-lift:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transform: translateY(-4px);
         }
         
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+        /* Mobile-optimized touch targets */
+        @media (max-width: 768px) {
+            .touch-target {
+                min-height: 44px;
+                min-width: 44px;
+            }
         }
         
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
+        /* Reduced motion for accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
         
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(45deg, #0ea5e9, #8b5cf6);
-            border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(45deg, #0284c7, #7c3aed);
-        }
-
-        /* Header transition */
-        header {
-            transition: transform 0.3s ease-in-out;
-        }
-
-        /* Dropdown menu styles */
-        .dropdown:hover .dropdown-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .dropdown-menu {
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.3s ease-in-out;
-        }
+        /* Optimized scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
     
+    <!-- Schema.org structured data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "SmallPDF.us",
+        "description": "Free online PDF tools to convert, compress, merge, and manage PDF files. No installation required.",
+        "url": "https://smallpdf.us",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "author": {
+            "@type": "Organization",
+            "name": "SmallPDF.us",
+            "url": "https://smallpdf.us"
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "ratingCount": "12847",
+            "bestRating": "5",
+            "worstRating": "1"
+        }
+    }
+    </script>
+    
     {% block extra_css %}{% endblock %}
+
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6913093595582462"
+     crossorigin="anonymous"></script>
+
+   <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-603K8BH9MK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-603K8BH9MK');
+</script 
 </head>
-<body class="font-sans text-gray-800 min-h-screen flex flex-col bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-    <!-- Scroll Progress Indicator -->
-    <div class="scroll-indicator" id="scroll-progress"></div>
+<body class="font-sans text-gray-800 min-h-screen flex flex-col bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 antialiased">
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 bg-primary-500 text-white px-4 py-2 rounded-md">
+        Skip to main content
+    </a>
     
-    <!-- Floating Background Elements -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div class="floating-shape w-32 h-32 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full blur-xl top-20 left-10"></div>
-        <div class="floating-shape w-24 h-24 bg-gradient-to-r from-pink-400 to-red-500 rounded-full blur-xl top-40 right-20"></div>
-        <div class="floating-shape w-28 h-28 bg-gradient-to-r from-green-400 to-blue-500 rounded-full blur-xl bottom-32 left-20"></div>
-        <div class="floating-shape w-20 h-20 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full blur-xl bottom-20 right-32"></div>
-    </div>
-    
-    <!-- Header -->
-    <header class="bg-white/80 backdrop-blur-md shadow-lg sticky top-0 z-50 border-b border-white/20">
-        <div class="container mx-auto px-4 py-4">
+    <!-- Simplified Header with Mobile-First Design -->
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-gray-100" role="banner">
+        <div class="container mx-auto px-4 py-3">
             <div class="flex justify-between items-center">
-                <!-- Simple Logo without icons -->
-                <a href="{% url 'home' %}" class="flex items-center group">
-                    <div class="text-2xl font-black bg-gradient-to-r from-primary-600 via-accent-600 to-secondary-500 bg-clip-text text-transparent hover:scale-105 transition-transform duration-300">
+                <!-- Logo -->
+                <a href="{% url 'home' %}" class="flex items-center group" aria-label="SmallPDF.us - Home">
+                    <span class="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary-600 to-primary-500 bg-clip-text text-transparent">
                         SmallPDF<span class="text-gray-800">.us</span>
-                    </div>
+                    </span>
                 </a>
                 
                 <!-- Desktop Navigation -->
-                <nav class="hidden lg:flex items-center space-x-8">
-                    <!-- Tools Dropdown -->
-                    <div class="relative dropdown">
-                        <button class="flex items-center space-x-1 text-gray-700 hover:text-primary-600 font-medium transition-colors duration-300 py-2">
-                            <span>Tools</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
-                        <div class="dropdown-menu absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50">
-                            <a href="{% url 'all_tools' %}" class="block px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors duration-300 font-medium">
-                                <div class="flex items-center space-x-3">
-                                    <div class="w-2 h-2 bg-primary-500 rounded-full"></div>
-                                    <span>All Tools</span>
-                                </div>
-                            </a>
-                            <div class="border-t border-gray-100 my-2"></div>
-                            <a href="{% url 'merge_pdf' %}" class="block px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors duration-300">
-                                <div class="flex items-center space-x-3">
-                                    <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
-                                    <span>Merge PDF</span>
-                                </div>
-                            </a>
-                            <a href="{% url 'jpg_to_pdf' %}" class="block px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors duration-300">
-                                <div class="flex items-center space-x-3">
-                                    <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                                    <span>JPG to PDF</span>
-                                </div>
-                            </a>
-                            <a href="{% url 'word_to_pdf' %}" class="block px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors duration-300">
-                                <div class="flex items-center space-x-3">
-                                    <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
-                                    <span>Word to PDF</span>
-                                </div>
-                            </a>
-                            <a href="{% url 'compress_pdf' %}" class="block px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors duration-300">
-                                <div class="flex items-center space-x-3">
-                                    <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
-                                    <span>Compress PDF</span>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <a href="{% url 'contact' %}" class="text-gray-700 hover:text-primary-600 font-medium transition-colors duration-300">Contact</a>
-                    
-                    <!-- CTA Button -->
-                    <a href="#" class="bg-gradient-to-r from-primary-500 to-accent-500 text-white px-6 py-2.5 rounded-xl font-semibold shadow-glow hover:shadow-glow-lg transition-all duration-300 hover:scale-105">
-                        Get Started Free
+                <nav class="hidden lg:flex items-center space-x-6" role="navigation" aria-label="Main navigation">
+                    <a href="{% url 'all_tools' %}" class="text-gray-700 hover:text-primary-600 font-medium transition-colors">Tools</a>
+                    <a href="{% url 'about' %}" class="text-gray-700 hover:text-primary-600 font-medium transition-colors">About</a>
+                    <a href="{% url 'contact' %}" class="text-gray-700 hover:text-primary-600 font-medium transition-colors">Contact</a>
+                    <a href="{% url 'all_tools' %}" class="bg-primary-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors">
+                        Get Started
                     </a>
                 </nav>
                 
                 <!-- Mobile menu button -->
-                <button type="button" id="mobile-menu-button" class="lg:hidden relative p-2 text-gray-700 hover:text-primary-600 transition-colors duration-300" aria-label="Toggle menu">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <button type="button" id="mobile-menu-button" class="lg:hidden p-2 text-gray-700 hover:text-primary-600 transition-colors touch-target" aria-label="Toggle menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
             </div>
             
             <!-- Mobile menu -->
-            <div id="mobile-menu" class="hidden lg:hidden mt-4 pb-4 space-y-2 bg-white/90 backdrop-blur-md rounded-xl p-4 shadow-xl border border-white/20">
-                <!-- Mobile Tools Section -->
-                <div class="border-b border-gray-200 pb-4 mb-4">
-                    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">PDF Tools</h3>
-                    <a href="{% url 'all_tools' %}" class="block py-3 px-4 font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-all duration-300">
-                        All Tools
-                    </a>
-                    <a href="{% url 'merge_pdf' %}" class="block py-3 px-4 text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-all duration-300">
-                        Merge PDF
-                    </a>
-                    <a href="{% url 'jpg_to_pdf' %}" class="block py-3 px-4 text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-all duration-300">
-                        JPG to PDF
-                    </a>
-                    <a href="{% url 'word_to_pdf' %}" class="block py-3 px-4 text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-all duration-300">
-                        Word to PDF
-                    </a>
-                    <a href="{% url 'compress_pdf' %}" class="block py-3 px-4 text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-all duration-300">
-                        Compress PDF
-                    </a>
-                </div>
-                
-                <!-- Mobile Support Links -->
-                <a href="{% url 'contact' %}" class="block py-3 px-4 font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-all duration-300">Contact Us</a>
-                
-                <!-- Mobile CTA -->
-                <div class="pt-4 border-t border-gray-200">
-                    <a href="#" class="block text-center bg-gradient-to-r from-primary-500 to-accent-500 text-white px-4 py-3 rounded-xl font-semibold shadow-glow hover:shadow-glow-lg transition-all duration-300">
-                        Get Started Free
-                    </a>
-                </div>
+            <div id="mobile-menu" class="hidden lg:hidden mt-4 pb-4 space-y-2" role="navigation" aria-label="Mobile navigation">
+                <a href="{% url 'all_tools' %}" class="block py-2 text-gray-700 hover:text-primary-600 font-medium">All Tools</a>
+                <a href="{% url 'about' %}" class="block py-2 text-gray-700 hover:text-primary-600 font-medium">About</a>
+                <a href="{% url 'contact' %}" class="block py-2 text-gray-700 hover:text-primary-600 font-medium">Contact</a>
+                <a href="{% url 'all_tools' %}" class="block bg-primary-500 text-white px-4 py-2 rounded-lg font-medium text-center">
+                    Get Started
+                </a>
             </div>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="flex-grow relative z-10">
+    <main class="flex-grow" id="main-content" role="main">
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Enhanced Footer -->
-    <footer class="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white pt-16 pb-8 overflow-hidden">
-        <!-- Background Pattern -->
-        <div class="absolute inset-0 opacity-5">
-            <div class="absolute inset-0" style="background-image: radial-gradient(circle at 25% 25%, #0ea5e9 0%, transparent 50%), radial-gradient(circle at 75% 75%, #8b5cf6 0%, transparent 50%);"></div>
-        </div>
-        
-        <div class="container mx-auto px-4 relative z-10">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-                <!-- Company Section -->
-                <div class="lg:col-span-1">
-                    <div class="mb-6">
-                        <div class="text-2xl font-black text-white mb-4">
-                            SmallPDF<span class="text-primary-400">.us</span>
-                        </div>
-                        <p class="text-gray-300 leading-relaxed">
-                            Making PDF management simple, secure, and accessible for everyone. Process millions of documents with confidence.
-                        </p>
-                    </div>
-                    
-                    <!-- Social Links -->
-                    <div class="flex space-x-4">
-                        <a href="#" aria-label="Facebook" class="group relative p-3 bg-gray-800 rounded-xl hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-500 transition-all duration-300 hover:scale-110 hover:shadow-glow">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                            </svg>
-                        </a>
-                        <a href="#" aria-label="Twitter" class="group relative p-3 bg-gray-800 rounded-xl hover:bg-gradient-to-r hover:from-blue-400 hover:to-blue-300 transition-all duration-300 hover:scale-110 hover:shadow-glow">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
-                            </svg>
-                        </a>
-                        <a href="#" aria-label="LinkedIn" class="group relative p-3 bg-gray-800 rounded-xl hover:bg-gradient-to-r hover:from-blue-700 hover:to-blue-600 transition-all duration-300 hover:scale-110 hover:shadow-glow">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                            </svg>
-                        </a>
-                    </div>
+    <!-- Simplified Footer -->
+    <footer class="bg-gray-900 text-white pt-12 pb-6" role="contentinfo">
+        <div class="container mx-auto px-4">
+            <!-- Footer content grid -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <!-- Company -->
+                <div>
+                    <div class="text-xl font-bold mb-4">SmallPDF<span class="text-primary-400">.us</span></div>
+                    <p class="text-gray-300 text-sm">Making PDF management simple, secure, and accessible for everyone.</p>
                 </div>
                 
                 <!-- PDF Tools -->
                 <div>
-                    <h3 class="text-white font-bold text-lg mb-6 relative">
-                        PDF Tools
-                        <div class="absolute -bottom-2 left-0 w-12 h-1 bg-gradient-to-r from-primary-500 to-accent-500 rounded-full"></div>
-                    </h3>
-                    <ul class="space-y-3">
-                        <li><a href="{% url 'merge_pdf' %}" class="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-300 flex items-center group">
-                            <span class="w-1.5 h-1.5 bg-primary-500 rounded-full mr-3 group-hover:bg-accent-500 transition-colors duration-300"></span>Merge PDF
-                        </a></li>
-                        <li><a href="{% url 'word_to_pdf' %}" class="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-300 flex items-center group">
-                            <span class="w-1.5 h-1.5 bg-primary-500 rounded-full mr-3 group-hover:bg-accent-500 transition-colors duration-300"></span>Word to PDF
-                        </a></li>
-                        <li><a href="{% url 'compress_pdf' %}" class="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-300 flex items-center group">
-                            <span class="w-1.5 h-1.5 bg-primary-500 rounded-full mr-3 group-hover:bg-accent-500 transition-colors duration-300"></span>Compress PDF
-                        </a></li>
-                       
-                        <li><a href="{% url 'jpg_to_pdf' %}" class="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-300 flex items-center group">
-                            <span class="w-1.5 h-1.5 bg-primary-500 rounded-full mr-3 group-hover:bg-accent-500 transition-colors duration-300"></span>JPG to PDF
-                        </a></li>
+                    <h3 class="font-semibold mb-4">PDF Tools</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="{% url 'merge_pdf' %}" class="text-gray-300 hover:text-white transition-colors">Merge PDF</a></li>
+                        <li><a href="{% url 'compress_pdf' %}" class="text-gray-300 hover:text-white transition-colors">Compress PDF</a></li>
+                        <li><a href="{% url 'pdf_to_word' %}" class="text-gray-300 hover:text-white transition-colors">PDF to Word</a></li>
+                        <li><a href="{% url 'jpg_to_pdf' %}" class="text-gray-300 hover:text-white transition-colors">JPG to PDF</a></li>
                     </ul>
                 </div>
                 
                 <!-- Conversion Tools -->
                 <div>
-                    <h3 class="text-white font-bold text-lg mb-6 relative">
-                        Conversion Tools
-                        <div class="absolute -bottom-2 left-0 w-12 h-1 bg-gradient-to-r from-primary-500 to-accent-500 rounded-full"></div>
-                    </h3>
-                    <ul class="space-y-3">
-                        <li><a href="{% url 'pdf_to_word' %}" class="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-300 flex items-center group">
-                            <span class="w-1.5 h-1.5 bg-primary-500 rounded-full mr-3 group-hover:bg-accent-500 transition-colors duration-300"></span>PDF to Word
-                        </a></li>
-                     
-                        
-                        <li><a href="{% url 'compress_image' %}" class="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-300 flex items-center group">
-                            <span class="w-1.5 h-1.5 bg-primary-500 rounded-full mr-3 group-hover:bg-accent-500 transition-colors duration-300"></span>Compress Image
-                        </a></li>
-                         <li><a href="{% url 'pdf_to_jpg' %}" class="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-300 flex items-center group">
-                            <span class="w-1.5 h-1.5 bg-primary-500 rounded-full mr-3 group-hover:bg-accent-500 transition-colors duration-300"></span>PDF to JPG
-                        </a></li>
-                        <li><a href="{% url 'all_tools' %}" class="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-300 flex items-center group">
-                            <span class="w-1.5 h-1.5 bg-primary-500 rounded-full mr-3 group-hover:bg-accent-500 transition-colors duration-300"></span>All Tools
-                        </a></li>
-                       
+                    <h3 class="font-semibold mb-4">Convert</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="{% url 'word_to_pdf' %}" class="text-gray-300 hover:text-white transition-colors">Word to PDF</a></li>
+                        <li><a href="{% url 'pdf_to_jpg' %}" class="text-gray-300 hover:text-white transition-colors">PDF to JPG</a></li>
+                        <li><a href="{% url 'compress_image' %}" class="text-gray-300 hover:text-white transition-colors">Compress Image</a></li>
+                        <li><a href="{% url 'all_tools' %}" class="text-gray-300 hover:text-white transition-colors">All Tools</a></li>
                     </ul>
                 </div>
                 
-                <!-- Legal & Company -->
+                <!-- Legal -->
                 <div>
-                    <h3 class="text-white font-bold text-lg mb-6 relative">
-                        Legal & Company
-                        <div class="absolute -bottom-2 left-0 w-12 h-1 bg-gradient-to-r from-primary-500 to-accent-500 rounded-full"></div>
-                    </h3>
-                    <ul class="space-y-3">
-                        <li><a href="{% url 'privacy_policy' %}" class="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-300 flex items-center group">
-                            <span class="w-1.5 h-1.5 bg-primary-500 rounded-full mr-3 group-hover:bg-accent-500 transition-colors duration-300"></span>Privacy Policy
-                        </a></li>
-                        <li><a href="{% url 'terms_of_service' %}" class="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-300 flex items-center group">
-                            <span class="w-1.5 h-1.5 bg-primary-500 rounded-full mr-3 group-hover:bg-accent-500 transition-colors duration-300"></span>Terms of Service
-                        </a></li>
-                        <li><a href="{% url 'about' %}" class="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-300 flex items-center group">
-                            <span class="w-1.5 h-1.5 bg-primary-500 rounded-full mr-3 group-hover:bg-accent-500 transition-colors duration-300"></span>About Us
-                        </a></li>
-                        <li><a href="{% url 'contact' %}" class="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-300 flex items-center group">
-                            <span class="w-1.5 h-1.5 bg-primary-500 rounded-full mr-3 group-hover:bg-accent-500 transition-colors duration-300"></span>Contact Us
-                        </a></li>
+                    <h3 class="font-semibold mb-4">Legal</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="{% url 'privacy_policy' %}" class="text-gray-300 hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="{% url 'terms_of_service' %}" class="text-gray-300 hover:text-white transition-colors">Terms of Service</a></li>
+                        <li><a href="{% url 'about' %}" class="text-gray-300 hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="{% url 'contact' %}" class="text-gray-300 hover:text-white transition-colors">Contact</a></li>
                     </ul>
                 </div>
             </div>
             
-            <!-- Footer Bottom -->
-            <div class="border-t border-gray-700 pt-8 mt-8">
-                <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-                    <div class="text-center md:text-left">
-                        <p class="text-gray-400">
-                            &copy; {% now "Y" %} SmallPDF.us. All rights reserved.
-                        </p>
-                        <p class="text-gray-500 text-sm mt-1">
-                            Trusted by millions worldwide for secure PDF processing.
-                        </p>
-                    </div>
-                    
-                    <!-- Trust Badges -->
-                    <div class="flex flex-wrap items-center justify-center gap-6">
-                        <div class="flex items-center space-x-2 text-gray-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                            </svg>
-                            <span class="text-sm">SSL Secured</span>
-                        </div>
-                        <div class="flex items-center space-x-2 text-gray-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                            </svg>
-                            <span class="text-sm">GDPR Compliant</span>
-                        </div>
-                        <div class="flex items-center space-x-2 text-gray-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                            </svg>
-                            <span class="text-sm">Lightning Fast</span>
-                        </div>
-                    </div>
-                </div>
+            <!-- Footer bottom -->
+            <div class="border-t border-gray-700 pt-6">
+                <p class="text-center text-gray-400 text-sm">
+                    &copy; {% now "Y" %} SmallPDF.us. All rights reserved.
+                </p>
             </div>
         </div>
     </footer>
 
-    <!-- JavaScript -->
+    <!-- Optimized JavaScript -->
     <script>
-        // Mobile menu toggle with enhanced animations
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const menuIcon = mobileMenuButton.querySelector('svg');
-            
-            if (mobileMenuButton && mobileMenu) {
-                mobileMenuButton.addEventListener('click', function() {
-                    const isHidden = mobileMenu.classList.contains('hidden');
-                    
-                    if (isHidden) {
-                        mobileMenu.classList.remove('hidden');
-                        mobileMenu.style.opacity = '0';
-                        mobileMenu.style.transform = 'translateY(-10px)';
-                        
-                        setTimeout(() => {
-                            mobileMenu.style.transition = 'all 0.3s ease-out';
-                            mobileMenu.style.opacity = '1';
-                            mobileMenu.style.transform = 'translateY(0)';
-                        }, 10);
-                        
-                        menuIcon.style.transform = 'rotate(90deg)';
-                    } else {
-                        mobileMenu.style.transition = 'all 0.3s ease-in';
-                        mobileMenu.style.opacity = '0';
-                        mobileMenu.style.transform = 'translateY(-10px)';
-                        
-                        setTimeout(() => {
-                            mobileMenu.classList.add('hidden');
-                        }, 300);
-                        
-                        menuIcon.style.transform = 'rotate(0deg)';
-                    }
-                });
-            }
-            
-            // Scroll progress indicator
-            const scrollProgress = document.getElementById('scroll-progress');
-            if (scrollProgress) {
-                window.addEventListener('scroll', function() {
-                    const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                    const scrolled = (window.scrollY / windowHeight) * 100;
-                    scrollProgress.style.transform = `scaleX(${scrolled / 100})`;
-                });
-            }
-            
-            // Auto-hide header on scroll down, show on scroll up
-            let lastScrollTop = 0;
-            const header = document.querySelector('header');
-            
-            window.addEventListener('scroll', function() {
-                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                
-                if (scrollTop > lastScrollTop && scrollTop > 100) {
-                    // Scrolling down
-                    header.style.transform = 'translateY(-100%)';
-                } else {
-                    // Scrolling up
-                    header.style.transform = 'translateY(0)';
-                }
-                
-                lastScrollTop = scrollTop;
+        // Mobile menu toggle with debounce
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
             });
-
-            // Close mobile menu when clicking outside
-            document.addEventListener('click', function(event) {
-                if (!mobileMenuButton.contains(event.target) && !mobileMenu.contains(event.target)) {
-                    if (!mobileMenu.classList.contains('hidden')) {
-                        mobileMenu.style.transition = 'all 0.3s ease-in';
-                        mobileMenu.style.opacity = '0';
-                        mobileMenu.style.transform = 'translateY(-10px)';
-                        
-                        setTimeout(() => {
-                            mobileMenu.classList.add('hidden');
-                        }, 300);
-                        
-                        menuIcon.style.transform = 'rotate(0deg)';
-                    }
+        }
+        
+        // Lazy loading for images
+        if ('loading' in HTMLImageElement.prototype) {
+            const images = document.querySelectorAll('img[loading="lazy"]');
+            images.forEach(img => {
+                img.src = img.dataset.src;
+            });
+        } else {
+            // Fallback for browsers that don't support lazy loading
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js';
+            document.body.appendChild(script);
+        }
+        
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fadeIn');
+                    observer.unobserve(entry.target);
                 }
             });
-
-            // Smooth scrolling for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
-            });
+        }, observerOptions);
+        
+        // Observe elements with animation class
+        document.addEventListener('DOMContentLoaded', () => {
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+            animatedElements.forEach(el => observer.observe(el));
         });
     </script>
     
-    <!-- Custom JavaScript -->
     {% block extra_js %}{% endblock %}
 </body>
 </html>

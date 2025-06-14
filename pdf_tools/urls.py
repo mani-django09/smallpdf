@@ -20,6 +20,8 @@ urlpatterns = [
     # Legal pages
     path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
     path('terms-of-service/', views.terms_of_service, name='terms_of_service'),
+    path('robots.txt', views.robots_txt, name='robots_txt'),
+
     # Tool pages
     path('tools/', views.all_tools, name='all_tools'),
     path('merge-pdf/', views.merge_pdf, name='merge_pdf'),
