@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmallPDF.us - Analytics Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .card { @apply bg-white rounded-lg shadow p-6 border border-gray-200; }
+        .stat-card { @apply bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg p-6 shadow-lg; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-gray-900">SmallPDF.us Analytics</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <select id="dateRange" class="border border-gray-300 rounded-md px-3 py-2 bg-white text-sm">
+                        <option value="1">Last 24 Hours</option>
+                        <option value="7" {% if days == 7 %}selected{% endif %}>Last 7 Days</option>
+                        <option value="30">Last 30 Days</option>
+                        <option value="90">Last 90 Days</option>
+                    </select>
+                    <button id="refreshData" class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700">
+                        Refresh
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Key Metrics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="stat-card">
+                <div class="flex items-center">
+                    <div class="p-2 bg-white bg-opacity-20 rounded-lg">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-white text-opacity-80 text-sm">Total Activities</p>
+                        <p class="text-2xl font-bold">{{ total_activities|floatformat:0 }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stat-card bg-gradient-to-r from-green-500 to-teal-600">
+                <div class="flex items-center">
+                    <div class="p-2 bg-white bg-opacity-20 rounded-lg">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-white text-opacity-80 text-sm">Unique Users</p>
+                        <p class="text-2xl font-bold">{{ unique_users|floatformat:0 }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stat-card bg-gradient-to-r from-red-500 to-pink-600">
+                <div class="flex items-center">
+                    <div class="p-2 bg-white bg-opacity-20 rounded-lg">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-white text-opacity-80 text-sm">Total Errors</p>
+                        <p class="text-2xl font-bold">{{ total_errors|floatformat:0 }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stat-card bg-gradient-to-r from-yellow-500 to-orange-600">
+                <div class="flex items-center">
+                    <div class="p-2 bg-white bg-opacity-20 rounded-lg">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-white text-opacity-80 text-sm">Success Rate</p>
+                        <p class="text-2xl font-bold">{{ success_percentage }}%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Daily Activity Chart -->
+            <div class="card">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Daily Activity Trends</h3>
+                <canvas id="activityChart" width="400" height="200"></canvas>
+            </div>
+            
+            <!-- Tool Usage Chart -->
+            <div class="card">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Most Used Tools</h3>
+                <canvas id="toolChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Data Tables Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Recent Errors Table -->
+            <div class="card">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">Recent Errors</h3>
+                    <a href="{% url 'admin:error_log_detail' %}" class="text-blue-600 hover:text-blue-800 text-sm">View All</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Error Type</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Count</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Severity</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            {% for error in error_breakdown %}
+                            <tr>
+                                <td class="px-4 py-3 text-sm text-gray-900">{{ error.error_type }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-900">{{ error.count }}</td>
+                                <td class="px-4 py-3 text-sm">
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
+                                        High
+                                    </span>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="px-4 py-3 text-sm text-gray-500 text-center">No errors found</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- File Processing Stats -->
+            <div class="card">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">File Processing Stats</h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-600">Total Files Processed</span>
+                        <span class="text-sm font-semibold">{{ file_stats.total_files|default:0 }}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-600">Average File Size</span>
+                        <span class="text-sm font-semibold">
+                            {% if file_stats.avg_file_size %}
+                                {{ file_stats.avg_file_size|floatformat:2|filesizeformat }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-600">Total Data Processed</span>
+                        <span class="text-sm font-semibold">
+                            {% if file_stats.total_size %}
+                                {{ file_stats.total_size|filesizeformat }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-600">Avg Processing Time</span>
+                        <span class="text-sm font-semibold">
+                            {% if file_stats.avg_processing_time %}
+                                {{ file_stats.avg_processing_time|floatformat:2 }}s
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Device & Browser Stats -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Device Types -->
+            <div class="card">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Device Types</h3>
+                <div class="space-y-3">
+                    {% for device in device_stats %}
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-600 capitalize">{{ device.device_type|default:"Unknown" }}</span>
+                        <div class="flex items-center">
+                            <div class="w-20 bg-gray-200 rounded-full h-2 mr-2">
+                                <div class="bg-blue-600 h-2 rounded-full" style="width: {{ device.count|mul:100|div:total_activities }}%"></div>
+                            </div>
+                            <span class="text-sm font-semibold">{{ device.count }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Browser Stats -->
+            <div class="card">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Browsers</h3>
+                <div class="space-y-3">
+                    {% for browser in browser_stats %}
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-600">{{ browser.browser|default:"Unknown" }}</span>
+                        <div class="flex items-center">
+                            <div class="w-20 bg-gray-200 rounded-full h-2 mr-2">
+                                <div class="bg-green-600 h-2 rounded-full" style="width: {{ browser.count|mul:100|div:total_activities }}%"></div>
+                            </div>
+                            <span class="text-sm font-semibold">{{ browser.count }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Top Countries -->
+            <div class="card">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Top Countries</h3>
+                <div class="space-y-3">
+                    {% for country in country_stats %}
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-600">{{ country.country|default:"Unknown" }}</span>
+                        <div class="flex items-center">
+                            <div class="w-20 bg-gray-200 rounded-full h-2 mr-2">
+                                <div class="bg-purple-600 h-2 rounded-full" style="width: {{ country.count|mul:100|div:total_activities }}%"></div>
+                            </div>
+                            <span class="text-sm font-semibold">{{ country.count }}</span>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-sm text-gray-500">No country data available</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="mt-8 flex space-x-4">
+            <a href="{% url 'admin:user_activity_detail' %}" class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700">
+                View User Activities
+            </a>
+            <a href="{% url 'admin:error_log_detail' %}" class="bg-red-600 text-white px-4 py-2 rounded-md text-sm hover:bg-red-700">
+                View Error Logs
+            </a>
+            <button id="exportData" class="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700">
+                Export Data
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Daily Activity Chart
+        const activityCtx = document.getElementById('activityChart').getContext('2d');
+        const activityData = {{ daily_activity|safe }};
+        
+        new Chart(activityCtx, {
+            type: 'line',
+            data: {
+                labels: activityData.map(d => d.date),
+                datasets: [{
+                    label: 'Activities',
+                    data: activityData.map(d => d.activities),
+                    borderColor: 'rgb(59, 130, 246)',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    tension: 0.1
+                }, {
+                    label: 'Errors',
+                    data: activityData.map(d => d.errors),
+                    borderColor: 'rgb(239, 68, 68)',
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Tool Usage Chart
+        const toolCtx = document.getElementById('toolChart').getContext('2d');
+        const toolData = {{ tool_usage|safe }};
+        
+        new Chart(toolCtx, {
+            type: 'doughnut',
+            data: {
+                labels: toolData.map(d => d.tool_name || 'Unknown'),
+                datasets: [{
+                    data: toolData.map(d => d.count),
+                    backgroundColor: [
+                        '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6',
+                        '#06B6D4', '#84CC16', '#F97316', '#EC4899', '#6366F1'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // Date range change handler
+        document.getElementById('dateRange').addEventListener('change', function() {
+            const days = this.value;
+            window.location.href = `?days=${days}`;
+        });
+
+        // Auto-refresh every 30 seconds
+        setInterval(function() {
+            // You can implement real-time updates via AJAX here
+            console.log('Auto-refresh triggered');
+        }, 30000);
+
+        // Export functionality
+        document.getElementById('exportData').addEventListener('click', function() {
+            // Implement CSV export functionality
+            alert('Export functionality would be implemented here');
+        });
+    </script>
+</body>
+</html>

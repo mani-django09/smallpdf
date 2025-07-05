@@ -8,9 +8,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     
     <!-- Primary SEO Meta Tags -->
-    <title>{% block title %}SmallPDF.us - Free Online PDF Tools | Convert, Compress, Merge PDFs Instantly{% endblock %}</title>
+    <title>{% block title %}PDF Tools Online | Free & Fast | SmallPDF.us{% endblock %}</title>
     <meta name="title" content="{% block meta_title %}SmallPDF.us - Free Online PDF Tools | Convert, Compress, Merge PDFs Instantly{% endblock %}">
-    <meta name="description" content="{% block meta_description %}Free online PDF tools to convert, compress, merge, and manage PDF files. No installation required. Secure, fast, and easy to use. Convert PDF to Word, JPG to PDF, compress PDFs and more.{% endblock %}">
+    <meta name="description" content="{% block meta_description %}Free PDF tools to convert, compress, merge files. Secure & fast. No installation required.{% endblock %}">
     <meta name="keywords" content="{% block meta_keywords %}PDF tools, PDF converter, compress PDF, merge PDF, PDF to Word, Word to PDF, JPG to PDF, PDF to JPG, free online PDF tools, document converter{% endblock %}">
     <meta name="author" content="SmallPDF.us">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -18,7 +18,7 @@
     <meta name="revisit-after" content="7 days">
     <meta name="distribution" content="global">
     <meta name="rating" content="general">
-    
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <!-- CANONICAL URL - CRITICAL FOR SEO -->
     <link rel="canonical" href="{% block canonical %}https://smallpdf.us{{ request.get_full_path|slice:":-1" }}{% endblock %}">
     
@@ -54,12 +54,16 @@
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style">
     <link rel="preload" href="https://cdn.tailwindcss.com" as="script">
     
-    <!-- Favicons -->
-    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon.png' %}">
-    <link rel="mask-icon" href="{% static 'images/safari-pinned-tab.svg' %}" color="#0ea5e9">
+    <!-- Favicons - Updated with your files -->
+<link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+<link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
+<link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
+<link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon.png' %}">
+<link rel="manifest" href="{% static 'site.webmanifest' %}">
+
+<!-- Additional favicons for better compatibility -->
+<link rel="icon" type="image/png" sizes="192x192" href="{% static 'images/android-chrome-192x192.png' %}">
+<link rel="icon" type="image/png" sizes="512x512" href="{% static 'images/android-chrome-512x512.png' %}">
     
     <!-- Preconnect to external domains for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -224,15 +228,15 @@
                     </span>
                 </a>
                 
-                <!-- Desktop Navigation -->
                 <nav class="hidden lg:flex items-center space-x-6" role="navigation" aria-label="Main navigation">
-                    <a href="{% url 'all_tools' %}" class="text-gray-700 hover:text-primary-600 font-medium transition-colors">Tools</a>
-                    <a href="{% url 'about' %}" class="text-gray-700 hover:text-primary-600 font-medium transition-colors">About</a>
-                    <a href="{% url 'contact' %}" class="text-gray-700 hover:text-primary-600 font-medium transition-colors">Contact</a>
-                    <a href="{% url 'all_tools' %}" class="bg-primary-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors">
-                        Get Started
-                    </a>
-                </nav>
+    <a href="{% url 'home' %}" class="text-gray-700 hover:text-primary-600 font-medium transition-colors">Home</a>
+    <a href="{% url 'all_tools' %}" class="text-gray-700 hover:text-primary-600 font-medium transition-colors">Tools</a>
+    <a href="{% url 'about' %}" class="text-gray-700 hover:text-primary-600 font-medium transition-colors">About</a>
+    <a href="{% url 'contact' %}" class="text-gray-700 hover:text-primary-600 font-medium transition-colors">Contact</a>
+    <a href="{% url 'all_tools' %}" class="bg-primary-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors">
+        Get Started
+    </a>
+</nav>
                 
                 <!-- Mobile menu button -->
                 <button type="button" id="mobile-menu-button" class="lg:hidden p-2 text-gray-700 hover:text-primary-600 transition-colors touch-target" aria-label="Toggle menu">
@@ -242,15 +246,15 @@
                 </button>
             </div>
             
-            <!-- Mobile menu -->
             <div id="mobile-menu" class="hidden lg:hidden mt-4 pb-4 space-y-2" role="navigation" aria-label="Mobile navigation">
-                <a href="{% url 'all_tools' %}" class="block py-2 text-gray-700 hover:text-primary-600 font-medium">All Tools</a>
-                <a href="{% url 'about' %}" class="block py-2 text-gray-700 hover:text-primary-600 font-medium">About</a>
-                <a href="{% url 'contact' %}" class="block py-2 text-gray-700 hover:text-primary-600 font-medium">Contact</a>
-                <a href="{% url 'all_tools' %}" class="block bg-primary-500 text-white px-4 py-2 rounded-lg font-medium text-center">
-                    Get Started
-                </a>
-            </div>
+    <a href="{% url 'home' %}" class="block py-2 text-gray-700 hover:text-primary-600 font-medium">Home</a>
+    <a href="{% url 'all_tools' %}" class="block py-2 text-gray-700 hover:text-primary-600 font-medium">All Tools</a>
+    <a href="{% url 'about' %}" class="block py-2 text-gray-700 hover:text-primary-600 font-medium">About</a>
+    <a href="{% url 'contact' %}" class="block py-2 text-gray-700 hover:text-primary-600 font-medium">Contact</a>
+    <a href="{% url 'all_tools' %}" class="block bg-primary-500 text-white px-4 py-2 rounded-lg font-medium text-center">
+        Get Started
+    </a>
+</div>
         </div>
     </header>
 

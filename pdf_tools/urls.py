@@ -3,6 +3,7 @@
 from django.urls import path
 from . import views
 
+
 # Add these lines to your existing urlpatterns list:
 path('word-to-pdf/', views.word_to_pdf, name='word_to_pdf'),
 path('api/word-to-pdf/', views.word_to_pdf_api, name='word_to_pdf_api'),
@@ -22,6 +23,13 @@ urlpatterns = [
     path('terms-of-service/', views.terms_of_service, name='terms_of_service'),
     path('robots.txt', views.robots_txt, name='robots_txt'),
 
+        path('admin/analytics/', views.admin_dashboard, name='admin_dashboard'),
+
+    path('admin/analytics/', views.admin_dashboard, name='admin_dashboard'),
+    path('admin/analytics/activity/', views.user_activity_detail, name='user_activity_detail'),
+    path('admin/analytics/errors/', views.error_log_detail, name='error_log_detail'),
+    path('admin/analytics/api/data/', views.api_dashboard_data, name='api_dashboard_data'),
+    path('admin/analytics/resolve-error/<uuid:error_id>/', views.resolve_error, name='resolve_error'),
     # Tool pages
     path('tools/', views.all_tools, name='all_tools'),
     path('merge-pdf/', views.merge_pdf, name='merge_pdf'),
@@ -36,6 +44,7 @@ urlpatterns = [
 
     # API endpoints for PDF processing
     path('api/merge-pdf/', views.merge_pdf_api, name='merge_pdf_api'),
+    path('merge-pdf-api/', views.merge_pdf_api, name='merge_pdf_direct'),
     path('api/compress-pdf/', views.compress_pdf_api, name='compress_pdf_api'),
     path('api/convert-pdf/', views.convert_pdf_api, name='convert_pdf_api'),
     path('api/word-to-pdf/', views.word_to_pdf_api, name='word_to_pdf_api'),  # New Word to PDF API endpoint
@@ -45,6 +54,5 @@ urlpatterns = [
     path('api/jpg-to-pdf/', views.jpg_to_pdf_api, name='jpg_to_pdf_api'),
     path('api/compress-pdf/', views.compress_pdf_api, name='compress_pdf_api'),
     path('api/compress-image/', views.compress_image_api, name='compress_image_api'),
-
-
+    
 ]

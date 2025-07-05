@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}JPG to PDF Converter - Free Online Image to PDF Tool | SmallPDF.us{% endblock %}
+{% block title %}JPG to PDF Converter - Best Online JPG to PDF Tool | SmallPDF.us{% endblock %}
 
 {% block meta %}
-<meta name="description" content="Convert JPG to PDF online free with SmallPDF.us - the best JPG to PDF converter. Merge JPG to PDF, combine multiple images into one PDF. Fast, secure, and professional results.">
-<meta name="keywords" content="jpg to pdf, convert jpg to pdf, jpg to pdf converter, merge jpg to pdf, combine jpg to pdf, small pdf, image to pdf, online pdf converter, smallpdf.us">
+<meta name="description" content="Convert JPG to PDF online free with SmallPDF.us - the best online JPG to PDF converter. Convert JPG to PDF, merge multiple images into PDF. Fast, secure converter JPG to PDF tool.">
+<meta name="keywords" content="jpg to pdf, jpg to pdf converter, online jpg to pdf converter, converter jpg to pdf, convert jpg to pdf online, jpg to pdf online, free jpg to pdf converter, smallpdf.us">
 <meta name="robots" content="index, follow">
 <meta name="author" content="SmallPDF.us">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- Open Graph Meta Tags -->
-<meta property="og:title" content="JPG to PDF Converter - Convert JPG to PDF Online Free | SmallPDF.us">
-<meta property="og:description" content="Best JPG to PDF converter online. Merge JPG to PDF, combine multiple images. Free, fast, and secure conversion with SmallPDF.us">
+<meta property="og:title" content="JPG to PDF Converter - Best Online JPG to PDF Tool | SmallPDF.us">
+<meta property="og:description" content="Best online JPG to PDF converter at SmallPDF.us. Convert JPG to PDF free, merge images to PDF. Professional converter JPG to PDF with instant results.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://smallpdf.us/jpg-to-pdf">
 <meta property="og:image" content="{% static 'images/jpg-to-pdf-converter.jpg' %}">
@@ -20,8 +20,8 @@
 
 <!-- Twitter Card Meta Tags -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="JPG to PDF Converter - Convert JPG to PDF Free | SmallPDF.us">
-<meta name="twitter:description" content="Professional JPG to PDF converter. Merge and combine JPG to PDF online with SmallPDF.us">
+<meta name="twitter:title" content="JPG to PDF Converter - Online JPG to PDF Tool | SmallPDF.us">
+<meta name="twitter:description" content="Professional online JPG to PDF converter. Convert JPG to PDF free with SmallPDF.us - fastest converter JPG to PDF tool online.">
 <meta name="twitter:image" content="{% static 'images/jpg-to-pdf-converter.jpg' %}">
 
 <!-- Structured Data -->
@@ -30,7 +30,7 @@
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "JPG to PDF Converter - SmallPDF.us",
-  "description": "Free online JPG to PDF converter to convert, merge, and combine JPG images to PDF documents",
+  "description": "Free online JPG to PDF converter to convert JPG to PDF, merge multiple images to PDF documents at SmallPDF.us",
   "url": "https://smallpdf.us/jpg-to-pdf",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Any",
@@ -41,11 +41,11 @@
   },
   "featureList": [
     "Convert JPG to PDF online free",
-    "Merge JPG to PDF documents", 
-    "Combine multiple JPG images to PDF",
-    "Batch JPG to PDF conversion",
+    "Online JPG to PDF converter", 
+    "Converter JPG to PDF with batch processing",
+    "Merge multiple JPG images to PDF",
     "Real-time PDF preview",
-    "Custom page sizes and orientations"
+    "Mobile-optimized JPG to PDF conversion"
   ],
   "provider": {
     "@type": "Organization",
@@ -57,12 +57,12 @@
 
 <!-- Preload critical resources -->
 <link rel="preload" href="{% static 'css/converter.css' %}" as="style">
-<link rel="preload" href="{% static 'js/pdf-lib.min.js' %}" as="script">
+<!-- Lazy load PDF.js only when needed -->
 {% endblock %}
 
 {% block extra_css %}
 <style>
-    /* Performance optimized CSS with critical path optimization */
+    /* Performance optimized CSS with enhanced mobile optimization */
     :root {
         --primary-color: #4361ee;
         --primary-dark: #3a0ca3;
@@ -84,7 +84,7 @@
         --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
     }
 
-    /* Optimized base styles */
+    /* Enhanced mobile-first responsive design */
     * {
         box-sizing: border-box;
     }
@@ -92,57 +92,57 @@
     .main-wrapper {
         min-height: 100vh;
         background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-200) 100%);
-        padding: 1rem;
+        padding: 0.5rem;
     }
     
     .converter-container {
         max-width: 800px;
         margin: 0 auto;
         background: white;
-        border-radius: 16px;
-        box-shadow: var(--shadow-xl);
+        border-radius: 12px;
+        box-shadow: var(--shadow-lg);
         overflow: hidden;
         border: 1px solid var(--gray-200);
     }
 
-    /* Compact header */
+    /* Mobile-optimized header */
     .tool-header {
         text-align: center;
-        padding: 1.5rem 1rem;
+        padding: 1rem 0.75rem;
         background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
         color: white;
         position: relative;
     }
     
     .tool-header h1 {
-        font-size: 1.75rem;
+        font-size: 1.3rem;
         font-weight: 700;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.4rem;
         line-height: 1.2;
     }
     
     .tool-header p {
         opacity: 0.9;
-        font-size: 0.95rem;
+        font-size: 0.85rem;
         margin: 0;
-        line-height: 1.4;
+        line-height: 1.3;
     }
 
-    /* Compact content area */
+    /* Mobile-optimized content area */
     .content-area {
-        padding: 1rem;
+        padding: 0.75rem;
     }
 
-    /* Optimized upload area */
+    /* Enhanced mobile upload area */
     .upload-area {
         border: 2px dashed var(--gray-300);
-        border-radius: 12px;
-        padding: 2rem 1rem;
+        border-radius: 10px;
+        padding: 1.5rem 0.75rem;
         text-align: center;
         transition: all 0.2s ease;
         cursor: pointer;
         background: var(--gray-50);
-        margin-bottom: 1rem;
+        margin-bottom: 0.75rem;
     }
     
     .upload-area:hover, .upload-area.dragover {
@@ -152,14 +152,14 @@
     }
     
     .upload-icon {
-        width: 60px;
-        height: 60px;
+        width: 50px;
+        height: 50px;
         background: rgba(67, 97, 238, 0.1);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto 1rem;
+        margin: 0 auto 0.75rem;
         transition: transform 0.2s ease;
     }
     
@@ -168,23 +168,23 @@
     }
     
     .upload-icon svg {
-        width: 30px;
-        height: 30px;
+        width: 24px;
+        height: 24px;
         color: var(--primary-color);
     }
 
     .upload-text h3 {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         color: var(--gray-800);
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.4rem;
         font-weight: 600;
     }
     
     .upload-text p {
         color: var(--gray-600);
-        margin-bottom: 1rem;
-        font-size: 0.9rem;
-        line-height: 1.4;
+        margin-bottom: 0.75rem;
+        font-size: 0.85rem;
+        line-height: 1.3;
     }
     
     .upload-btn {
@@ -192,12 +192,14 @@
         color: white;
         border: none;
         border-radius: 8px;
-        padding: 0.75rem 1.5rem;
+        padding: 0.65rem 1.2rem;
         font-weight: 600;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         cursor: pointer;
         transition: all 0.2s ease;
         box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+        width: 100%;
+        max-width: 200px;
     }
     
     .upload-btn:hover {
@@ -205,7 +207,7 @@
         box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
     }
 
-    /* Compact file preview */
+    /* Mobile-optimized file preview */
     .file-container {
         display: none;
     }
@@ -214,19 +216,23 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 0.75rem;
+        margin-bottom: 0.6rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
     }
 
     .file-header h3 {
-        font-size: 1.1rem;
+        font-size: 1rem;
         font-weight: 600;
         color: var(--gray-800);
         margin: 0;
+        flex: 1;
+        min-width: 120px;
     }
 
     .add-more-btn {
-        font-size: 0.8rem;
-        padding: 0.4rem 0.8rem;
+        font-size: 0.75rem;
+        padding: 0.4rem 0.7rem;
         background: var(--gray-100);
         border: 1px solid var(--gray-300);
         border-radius: 6px;
@@ -234,7 +240,8 @@
         transition: all 0.2s ease;
         display: flex;
         align-items: center;
-        gap: 0.3rem;
+        gap: 0.25rem;
+        white-space: nowrap;
     }
 
     .add-more-btn:hover {
@@ -243,10 +250,10 @@
 
     .file-preview-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-        gap: 0.5rem;
-        margin-bottom: 1rem;
-        max-height: 200px;
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 0.4rem;
+        margin-bottom: 0.75rem;
+        max-height: 180px;
         overflow-y: auto;
         padding: 0.5rem;
         background: var(--gray-50);
@@ -257,7 +264,7 @@
     .file-preview-item {
         background: white;
         border-radius: 6px;
-        padding: 0.5rem;
+        padding: 0.4rem;
         text-align: center;
         box-shadow: var(--shadow-sm);
         transition: all 0.2s ease;
@@ -271,41 +278,41 @@
     }
 
     .preview-image {
-        width: 70px;
-        height: 70px;
+        width: 60px;
+        height: 60px;
         object-fit: cover;
         border-radius: 4px;
-        margin: 0 auto 0.4rem;
+        margin: 0 auto 0.3rem;
         display: block;
         background: var(--gray-100);
     }
 
     .file-name {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         font-weight: 500;
         color: var(--gray-700);
-        margin-bottom: 0.2rem;
+        margin-bottom: 0.15rem;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
 
     .file-size {
-        font-size: 0.65rem;
+        font-size: 0.6rem;
         color: var(--gray-500);
     }
 
     .remove-btn {
         position: absolute;
-        top: -4px;
-        right: -4px;
-        width: 18px;
-        height: 18px;
+        top: -3px;
+        right: -3px;
+        width: 16px;
+        height: 16px;
         background: var(--error-color);
         color: white;
         border: none;
         border-radius: 50%;
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -318,77 +325,15 @@
         transform: scale(1.1);
     }
 
-    /* Real PDF Preview Area - Enhanced */
-    .pdf-preview-section {
-        margin-top: 1rem;
-        padding: 1rem;
-        background: var(--gray-50);
-        border-radius: 8px;
-        border: 1px solid var(--gray-200);
-    }
+    
 
-    .pdf-preview-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 0.75rem;
-    }
-
-    .pdf-preview-title {
-        font-size: 1rem;
-        font-weight: 600;
-        color: var(--gray-800);
-        margin: 0;
-    }
-
-    .pdf-preview-container {
-        background: white;
-        border-radius: 6px;
-        padding: 1rem;
-        box-shadow: var(--shadow-sm);
-        min-height: 150px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        overflow: hidden;
-    }
-
-    /* Real PDF Canvas Preview */
-    .pdf-canvas-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 0.5rem;
-        max-height: 140px;
-        overflow-y: auto;
-        padding: 0.5rem;
-        width: 100%;
-    }
-
-    .pdf-page-canvas {
-        border: 1px solid var(--gray-300);
-        border-radius: 4px;
-        box-shadow: var(--shadow-sm);
-        background: white;
-        max-width: 100px;
-        height: auto;
-        transition: transform 0.2s ease;
-    }
-
-    .pdf-page-canvas:hover {
-        transform: scale(1.05);
-        box-shadow: var(--shadow-md);
-    }
-
-    /* Compact options */
+    /* Mobile-first options layout */
     .options-section {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-        gap: 0.75rem;
-        margin: 1rem 0;
-        padding: 1rem;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+        margin: 0.75rem 0;
+        padding: 0.75rem;
         background: var(--gray-50);
         border-radius: 8px;
         border: 1px solid var(--gray-200);
@@ -400,17 +345,17 @@
     }
 
     .option-label {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         font-weight: 600;
         color: var(--gray-700);
-        margin-bottom: 0.3rem;
+        margin-bottom: 0.25rem;
     }
 
     .option-select {
-        padding: 0.5rem;
+        padding: 0.4rem;
         border: 1px solid var(--gray-300);
         border-radius: 6px;
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         background: white;
         transition: all 0.2s ease;
     }
@@ -421,26 +366,27 @@
         box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
     }
 
-    /* Compact action buttons */
+    /* Mobile-optimized action buttons */
     .action-buttons {
         display: flex;
-        gap: 0.75rem;
-        margin-top: 1rem;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 0.75rem;
     }
 
     .action-btn {
-        flex: 1;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 0.4rem;
-        padding: 0.75rem 1rem;
+        padding: 0.7rem 1rem;
         border-radius: 8px;
         font-weight: 600;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         cursor: pointer;
         transition: all 0.2s ease;
         text-decoration: none;
+        width: 100%;
     }
 
     .secondary-btn {
@@ -473,7 +419,7 @@
         transform: none;
     }
 
-    /* Optimized loading overlay */
+    /* Mobile-optimized loading overlay */
     .loading-overlay {
         position: fixed;
         top: 0;
@@ -486,14 +432,16 @@
         align-items: center;
         justify-content: center;
         z-index: 1000;
+        padding: 1rem;
     }
 
     .loading-content {
         background: white;
         border-radius: 16px;
-        padding: 2rem 1.5rem;
+        padding: 1.5rem 1rem;
         text-align: center;
-        min-width: 280px;
+        width: 100%;
+        max-width: 280px;
         box-shadow: var(--shadow-xl);
         animation: slideInUp 0.3s ease-out;
     }
@@ -510,17 +458,17 @@
     }
 
     .loader {
-        width: 40px;
-        height: 40px;
+        width: 35px;
+        height: 35px;
         position: relative;
-        margin: 0 auto 1rem;
+        margin: 0 auto 0.75rem;
     }
 
     .loader::before {
         content: '';
         position: absolute;
-        width: 40px;
-        height: 40px;
+        width: 35px;
+        height: 35px;
         border-radius: 50%;
         border: 3px solid var(--gray-200);
         border-top: 3px solid var(--primary-color);
@@ -537,7 +485,7 @@
         height: 4px;
         background: var(--gray-200);
         border-radius: 2px;
-        margin: 0.75rem 0;
+        margin: 0.6rem 0;
         overflow: hidden;
     }
 
@@ -549,11 +497,11 @@
         transition: width 0.3s ease;
     }
 
-    /* Compact result section */
+    /* Mobile-optimized result section */
     .pdf-result-section {
         display: none;
-        margin-top: 1rem;
-        padding: 1.5rem;
+        margin-top: 0.75rem;
+        padding: 1rem;
         background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
         border-radius: 12px;
         border: 2px solid #0ea5e9;
@@ -573,23 +521,23 @@
 
     .pdf-result-header {
         text-align: center;
-        margin-bottom: 1rem;
+        margin-bottom: 0.75rem;
     }
 
     .pdf-result-title {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
         font-weight: 700;
         color: var(--gray-900);
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.4rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 0.5rem;
+        gap: 0.4rem;
     }
 
     .success-icon {
-        width: 24px;
-        height: 24px;
+        width: 20px;
+        height: 20px;
         background: var(--success-color);
         border-radius: 50%;
         display: flex;
@@ -606,10 +554,10 @@
 
     .pdf-info {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-        gap: 0.75rem;
-        margin-bottom: 1rem;
-        padding: 0.75rem;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+        padding: 0.6rem;
         background: rgba(255, 255, 255, 0.7);
         border-radius: 6px;
     }
@@ -619,7 +567,7 @@
     }
 
     .pdf-info-label {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         color: var(--gray-600);
         font-weight: 500;
         text-transform: uppercase;
@@ -627,15 +575,16 @@
     }
 
     .pdf-info-value {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
         font-weight: 700;
         color: var(--gray-900);
-        margin-top: 0.2rem;
+        margin-top: 0.15rem;
     }
 
     .download-section {
         display: flex;
-        gap: 0.75rem;
+        flex-direction: column;
+        gap: 0.5rem;
         justify-content: center;
     }
 
@@ -644,15 +593,17 @@
         color: white;
         border: none;
         border-radius: 8px;
-        padding: 0.75rem 1.5rem;
+        padding: 0.7rem 1.2rem;
         font-weight: 600;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         cursor: pointer;
         transition: all 0.2s ease;
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        justify-content: center;
+        gap: 0.4rem;
         box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        width: 100%;
     }
 
     .download-btn:hover {
@@ -660,15 +611,15 @@
         box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
     }
 
-    /* Messages */
+    /* Mobile-optimized messages */
     .message {
-        padding: 0.75rem 1rem;
+        padding: 0.6rem 0.75rem;
         border-radius: 6px;
-        margin-bottom: 0.75rem;
+        margin-bottom: 0.6rem;
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        font-size: 0.85rem;
+        gap: 0.4rem;
+        font-size: 0.8rem;
         animation: slideIn 0.3s ease;
     }
 
@@ -685,51 +636,51 @@
     }
 
     .message-icon {
-        width: 16px;
-        height: 16px;
+        width: 14px;
+        height: 14px;
         flex-shrink: 0;
     }
 
-    /* Content sections */
+    /* Content sections - Mobile First */
     .content-section {
-        padding: 3rem 1rem;
+        padding: 2rem 0.75rem;
         max-width: 1200px;
         margin: 0 auto;
     }
 
     .section-header {
         text-align: center;
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
     }
 
     .section-title {
-        font-size: 2rem;
+        font-size: 1.4rem;
         font-weight: 700;
         color: var(--gray-900);
-        margin-bottom: 0.75rem;
+        margin-bottom: 0.6rem;
         line-height: 1.2;
     }
 
     .section-subtitle {
-        font-size: 1.1rem;
+        font-size: 0.95rem;
         color: var(--gray-600);
         max-width: 600px;
         margin: 0 auto;
-        line-height: 1.5;
+        line-height: 1.4;
     }
 
-    /* Instructions grid */
+    /* Mobile-first instructions grid */
     .instructions-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 1.5rem;
-        margin-top: 2rem;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        margin-top: 1.5rem;
     }
 
     .instruction-card {
         background: white;
         border-radius: 12px;
-        padding: 1.5rem;
+        padding: 1.25rem;
         box-shadow: var(--shadow-md);
         transition: transform 0.2s ease, box-shadow 0.2s ease;
         text-align: center;
@@ -737,52 +688,52 @@
     }
 
     .instruction-card:hover {
-        transform: translateY(-4px);
+        transform: translateY(-2px);
         box-shadow: var(--shadow-lg);
     }
 
     .instruction-icon {
-        width: 60px;
-        height: 60px;
+        width: 50px;
+        height: 50px;
         background: rgba(67, 97, 238, 0.1);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto 1rem;
+        margin: 0 auto 0.75rem;
     }
 
     .instruction-icon svg {
-        width: 28px;
-        height: 28px;
+        width: 24px;
+        height: 24px;
         color: var(--primary-color);
     }
 
     .instruction-card h3 {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         color: var(--gray-900);
-        margin-bottom: 0.75rem;
+        margin-bottom: 0.6rem;
         font-weight: 600;
     }
 
     .instruction-card p {
         color: var(--gray-600);
-        font-size: 0.95rem;
-        line-height: 1.5;
+        font-size: 0.9rem;
+        line-height: 1.4;
     }
 
-    /* Features grid */
+    /* Mobile-first features grid */
     .features-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 1.5rem;
-        margin-top: 2rem;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        margin-top: 1.5rem;
     }
 
     .feature-card {
         background: white;
         border-radius: 12px;
-        padding: 1.5rem;
+        padding: 1.25rem;
         box-shadow: var(--shadow-md);
         transition: transform 0.2s ease, box-shadow 0.2s ease;
         text-align: center;
@@ -805,7 +756,7 @@
     }
 
     .feature-card:hover {
-        transform: translateY(-4px);
+        transform: translateY(-2px);
         box-shadow: var(--shadow-lg);
     }
 
@@ -814,14 +765,14 @@
     }
 
     .feature-icon {
-        width: 60px;
-        height: 60px;
+        width: 50px;
+        height: 50px;
         background: rgba(67, 97, 238, 0.1);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto 1rem;
+        margin: 0 auto 0.75rem;
         transition: all 0.2s ease;
     }
 
@@ -831,45 +782,46 @@
     }
 
     .feature-icon svg {
-        width: 28px;
-        height: 28px;
+        width: 24px;
+        height: 24px;
         color: var(--primary-color);
     }
 
     .feature-card h3 {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         color: var(--gray-900);
-        margin-bottom: 0.75rem;
+        margin-bottom: 0.6rem;
         font-weight: 600;
     }
 
     .feature-card p {
         color: var(--gray-600);
-        font-size: 0.95rem;
-        line-height: 1.5;
+        font-size: 0.9rem;
+        line-height: 1.4;
     }
 
-    /* FAQ Section */
+    /* Mobile-optimized FAQ Section */
     .faq-container {
         max-width: 800px;
-        margin: 2rem auto 0;
+        margin: 1.5rem auto 0;
     }
 
     .faq-item {
         border-bottom: 1px solid var(--gray-200);
-        margin-bottom: 0.75rem;
+        margin-bottom: 0.6rem;
     }
 
     .faq-question {
-        font-size: 1rem;
+        font-size: 0.95rem;
         color: var(--gray-900);
         font-weight: 600;
-        padding: 1rem 0;
+        padding: 0.75rem 0;
         cursor: pointer;
         display: flex;
         justify-content: space-between;
         align-items: center;
         transition: color 0.2s ease;
+        line-height: 1.3;
     }
 
     .faq-question:hover {
@@ -877,10 +829,12 @@
     }
 
     .faq-question svg {
-        width: 16px;
-        height: 16px;
+        width: 14px;
+        height: 14px;
         color: var(--gray-500);
         transition: transform 0.2s ease;
+        flex-shrink: 0;
+        margin-left: 0.5rem;
     }
 
     .faq-item.active .faq-question svg {
@@ -896,84 +850,91 @@
 
     .faq-item.active .faq-answer {
         max-height: 300px;
-        padding-bottom: 1rem;
+        padding-bottom: 0.75rem;
     }
 
     .faq-answer p {
         color: var(--gray-600);
-        font-size: 0.95rem;
-        line-height: 1.6;
-        margin-bottom: 0.75rem;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        margin-bottom: 0.6rem;
     }
 
-    /* SEO Content */
+    /* Mobile-optimized SEO Content */
     .seo-content {
         background: var(--gray-50);
-        padding: 3rem 1rem;
+        padding: 2rem 0.75rem;
         border-top: 1px solid var(--gray-200);
     }
 
     .seo-content h2 {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
         color: var(--gray-900);
-        margin-bottom: 1rem;
+        margin-bottom: 0.75rem;
         font-weight: 700;
+        line-height: 1.3;
     }
 
     .seo-content h3 {
-        font-size: 1.4rem;
+        font-size: 1.2rem;
         color: var(--gray-900);
-        margin: 2rem 0 1rem;
+        margin: 1.5rem 0 0.75rem;
         font-weight: 600;
+        line-height: 1.3;
     }
 
     .seo-content p {
         color: var(--gray-700);
-        font-size: 1rem;
-        line-height: 1.7;
-        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin-bottom: 0.75rem;
     }
 
     .seo-content ul, .seo-content ol {
-        margin-left: 1.5rem;
-        margin-bottom: 1.5rem;
+        margin-left: 1.2rem;
+        margin-bottom: 1rem;
     }
 
     .seo-content li {
         color: var(--gray-700);
-        margin-bottom: 0.5rem;
-        line-height: 1.6;
+        margin-bottom: 0.4rem;
+        line-height: 1.5;
+        font-size: 0.9rem;
     }
 
-    /* CTA Section */
+    /* Mobile-optimized CTA Section */
     .cta-section {
         background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
         color: white;
         text-align: center;
-        padding: 2rem 1rem;
+        padding: 1.5rem 0.75rem;
     }
 
     .cta-section h2 {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
         font-weight: 700;
-        margin-bottom: 0.75rem;
+        margin-bottom: 0.6rem;
+        line-height: 1.3;
     }
 
     .cta-section p {
-        margin-bottom: 1.5rem;
+        margin-bottom: 1rem;
         opacity: 0.9;
+        font-size: 0.9rem;
+        line-height: 1.4;
     }
 
     .cta-btn {
         background: white;
         color: var(--primary-dark);
         font-weight: 600;
-        padding: 0.75rem 1.5rem;
+        padding: 0.7rem 1.2rem;
         border-radius: 8px;
         text-decoration: none;
         transition: all 0.2s ease;
         display: inline-block;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        font-size: 0.85rem;
     }
 
     .cta-btn:hover {
@@ -981,14 +942,14 @@
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
     }
 
-    /* Mobile optimizations */
-    @media (max-width: 768px) {
+    /* Tablet optimizations */
+    @media (min-width: 480px) {
         .main-wrapper {
-            padding: 0.5rem;
+            padding: 0.75rem;
         }
         
         .tool-header {
-            padding: 1rem 0.75rem;
+            padding: 1.25rem 1rem;
         }
         
         .tool-header h1 {
@@ -996,66 +957,72 @@
         }
         
         .tool-header p {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
         }
         
         .content-area {
-            padding: 0.75rem;
-        }
-        
-        .upload-area {
-            padding: 1.5rem 0.75rem;
-        }
-        
-        .upload-icon {
-            width: 50px;
-            height: 50px;
-        }
-        
-        .upload-icon svg {
-            width: 24px;
-            height: 24px;
-        }
-        
-        .upload-text h3 {
-            font-size: 1.1rem;
-        }
-        
-        .upload-text p {
-            font-size: 0.85rem;
-        }
-        
-        .file-preview-grid {
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 0.4rem;
-            max-height: 160px;
-        }
-        
-        .preview-image {
-            width: 60px;
-            height: 60px;
-        }
-        
-        .options-section {
-            grid-template-columns: 1fr 1fr;
-            gap: 0.5rem;
-            padding: 0.75rem;
-        }
-        
-        .action-buttons, .download-section {
-            flex-direction: column;
-        }
-        
-        .pdf-result-section {
             padding: 1rem;
         }
         
+        .upload-area {
+            padding: 2rem 1rem;
+        }
+        
+        .upload-icon {
+            width: 55px;
+            height: 55px;
+        }
+        
+        .upload-icon svg {
+            width: 26px;
+            height: 26px;
+        }
+        
+        .upload-text h3 {
+            font-size: 1.15rem;
+        }
+        
+        .upload-text p {
+            font-size: 0.9rem;
+        }
+        
+        .upload-btn {
+            width: auto;
+            max-width: none;
+        }
+        
+        .file-preview-grid {
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 0.5rem;
+            max-height: 200px;
+        }
+        
+        .preview-image {
+            width: 70px;
+            height: 70px;
+        }
+        
+        .options-section {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            padding: 1rem;
+        }
+        
+        .action-buttons, .download-section {
+            flex-direction: row;
+            gap: 0.75rem;
+        }
+        
+        .pdf-result-section {
+            padding: 1.25rem;
+        }
+        
         .pdf-info {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(4, 1fr);
         }
 
         .content-section {
-            padding: 2rem 0.75rem;
+            padding: 2.5rem 1rem;
         }
         
         .section-title {
@@ -1067,39 +1034,112 @@
         }
         
         .instructions-grid, .features-grid {
-            grid-template-columns: 1fr;
-            gap: 1rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
         }
         
         .instruction-card, .feature-card {
-            padding: 1.25rem;
+            padding: 1.5rem;
         }
     }
 
-    @media (max-width: 480px) {
+    /* Desktop optimizations */
+    @media (min-width: 768px) {
+        .main-wrapper {
+            padding: 1rem;
+        }
+        
+        .tool-header {
+            padding: 1.5rem 1rem;
+        }
+        
         .tool-header h1 {
-            font-size: 1.3rem;
+            font-size: 1.75rem;
+        }
+        
+        .tool-header p {
+            font-size: 0.95rem;
+        }
+        
+        .content-area {
+            padding: 1rem;
         }
         
         .upload-area {
-            padding: 1rem 0.5rem;
+            padding: 2rem 1rem;
+        }
+        
+        .upload-icon {
+            width: 60px;
+            height: 60px;
+        }
+        
+        .upload-icon svg {
+            width: 30px;
+            height: 30px;
+        }
+        
+        .upload-text h3 {
+            font-size: 1.2rem;
+        }
+        
+        .upload-text p {
+            font-size: 0.9rem;
         }
         
         .file-preview-grid {
-            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 0.5rem;
+            max-height: 200px;
         }
         
         .preview-image {
-            width: 50px;
-            height: 50px;
+            width: 70px;
+            height: 70px;
         }
         
         .options-section {
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.75rem;
+            padding: 1rem;
+        }
+        
+        .action-buttons {
+            flex-direction: row;
+            gap: 0.75rem;
+        }
+        
+        .pdf-result-section {
+            padding: 1.5rem;
+        }
+
+        .content-section {
+            padding: 3rem 1rem;
         }
         
         .section-title {
-            font-size: 1.4rem;
+            font-size: 2rem;
+        }
+        
+        .section-subtitle {
+            font-size: 1.1rem;
+        }
+        
+        .instructions-grid, .features-grid {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .instruction-card, .feature-card {
+            padding: 1.5rem;
+        }
+
+        .cta-section {
+            padding: 2rem 1rem;
+        }
+        
+        .cta-section h2 {
+            font-size: 1.5rem;
         }
     }
 
@@ -1110,18 +1150,25 @@
 
     /* Lazy loading optimization */
     .lazy-load {
-        display: block; /* Ensure lazy-loaded images are initially hidden */
+        display: block;
         opacity: 0;
-        transition: opacity 0.5s ease; /* Smooth fade-in */
+        transition: opacity 0.5s ease;
     }
 
     .lazy-load.loaded {
         opacity: 1;
     }
 
-    /* Critical CSS loaded, non-critical styles can be loaded async */
-    .non-critical {
-        /* Styles that can be loaded after initial render */
+    /* PDF.js lazy loading indicator */
+    .pdf-lib-loading {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border: 2px solid var(--gray-300);
+        border-radius: 50%;
+        border-top-color: var(--primary-color);
+        animation: spin 1s ease-in-out infinite;
+        margin-left: 0.5rem;
     }
 </style>
 {% endblock %}
@@ -1132,7 +1179,7 @@
         <!-- Header -->
         <div class="tool-header">
             <h1>JPG to PDF Converter - SmallPDF.us</h1>
-            <p>Convert JPG to PDF online free. Merge and combine multiple JPG images into professional PDF documents</p>
+            <p>Best online JPG to PDF converter - Convert JPG to PDF free with SmallPDF.us professional tool</p>
         </div>
 
         <!-- Main Content -->
@@ -1147,8 +1194,8 @@
                     </svg>
                 </div>
                 <div class="upload-text">
-                    <h3>Upload Images</h3>
-                    <p>Drag & drop or click to browse<br>JPG, PNG, GIF, BMP, WebP supported</p>
+                    <h3>Upload Images for JPG to PDF</h3>
+                    <p>Use SmallPDF.us JPG to PDF converter<br>JPG, PNG, GIF, BMP, WebP supported</p>
                     <button class="upload-btn" id="selectFileBtn">Select Images</button>
                 </div>
                 <input type="file" id="fileInput" class="file-input" accept=".jpg,.jpeg,.png,.gif,.bmp,.webp,image/*" multiple>
@@ -1170,8 +1217,6 @@
                 <div class="file-preview-grid" id="filePreviewGrid">
                     <!-- Files will be populated here -->
                 </div>
-
-                
 
                 <!-- Options Section -->
                 <div class="options-section">
@@ -1245,13 +1290,13 @@
                 <div class="pdf-result-header">
                     <h2 class="pdf-result-title">
                         <div class="success-icon">
-                            <svg style="width: 14px; height: 14px; color: white;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg style="width: 12px; height: 12px; color: white;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
                             </svg>
                         </div>
-                        PDF Created Successfully!
+                        JPG to PDF Success!
                     </h2>
-                    <p style="color: #64748b; font-size: 0.9rem; margin: 0;">Your images have been converted to PDF</p>
+                    <p style="color: #64748b; font-size: 0.85rem; margin: 0;">SmallPDF.us converted your JPG to PDF perfectly</p>
                 </div>
 
                 <div class="pdf-info" id="pdfInfo">
@@ -1296,20 +1341,20 @@
 <div class="loading-overlay" id="loadingOverlay">
     <div class="loading-content">
         <div class="loader"></div>
-        <h3 style="font-size: 1.1rem; font-weight: 600; color: #1e293b; margin-bottom: 0.5rem;">Converting to PDF...</h3>
-        <p style="color: #64748b; margin-bottom: 1rem; font-size: 0.9rem;">Processing your images</p>
+        <h3 style="font-size: 1rem; font-weight: 600; color: #1e293b; margin-bottom: 0.4rem;">Converting JPG to PDF...</h3>
+        <p style="color: #64748b; margin-bottom: 0.75rem; font-size: 0.85rem;">SmallPDF.us processing your images</p>
         <div class="loading-progress">
             <div class="progress-bar" id="progressBar"></div>
         </div>
-        <p style="font-size: 0.8rem; color: #64748b; margin: 0.5rem 0 0;" id="loadingStatus">Preparing...</p>
+        <p style="font-size: 0.75rem; color: #64748b; margin: 0.4rem 0 0;" id="loadingStatus">Preparing...</p>
     </div>
 </div>
 
 <!-- Instructions Section -->
 <section class="content-section" style="background: white;">
     <div class="section-header">
-        <h2 class="section-title">How to Convert JPG to PDF with SmallPDF.us</h2>
-        <p class="section-subtitle">Learn how to convert JPG to PDF, merge JPG files, and combine multiple images into one PDF document using our professional JPG to PDF converter</p>
+        <h2 class="section-title">How to Use SmallPDF.us JPG to PDF Converter</h2>
+        <p class="section-subtitle">Learn how to convert JPG to PDF online free with SmallPDF.us - the best online JPG to PDF converter tool for professional results</p>
     </div>
     
     <div class="instructions-grid">
@@ -1321,8 +1366,8 @@
                     <polyline points="21 15 16 10 5 21"></polyline>
                 </svg>
             </div>
-            <h3>1. Upload JPG Images</h3>
-            <p>Select your JPG files to convert to PDF using our SmallPDF.us converter. You can upload multiple JPG images to merge into one PDF or create separate PDF files for each image.</p>
+            <h3>1. Upload JPG Files</h3>
+            <p>Select your JPG images to convert JPG to PDF using SmallPDF.us online JPG to PDF converter. Upload multiple JPG files to batch convert JPG to PDF instantly.</p>
         </div>
         
         <div class="instruction-card">
@@ -1332,8 +1377,8 @@
                     <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                 </svg>
             </div>
-            <h3>2. Configure JPG to PDF Settings</h3>
-            <p>Customize your JPG to PDF conversion with our advanced options. Choose to merge JPG to PDF as a single document or combine JPG files into separate PDFs with custom page sizes and quality settings.</p>
+            <h3>2. Configure Converter JPG to PDF Settings</h3>
+            <p>Customize your JPG to PDF conversion with SmallPDF.us advanced options. Choose page sizes, quality, and margins for perfect converter JPG to PDF results.</p>
         </div>
         
         <div class="instruction-card">
@@ -1345,7 +1390,7 @@
                 </svg>
             </div>
             <h3>3. Download Your PDF</h3>
-            <p>Complete your JPG to PDF conversion and download your professional PDF document. SmallPDF.us ensures high-quality results whether you convert single JPG to PDF or merge multiple images.</p>
+            <p>Complete your JPG to PDF conversion and download your professional PDF document. SmallPDF.us online JPG to PDF converter ensures high-quality results every time.</p>
         </div>
     </div>
 </section>
@@ -1353,8 +1398,8 @@
 <!-- Features Section -->
 <section class="content-section" style="background: #f8fafc;">
     <div class="section-header">
-        <h2 class="section-title">Why SmallPDF.us is the Best JPG to PDF Converter</h2>
-        <p class="section-subtitle">Discover why millions choose SmallPDF.us to convert JPG to PDF, merge images, and combine JPG files into professional PDF documents</p>
+        <h2 class="section-title">Why SmallPDF.us is the Best Online JPG to PDF Converter</h2>
+        <p class="section-subtitle">Discover why SmallPDF.us is the top choice for JPG to PDF conversion - the most advanced online JPG to PDF converter tool available</p>
     </div>
     
     <div class="features-grid">
@@ -1366,7 +1411,7 @@
                 </svg>
             </div>
             <h3>Real-time JPG to PDF Preview</h3>
-            <p>See exactly how your JPG to PDF conversion will look with SmallPDF.us real-time preview. Watch as your JPG images transform into professional PDF pages before conversion.</p>
+            <p>SmallPDF.us online JPG to PDF converter shows real-time preview of your JPG to PDF conversion. See exactly how your PDF will look before processing.</p>
         </div>
         
         <div class="feature-card">
@@ -1377,8 +1422,8 @@
                     <polyline points="21 15 16 10 5 21"></polyline>
                 </svg>
             </div>
-            <h3>Merge JPG to PDF Easily</h3>
-            <p>Combine multiple JPG images into one PDF document with SmallPDF.us. Our JPG to PDF converter makes it simple to merge JPG files while maintaining image quality and proper formatting.</p>
+            <h3>Batch JPG to PDF Conversion</h3>
+            <p>Convert multiple JPG files to PDF simultaneously with SmallPDF.us. Our converter JPG to PDF tool handles up to 20 images for efficient batch processing.</p>
         </div>
         
         <div class="feature-card">
@@ -1388,8 +1433,8 @@
                     <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
                 </svg>
             </div>
-            <h3>Batch JPG to PDF Conversion</h3>
-            <p>Convert multiple JPG files to PDF simultaneously with SmallPDF.us batch processing. Upload up to 20 JPG images and choose to combine JPG to PDF or create individual PDF files.</p>
+            <h3>Professional JPG to PDF Quality</h3>
+            <p>SmallPDF.us online JPG to PDF converter delivers professional-grade results. Convert JPG to PDF with perfect image quality and formatting every time.</p>
         </div>
         
         <div class="feature-card">
@@ -1398,8 +1443,8 @@
                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                 </svg>
             </div>
-            <h3>Secure JPG to PDF Processing</h3>
-            <p>SmallPDF.us protects your privacy during JPG to PDF conversion. All uploaded JPG files are encrypted and automatically deleted after processing, ensuring your images remain secure.</p>
+            <h3>Secure Online JPG to PDF Converter</h3>
+            <p>SmallPDF.us protects your privacy during JPG to PDF conversion. All uploaded JPG files are encrypted and automatically deleted after processing.</p>
         </div>
         
         <div class="feature-card">
@@ -1409,8 +1454,8 @@
                     <polyline points="12 6 12 12 16 14"></polyline>
                 </svg>
             </div>
-            <h3>Fast JPG to PDF Conversion</h3>
-            <p>Experience lightning-fast JPG to PDF conversion with SmallPDF.us. Our optimized servers process your JPG images and create PDF documents in seconds, not minutes.</p>
+            <h3>Fast JPG to PDF Processing</h3>
+            <p>Experience lightning-fast JPG to PDF conversion with SmallPDF.us. Our optimized online JPG to PDF converter processes images in seconds.</p>
         </div>
         
         <div class="feature-card">
@@ -1421,16 +1466,97 @@
                 </svg>
             </div>
             <h3>Free JPG to PDF Converter</h3>
-            <p>Convert JPG to PDF completely free with SmallPDF.us. No hidden costs, no watermarks, no registration required. Enjoy unlimited JPG to PDF conversions at no charge.</p>
+            <p>Convert JPG to PDF completely free with SmallPDF.us. No hidden costs, no watermarks, no registration required for our online JPG to PDF converter.</p>
         </div>
     </div>
 </section>
 
+<!-- SEO Content Section -->
+<section class="seo-content">
+    <div class="content-section">
+        <h2>SmallPDF.us - The Best Online JPG to PDF Converter</h2>
+        <p>SmallPDF.us is the leading platform to <strong>convert JPG to PDF</strong> online with professional results. Our advanced <strong>online JPG to PDF converter</strong> allows you to effortlessly transform JPG images into PDF documents. Whether you need a simple <strong>JPG to PDF converter</strong> or a powerful <strong>converter JPG to PDF</strong> tool, SmallPDF.us delivers exceptional quality and speed for all your conversion needs.</p>
+        
+        <h3>Why Choose SmallPDF.us Online JPG to PDF Converter?</h3>
+        <p>When you need to <strong>convert JPG to PDF</strong>, SmallPDF.us stands out as the premier choice among online converters. Our <strong>JPG to PDF converter</strong> combines cutting-edge technology with user-friendly design to deliver superior results. Here's what makes SmallPDF.us the best <strong>online JPG to PDF converter</strong>:</p>
+        <ul>
+            <li><strong>Advanced JPG to PDF Technology:</strong> SmallPDF.us uses proprietary algorithms to ensure perfect JPG to PDF conversion while maintaining original image quality</li>
+            <li><strong>Real-time Preview:</strong> Our online JPG to PDF converter shows exactly how your JPG to PDF conversion will look before processing</li>
+            <li><strong>Batch Processing:</strong> Convert up to 20 JPG files simultaneously with our powerful converter JPG to PDF tool</li>
+            <li><strong>Custom PDF Settings:</strong> Choose page sizes, orientations, and margins for perfect JPG to PDF results</li>
+            <li><strong>Mobile Optimized:</strong> SmallPDF.us online JPG to PDF converter works perfectly on all devices</li>
+            <li><strong>Free JPG to PDF Conversion:</strong> No hidden costs or watermarks with our JPG to PDF converter</li>
+        </ul>
+        
+        <h3>Professional JPG to PDF Conversion for Every Need</h3>
+        <p>SmallPDF.us serves professionals, students, and individuals who need reliable <strong>JPG to PDF conversion</strong>. Our versatile <strong>online JPG to PDF converter</strong> handles diverse requirements, from simple single-image conversions to complex projects:</p>
+        <ol>
+            <li><strong>Business Documentation:</strong> Convert JPG receipts, invoices, and contracts to PDF format with SmallPDF.us converter JPG to PDF</li>
+            <li><strong>Academic Projects:</strong> Use our JPG to PDF converter to transform research materials, charts, and diagrams into organized PDF reports</li>
+            <li><strong>Portfolio Creation:</strong> Our online JPG to PDF converter helps combine JPG artwork, photography, and design samples into impressive PDF portfolios</li>
+            <li><strong>Digital Archiving:</strong> Convert JPG photos and documents to PDF for long-term preservation using SmallPDF.us</li>
+            <li><strong>Presentation Materials:</strong> Transform JPG slides and infographics into professional PDF handouts with our converter JPG to PDF</li>
+            <li><strong>E-book Publishing:</strong> Merge JPG pages into readable PDF format using SmallPDF.us online JPG to PDF converter</li>
+        </ol>
+        
+        <h3>How SmallPDF.us Creates Perfect PDF Files from JPG Images</h3>
+        <p>Our advanced <strong>online JPG to PDF converter</strong> uses intelligent compression to create optimized PDF files without sacrificing quality. When you <strong>convert JPG to PDF</strong> with SmallPDF.us, our system analyzes each image and applies optimal settings to ensure your PDF documents are:</p>
+        <ul>
+            <li><strong>Optimally Sized:</strong> SmallPDF.us creates compact PDF files that load quickly and are easy to share</li>
+            <li><strong>High Quality:</strong> Our JPG to PDF converter maintains original image clarity and color accuracy</li>
+            <li><strong>Universally Compatible:</strong> PDF files from our converter JPG to PDF open perfectly on any device</li>
+            <li><strong>Print-Ready:</strong> Professional quality suitable for high-resolution printing with SmallPDF.us</li>
+            <li><strong>Web-Optimized:</strong> Fast-loading PDF files perfect for online sharing using our online JPG to PDF converter</li>
+        </ul>
+        
+        <h3>Advanced Features of SmallPDF.us JPG to PDF Converter</h3>
+        <p>SmallPDF.us offers the most comprehensive set of features for <strong>JPG to PDF conversion</strong>. Our platform goes beyond basic conversion to provide professional-grade tools:</p>
+        <ul>
+            <li><strong>Multi-Format Support:</strong> Convert JPG, JPEG, PNG, GIF, BMP, and WebP images to PDF with our online JPG to PDF converter</li>
+            <li><strong>Flexible Conversion Options:</strong> Choose to combine JPG files into one PDF or create separate PDF files with SmallPDF.us</li>
+            <li><strong>Custom Page Layouts:</strong> Select from A4, Letter, A3, A5, or auto-sizing options for perfect PDF formatting</li>
+            <li><strong>Orientation Control:</strong> Set portrait, landscape, or automatic orientation with our converter JPG to PDF</li>
+            <li><strong>Margin Adjustment:</strong> Fine-tune spacing with none, small, medium, or large margin settings</li>
+            <li><strong>Quality Optimization:</strong> Balance file size and image quality using SmallPDF.us advanced settings</li>
+            <li><strong>Real-time Preview:</strong> See your PDF layout before conversion with our online JPG to PDF converter</li>
+            <li><strong>Batch Processing:</strong> Handle multiple JPG files simultaneously for efficient workflow</li>
+        </ul>
+        
+        <h3>Security and Privacy with SmallPDF.us Online JPG to PDF Converter</h3>
+        <p>When you <strong>convert JPG to PDF</strong> with SmallPDF.us, your privacy and security are our top priorities. Our secure <strong>online JPG to PDF converter</strong> ensures your images and documents remain completely private:</p>
+        <ul>
+            <li><strong>SSL Encryption:</strong> All JPG uploads and PDF downloads are protected with 256-bit SSL encryption</li>
+            <li><strong>Automatic File Deletion:</strong> Your JPG images and converted PDF files are automatically deleted within one hour</li>
+            <li><strong>No Registration Required:</strong> Convert JPG to PDF without creating accounts using SmallPDF.us</li>
+            <li><strong>Privacy Compliance:</strong> SmallPDF.us complies with GDPR and international privacy regulations</li>
+            <li><strong>Zero Data Storage:</strong> We never permanently store your JPG files or PDF documents</li>
+            <li><strong>No Human Access:</strong> Automated processing ensures no one can access your files during conversion</li>
+        </ul>
+        
+        <h3>SmallPDF.us vs. Other Online JPG to PDF Converters</h3>
+        <p>SmallPDF.us outperforms other online converters when you need to <strong>convert JPG to PDF</strong>. Here's why SmallPDF.us is the superior choice for <strong>JPG to PDF conversion</strong>:</p>
+        <ul>
+            <li><strong>Superior Quality:</strong> Advanced algorithms create optimized PDF files with exceptional image clarity</li>
+            <li><strong>Faster Processing:</strong> Optimized servers complete JPG to PDF conversion faster than competitors</li>
+            <li><strong>More Features:</strong> Comprehensive customization options not available in basic online JPG to PDF converters</li>
+            <li><strong>Better Security:</strong> Enhanced privacy protection with automatic file deletion</li>
+            <li><strong>Real-time Preview:</strong> Unique preview feature shows exact PDF layout before conversion</li>
+            <li><strong>Mobile Optimized:</strong> Perfect JPG to PDF conversion on any device with SmallPDF.us</li>
+            <li><strong>No Limitations:</strong> Unlimited conversions without watermarks using our converter JPG to PDF</li>
+            <li><strong>Professional Results:</strong> Business-grade quality from our online JPG to PDF converter</li>
+        </ul>
+        
+        <h3>Start Converting JPG to PDF with SmallPDF.us Today</h3>
+        <p>Experience the difference with SmallPDF.us, the most advanced <strong>online JPG to PDF converter</strong> available. Whether you need to convert a single JPG image or handle batch conversions, SmallPDF.us delivers exceptional results every time. Our commitment to creating optimized PDF files with maximum quality makes us the preferred choice for millions of users worldwide.</p>
+        
+        <p>Join the SmallPDF.us community today and discover why we're the leading platform to <strong>convert JPG to PDF</strong> online. With our free, secure, and feature-rich <strong>JPG to PDF converter</strong>, you'll never need another PDF conversion tool. Start your <strong>JPG to PDF conversion</strong> now and experience the SmallPDF.us difference!</p>
+    </div>
+</section>
 <!-- FAQ Section -->
 <section class="content-section" style="background: white;">
     <div class="section-header">
         <h2 class="section-title">JPG to PDF Converter FAQ - SmallPDF.us</h2>
-        <p class="section-subtitle">Get answers to common questions about converting JPG to PDF, merging images, and using SmallPDF.us</p>
+        <p class="section-subtitle">Get answers about SmallPDF.us JPG to PDF converter - the best online JPG to PDF converter tool</p>
     </div>
     
     <div class="faq-container">
@@ -1442,31 +1568,31 @@
                 </svg>
             </div>
             <div class="faq-answer">
-                <p>To convert JPG to PDF with SmallPDF.us, simply upload your JPG files using our free JPG to PDF converter above. Choose your preferred settings, then click "Convert to PDF". Your JPG to PDF conversion will be completed in seconds, and you can download your PDF document immediately.</p>
+                <p>To convert JPG to PDF with SmallPDF.us online JPG to PDF converter, simply upload your JPG files using our free converter JPG to PDF tool above. Choose your preferred settings, then click "Convert to PDF". Your JPG to PDF conversion will be completed instantly.</p>
             </div>
         </div>
         
         <div class="faq-item">
             <div class="faq-question">
-                Can I merge JPG to PDF and combine multiple images with SmallPDF.us?
+                Why is SmallPDF.us the best online JPG to PDF converter?
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
             </div>
             <div class="faq-answer">
-                <p>Yes! SmallPDF.us makes it easy to merge JPG to PDF. Upload multiple JPG images and select "Single PDF" to combine JPG files into one PDF document. You can also choose "Separate PDFs" to convert each JPG to its own PDF file.</p>
+                <p>SmallPDF.us offers the most advanced online JPG to PDF converter with real-time preview, batch processing, custom page sizes, and professional quality output. Our converter JPG to PDF tool maintains high image quality while creating optimized PDF files.</p>
             </div>
         </div>
         
         <div class="faq-item">
             <div class="faq-question">
-                What makes SmallPDF.us the best JPG to PDF converter?
+                Can I convert multiple JPG files to PDF with SmallPDF.us?
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
             </div>
             <div class="faq-answer">
-                <p>SmallPDF.us offers the most advanced JPG to PDF converter with real-time preview, batch processing to merge JPG to PDF, custom page sizes, and professional quality output. Our small PDF files maintain high image quality while being optimized for sharing and storage.</p>
+                <p>Yes! SmallPDF.us online JPG to PDF converter supports batch conversion. Upload up to 20 JPG images and choose to combine them into one PDF or create separate PDF files. Our converter JPG to PDF handles multiple files efficiently.</p>
             </div>
         </div>
         
@@ -1478,145 +1604,46 @@
                 </svg>
             </div>
             <div class="faq-answer">
-                <p>Absolutely. SmallPDF.us uses SSL encryption for all JPG to PDF conversions. Your JPG files are automatically deleted after processing, and we never access or store your images. Convert JPG to PDF with complete confidence in your privacy and security.</p>
+                <p>Absolutely. SmallPDF.us uses SSL encryption for all JPG to PDF conversions. Your JPG files are automatically deleted after processing, and we never access or store your images. Convert JPG to PDF with complete privacy.</p>
             </div>
         </div>
         
         <div class="faq-item">
             <div class="faq-question">
-                How many JPG files can I convert to PDF at once with SmallPDF.us?
+                What file formats does SmallPDF.us online JPG to PDF converter support?
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
             </div>
             <div class="faq-answer">
-                <p>You can upload up to 20 JPG images at once with SmallPDF.us. Each JPG file can be up to 10MB. This allows you to efficiently merge JPG to PDF or combine multiple JPG files into professional PDF documents in a single conversion process.</p>
+                <p>SmallPDF.us converter JPG to PDF supports JPG, JPEG, PNG, GIF, BMP, and WebP image formats. Our online JPG to PDF converter handles all common image types for maximum compatibility.</p>
             </div>
         </div>
         
         <div class="faq-item">
             <div class="faq-question">
-                Does SmallPDF.us create small PDF files from JPG images?
+                How fast is SmallPDF.us JPG to PDF conversion?
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
             </div>
             <div class="faq-answer">
-                <p>Yes! SmallPDF.us optimizes your JPG to PDF conversion to create small PDF files without compromising image quality. Our smart compression technology ensures your PDF documents are perfectly sized for sharing, emailing, and storage while maintaining professional appearance.</p>
+                <p>SmallPDF.us online JPG to PDF converter processes files in seconds. Our optimized servers ensure lightning-fast JPG to PDF conversion, making our converter JPG to PDF the fastest solution available.</p>
             </div>
         </div>
     </div>
 </section>
-
-<!-- SEO Content Section -->
-<section class="seo-content">
-    <div class="content-section">
-        <h2>SmallPDF.us - The Ultimate JPG to PDF Converter Online</h2>
-        <p>SmallPDF.us is the leading online platform to <strong>convert JPG to PDF</strong> with professional results. Our advanced <strong>JPG to PDF converter</strong> allows you to effortlessly <strong>merge JPG to PDF</strong> documents, <strong>combine JPG files</strong>, and create <strong>small PDF</strong> files optimized for any purpose. Whether you need to convert a single JPG image or merge multiple JPG files into one PDF, SmallPDF.us delivers exceptional quality and speed.</p>
-        
-        <h3>Why Choose SmallPDF.us for JPG to PDF Conversion?</h3>
-        <p>When you need to <strong>convert JPG to PDF</strong>, SmallPDF.us stands out as the premier choice among online converters. Our <strong>JPG to PDF converter</strong> combines cutting-edge technology with user-friendly design to deliver superior results. Here's what makes SmallPDF.us the best solution to <strong>merge JPG to PDF</strong> and create professional documents:</p>
-        <ul>
-            <li><strong>Advanced JPG to PDF Technology:</strong> Our proprietary algorithms ensure perfect JPG to PDF conversion while creating small PDF files that maintain original image quality</li>
-            <li><strong>Merge JPG to PDF Seamlessly:</strong> Combine multiple JPG images into a single, organized PDF document with SmallPDF.us advanced merging capabilities</li>
-            <li><strong>Real-time Preview:</strong> See exactly how your JPG to PDF conversion will look before processing, ensuring perfect results every time</li>
-            <li><strong>Batch Processing:</strong> Convert up to 20 JPG files simultaneously, making it easy to merge JPG to PDF for large projects</li>
-            <li><strong>Custom PDF Settings:</strong> Choose page sizes, orientations, and margins to create the perfect PDF from your JPG images</li>
-            <li><strong>Small PDF Optimization:</strong> SmallPDF.us creates compact PDF files that are easy to share and store without quality loss</li>
-        </ul>
-        
-        <h3>Professional JPG to PDF Conversion for Every Need</h3>
-        <p>SmallPDF.us serves professionals, students, and individuals who need reliable <strong>JPG to PDF conversion</strong>. Our versatile <strong>JPG to PDF converter</strong> handles diverse requirements, from simple single-image conversions to complex projects that <strong>combine JPG files</strong> into comprehensive PDF documents:</p>
-        <ol>
-            <li><strong>Business Documentation:</strong> Convert JPG receipts, invoices, and contracts to PDF format for professional record-keeping</li>
-            <li><strong>Academic Projects:</strong> Merge JPG images of research materials, charts, and diagrams into organized PDF reports</li>
-            <li><strong>Portfolio Creation:</strong> Combine JPG artwork, photography, and design samples into impressive PDF portfolios</li>
-            <li><strong>Digital Archiving:</strong> Convert JPG photos and documents to PDF for long-term preservation and organization</li>
-            <li><strong>Presentation Materials:</strong> Transform JPG slides and infographics into professional PDF handouts</li>
-            <li><strong>E-book Publishing:</strong> Merge JPG pages into readable PDF format for digital publishing</li>
-        </ol>
-        
-        <h3>How SmallPDF.us Creates Perfect Small PDF Files</h3>
-        <p>Our advanced <strong>JPG to PDF converter</strong> uses intelligent compression to create <strong>small PDF files</strong> without sacrificing quality. When you <strong>convert JPG to PDF</strong> with SmallPDF.us, our system analyzes each image and applies optimal compression settings to ensure your PDF documents are:</p>
-        <ul>
-            <li><strong>Optimally Sized:</strong> Small PDF files that load quickly and are easy to share via email or cloud storage</li>
-            <li><strong>High Quality:</strong> Maintain original JPG image clarity and color accuracy in the final PDF</li>
-            <li><strong>Universally Compatible:</strong> PDF files that open perfectly on any device or PDF reader</li>
-            <li><strong>Print-Ready:</strong> Professional quality suitable for high-resolution printing</li>
-            <li><strong>Web-Optimized:</strong> Fast-loading PDF files perfect for online sharing and viewing</li>
-        </ul>
-        
-        <h3>Advanced Features of SmallPDF.us JPG to PDF Converter</h3>
-        <p>SmallPDF.us offers the most comprehensive set of features for <strong>JPG to PDF conversion</strong>. Our platform goes beyond basic conversion to provide professional-grade tools that <strong>merge JPG to PDF</strong> with precision and flexibility:</p>
-        <ul>
-            <li><strong>Multi-Format Support:</strong> Convert JPG, JPEG, PNG, GIF, BMP, and WebP images to PDF format</li>
-            <li><strong>Flexible Merging Options:</strong> Choose to combine JPG files into one PDF or create separate PDF files for each image</li>
-            <li><strong>Custom Page Layouts:</strong> Select from A4, Letter, A3, A5, or auto-sizing options for perfect PDF formatting</li>
-            <li><strong>Orientation Control:</strong> Set portrait, landscape, or automatic orientation based on image dimensions</li>
-            <li><strong>Margin Adjustment:</strong> Fine-tune spacing with none, small, medium, or large margin settings</li>
-            <li><strong>Quality Optimization:</strong> Balance file size and image quality with high, medium, or low compression settings</li>
-            <li><strong>Real-time Preview:</strong> See your PDF layout before conversion to ensure perfect results</li>
-            <li><strong>Batch Processing:</strong> Handle multiple JPG files simultaneously for efficient workflow</li>
-        </ul>
-        
-        <h3>Security and Privacy with SmallPDF.us</h3>
-        <p>When you <strong>convert JPG to PDF</strong> with SmallPDF.us, your privacy and security are our top priorities. Our secure <strong>JPG to PDF converter</strong> ensures your images and documents remain completely private throughout the conversion process:</p>
-        <ul>
-            <li><strong>SSL Encryption:</strong> All JPG uploads and PDF downloads are protected with 256-bit SSL encryption</li>
-            <li><strong>Automatic File Deletion:</strong> Your JPG images and converted PDF files are automatically deleted within one hour</li>
-            <li><strong>No Registration Required:</strong> Convert JPG to PDF without creating accounts or providing personal information</li>
-            <li><strong>Privacy Compliance:</strong> SmallPDF.us complies with GDPR and international privacy regulations</li>
-            <li><strong>Zero Data Storage:</strong> We never permanently store your JPG files or PDF documents</li>
-            <li><strong>No Human Access:</strong> Automated processing ensures no one can access your files during conversion</li>
-        </ul>
-        
-        <h3>Tips for Optimal JPG to PDF Conversion Results</h3>
-        <p>Maximize the quality of your <strong>JPG to PDF conversion</strong> with these expert tips from SmallPDF.us:</p>
-        <ul>
-            <li><strong>Use High-Resolution JPG Images:</strong> Start with the highest quality JPG files for the best PDF output</li>
-            <li><strong>Organize Images Before Upload:</strong> Arrange JPG files in the desired order before uploading to merge JPG to PDF correctly</li>
-            <li><strong>Choose Appropriate Page Sizes:</strong> Select page dimensions that best fit your JPG image proportions</li>
-            <li><strong>Optimize for Intended Use:</strong> Use high quality for printing, medium for digital sharing, low for web use</li>
-            <li><strong>Consider File Size:</strong> Balance image quality with small PDF file size requirements for your specific needs</li>
-            <li><strong>Preview Before Converting:</strong> Use SmallPDF.us real-time preview to verify layout and formatting</li>
-            <li><strong>Batch Similar Images:</strong> Group JPG files with similar dimensions for consistent PDF page layouts</li>
-        </ul>
-        
-        <h3>SmallPDF.us vs. Other JPG to PDF Converters</h3>
-        <p>SmallPDF.us outperforms other online converters when you need to <strong>convert JPG to PDF</strong> or <strong>merge JPG files</strong>. Here's why SmallPDF.us is the superior choice for <strong>JPG to PDF conversion</strong>:</p>
-        <ul>
-            <li><strong>Superior Quality:</strong> Advanced algorithms create small PDF files with exceptional image clarity</li>
-            <li><strong>Faster Processing:</strong> Optimized servers complete JPG to PDF conversion in seconds, not minutes</li>
-            <li><strong>More Features:</strong> Comprehensive customization options not available in basic converters</li>
-            <li><strong>Better Security:</strong> Enhanced privacy protection and automatic file deletion</li>
-            <li><strong>Real-time Preview:</strong> Unique preview feature shows exact PDF layout before conversion</li>
-            <li><strong>Batch Capabilities:</strong> Handle more files simultaneously than competing services</li>
-            <li><strong>No Limitations:</strong> Unlimited conversions without watermarks or restrictions</li>
-            <li><strong>Mobile Optimized:</strong> Perfect JPG to PDF conversion on any device</li>
-        </ul>
-        
-        <h3>Start Converting JPG to PDF with SmallPDF.us Today</h3>
-        <p>Experience the difference with SmallPDF.us, the most advanced <strong>JPG to PDF converter</strong> available online. Whether you need to convert a single JPG image, <strong>merge JPG to PDF</strong> documents, or <strong>combine JPG files</strong> into professional presentations, SmallPDF.us delivers exceptional results every time. Our commitment to creating <strong>small PDF files</strong> with maximum quality makes us the preferred choice for millions of users worldwide.</p>
-        
-        <p>Join the SmallPDF.us community today and discover why we're the leading platform to <strong>convert JPG to PDF</strong> online. With our free, secure, and feature-rich <strong>JPG to PDF converter</strong>, you'll never need another PDF conversion tool. Start your <strong>JPG to PDF conversion</strong> now and experience the SmallPDF.us difference!</p>
-    </div>
-</section>
-
 <!-- CTA Section -->
 <section class="cta-section">
     <div class="content-section">
         <h2>Ready to Convert JPG to PDF with SmallPDF.us?</h2>
-        <p>Join millions who trust SmallPDF.us for professional JPG to PDF conversion. Merge JPG to PDF, combine images, and create small PDF files - all free!</p>
+        <p>Join millions who trust SmallPDF.us for professional JPG to PDF conversion. Use our online JPG to PDF converter free!</p>
         <a href="#uploadArea" class="cta-btn">Start Converting JPG to PDF Now</a>
     </div>
 </section>
-
-<!-- Load PDF-lib for real PDF preview -->
-<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Performance optimized JavaScript with lazy loading
+    // Performance optimized JavaScript without PDF preview functionality
     const uploadArea = document.getElementById('uploadArea');
     const fileInput = document.getElementById('fileInput');
     const selectFileBtn = document.getElementById('selectFileBtn');
@@ -1626,7 +1653,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const clearBtn = document.getElementById('clearBtn');
     const convertBtn = document.getElementById('convertBtn');
     const loadingOverlay = document.getElementById('loadingOverlay');
-    const pdfPreviewContainer = document.getElementById('pdfPreviewContainer');
     const pdfResultSection = document.getElementById('pdfResultSection');
     const downloadPdfBtn = document.getElementById('downloadPdfBtn');
     const startOverBtn = document.getElementById('startOverBtn');
@@ -1654,15 +1680,6 @@ document.addEventListener('DOMContentLoaded', function() {
     convertBtn.addEventListener('click', convertToPDF);
     downloadPdfBtn.addEventListener('click', downloadPDF);
     startOverBtn.addEventListener('click', startOver);
-
-    // Options change listeners with debouncing
-    let previewTimeout;
-    [pageSize, orientation, margin, quality, combineOption].forEach(element => {
-        element.addEventListener('change', () => {
-            clearTimeout(previewTimeout);
-            previewTimeout = setTimeout(updatePdfPreview, 300);
-        });
-    });
 
     // Optimized drag and drop
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -1739,7 +1756,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         selectedFiles = selectedFiles.concat(validFiles);
         updateFilePreview();
-        updatePdfPreview();
         showFileContainer();
 
         if (validFiles.length > 0) {
@@ -1772,149 +1788,11 @@ document.addEventListener('DOMContentLoaded', function() {
     window.removeFile = function(index) {
         selectedFiles.splice(index, 1);
         updateFilePreview();
-        updatePdfPreview();
 
         if (selectedFiles.length === 0) {
             showUploadArea();
         }
     };
-
-    // Real PDF preview using PDF-lib
-    async function updatePdfPreview() {
-        if (selectedFiles.length === 0) {
-            pdfPreviewContainer.innerHTML = `
-                <div style="text-align: center; color: #6b7280;">
-                    <svg style="width: 48px; height: 48px; margin: 0 auto 8px; opacity: 0.5;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    <p style="margin: 0; font-size: 0.9rem;">PDF preview will appear here</p>
-                </div>
-            `;
-            return;
-        }
-
-        try {
-            // Create real PDF preview using PDF-lib
-            const pdfDoc = await PDFLib.PDFDocument.create();
-            const canvasContainer = document.createElement('div');
-            canvasContainer.className = 'pdf-canvas-container';
-
-            for (let i = 0; i < Math.min(selectedFiles.length, 5); i++) { // Limit preview to 5 pages for performance
-                const file = selectedFiles[i];
-                const imageBytes = await file.arrayBuffer();
-                
-                let image;
-                if (file.type.includes('png')) {
-                    image = await pdfDoc.embedPng(imageBytes);
-                } else {
-                    image = await pdfDoc.embedJpg(imageBytes);
-                }
-
-                // Get page settings
-                const pageSizeValue = pageSize.value;
-                const orientationValue = orientation.value;
-                const marginValue = margin.value;
-
-                // Calculate page dimensions
-                let pageWidth, pageHeight;
-                const pageSizes = {
-                    'a4': [595, 842],
-                    'letter': [612, 792],
-                    'a3': [842, 1191],
-                    'a5': [420, 595],
-                    'auto': [image.width, image.height]
-                };
-
-                [pageWidth, pageHeight] = pageSizes[pageSizeValue] || pageSizes['a4'];
-
-                if (orientationValue === 'landscape' && pageSizeValue !== 'auto') {
-                    [pageWidth, pageHeight] = [pageHeight, pageWidth];
-                }
-
-                const page = pdfDoc.addPage([pageWidth, pageHeight]);
-
-                // Calculate margins
-                const marginSizes = { 'none': 0, 'small': 20, 'medium': 40, 'large': 60 };
-                const marginSize = marginSizes[marginValue] || 40;
-
-                // Calculate image dimensions with margins
-                const availableWidth = pageWidth - (2 * marginSize);
-                const availableHeight = pageHeight - (2 * marginSize);
-
-                const imageAspectRatio = image.width / image.height;
-                const availableAspectRatio = availableWidth / availableHeight;
-
-                let drawWidth, drawHeight, drawX, drawY;
-
-                if (imageAspectRatio > availableAspectRatio) {
-                    drawWidth = availableWidth;
-                    drawHeight = availableWidth / imageAspectRatio;
-                    drawX = marginSize;
-                    drawY = marginSize + (availableHeight - drawHeight) / 2;
-                } else {
-                    drawHeight = availableHeight;
-                    drawWidth = availableHeight * imageAspectRatio;
-                    drawX = marginSize + (availableWidth - drawWidth) / 2;
-                    drawY = marginSize;
-                }
-
-                page.drawImage(image, {
-                    x: drawX,
-                    y: drawY,
-                    width: drawWidth,
-                    height: drawHeight,
-                });
-
-                // Create canvas preview
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                const scale = 100 / Math.max(pageWidth, pageHeight); // Scale to fit 100px max dimension
-                
-                canvas.width = pageWidth * scale;
-                canvas.height = pageHeight * scale;
-                canvas.className = 'pdf-page-canvas';
-
-                // Draw white background
-                ctx.fillStyle = 'white';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                // Draw image on canvas
-                const img = new Image();
-                img.onload = function() {
-                    ctx.drawImage(img, 
-                        drawX * scale, 
-                        (pageHeight - drawY - drawHeight) * scale, // Flip Y coordinate
-                        drawWidth * scale, 
-                        drawHeight * scale
-                    );
-                };
-                img.src = URL.createObjectURL(file);
-
-                canvasContainer.appendChild(canvas);
-            }
-
-            const combineValue = combineOption.value;
-            const previewTitle = combineValue === 'single' 
-                ? `Single PDF Document (${selectedFiles.length} pages)`
-                : `${selectedFiles.length} Separate PDFs`;
-
-            pdfPreviewContainer.innerHTML = `
-                <div style="text-align: center; margin-bottom: 12px;">
-                    <h5 style="font-weight: 600; color: #1e293b; margin: 0 0 4px;">${previewTitle}</h5>
-                    <p style="font-size: 0.8rem; color: #64748b; margin: 0;">${pageSizeValue.toUpperCase()} • ${orientationValue} • ${marginValue} margin</p>
-                </div>
-            `;
-            pdfPreviewContainer.appendChild(canvasContainer);
-
-        } catch (error) {
-            console.error('PDF preview error:', error);
-            pdfPreviewContainer.innerHTML = `
-                <div style="text-align: center; color: #ef4444;">
-                    <p style="margin: 0; font-size: 0.9rem;">Preview temporarily unavailable</p>
-                </div>
-            `;
-        }
-    }
 
     function clearAllFiles() {
         selectedFiles = [];
@@ -2150,16 +2028,44 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize lazy loading for images
     const lazyImages = document.querySelectorAll('.lazy-load');
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('loaded');
-                observer.unobserve(entry.target);
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('loaded');
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+
+        lazyImages.forEach(img => imageObserver.observe(img));
+    } else {
+        // Fallback for older browsers
+        lazyImages.forEach(img => img.classList.add('loaded'));
+    }
+
+    // Initialize smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
             }
         });
     });
 
-    lazyImages.forEach(img => imageObserver.observe(img));
+    // Performance optimization: Debounce window resize events
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            // Trigger any resize-dependent functions here if needed
+        }, 250);
+    }, { passive: true });
 
     // Initialize
     showUploadArea();
@@ -2173,6 +2079,66 @@ if ('serviceWorker' in navigator) {
             .catch(error => console.log('SW registration failed'));
     });
 }
-</script>
 
+// Add viewport meta tag optimization for mobile
+if (!document.querySelector('meta[name="viewport"]')) {
+    const viewport = document.createElement('meta');
+    viewport.name = 'viewport';
+    viewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes';
+    document.head.appendChild(viewport);
+}
+
+// Preload critical resources for better performance
+function preloadCriticalResources() {
+    const criticalUrls = [
+        '/api/jpg-to-pdf/',
+        // Add other critical API endpoints here
+    ];
+    
+    criticalUrls.forEach(url => {
+        const link = document.createElement('link');
+        link.rel = 'dns-prefetch';
+        link.href = url;
+        document.head.appendChild(link);
+    });
+}
+
+// Initialize critical resource preloading
+preloadCriticalResources();
+
+// Add touch event optimizations for mobile
+let isTouch = false;
+document.addEventListener('touchstart', function() {
+    isTouch = true;
+}, { once: true, passive: true });
+
+// Optimize for mobile touch interactions
+if ('ontouchstart' in window) {
+    document.body.classList.add('touch-device');
+}
+
+// Memory management for file previews
+function cleanupFileUrls() {
+    const images = document.querySelectorAll('.preview-image');
+    images.forEach(img => {
+        if (img.src && img.src.startsWith('blob:')) {
+            URL.revokeObjectURL(img.src);
+        }
+    });
+}
+
+// Cleanup on page unload
+window.addEventListener('beforeunload', cleanupFileUrls);
+
+// Enhanced error handling for mobile browsers
+window.addEventListener('error', function(e) {
+    console.error('Global error:', e.error);
+    // Could send error reports to analytics here
+}, { passive: true });
+
+window.addEventListener('unhandledrejection', function(e) {
+    console.error('Unhandled promise rejection:', e.reason);
+    // Could send error reports to analytics here
+}, { passive: true });
+</script>
 {% endblock %}

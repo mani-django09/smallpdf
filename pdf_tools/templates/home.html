@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Free Online PDF Tools | Convert, Compress, Merge PDFs | SmallPDF.us{% endblock %}
+{% block title %}Free PDF Tools | Convert & Compress | SmallPDF.us{% endblock %}
 
-{% block meta_description %}Free online PDF tools to convert, compress, merge PDFs instantly. Convert PDF to Word, JPG to PDF, compress images. No registration required. Fast, secure, 100% free.{% endblock %}
-
+{% block meta_description %}Free PDF tools: convert, compress & merge PDFs instantly. No registration. Fast, secure, 100% free online.{% endblock %}
 {% block meta_keywords %}free PDF tools, PDF converter, compress PDF, merge PDF, PDF to Word, Word to PDF, JPG to PDF, PDF to JPG, online PDF tools, document converter, image compressor{% endblock %}
 
 {% block og_title %}SmallPDF.us - Free Online PDF Tools | Convert & Compress PDFs Instantly{% endblock %}
@@ -116,22 +115,34 @@
 
    
 <!-- Enhanced Tools Grid Section with mobile-optimized layout -->
-<section class="py-8 sm:py-12 md:py-16 bg-gray-50" id="tools">
-    <div class="container mx-auto px-4">
-        <div class="max-w-6xl mx-auto">
-            <!-- Section header with better SEO -->
-            <div class="text-center mb-8 sm:mb-12">
-                <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
-                    Professional PDF Tools for Every Need
-                </h2>
-                <p class="text-gray-600 text-base sm:text-lg max-w-3xl mx-auto leading-relaxed">
-                    Choose from our comprehensive suite of PDF tools designed for professionals, students, and businesses. 
-                    All tools are free, secure, and work directly in your browser.
-                </p>
-            </div>
-            
-            <!-- Enhanced tools grid with mobile-first responsive design -->
+<section class="py-8 sm:py-12 lg:py-16 bg-gradient-to-br from-blue-50 to-indigo-100 relative overflow-hidden">
+    <!-- Subtle background pattern for visual interest -->
+    <div class="absolute inset-0 opacity-5" aria-hidden="true">
+        <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="30" cy="30" r="8" fill="rgba(59, 130, 246, 0.1)"/>
+        </svg>
+    </div>
+    
+    <div class="container mx-auto px-4 text-center relative z-10">
+        <!-- Compact H1 with optimized mobile sizing -->
+        <h1 class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-3 sm:mb-4 leading-tight">
+            Free Online PDF Tools
+            <span class="block text-primary-600">Convert, Compress & Merge</span>
+        </h1>
+        
+        <!-- Concise description -->
+        <p class="text-base sm:text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto mb-6 sm:mb-8 leading-relaxed">
+            Transform your documents with our comprehensive suite of PDF tools. 
+            <span class="font-medium text-gray-700">Fast, secure, and completely free.</span>
+        </p>
+        
+
+
+<!-- Enhanced Tools Grid Section with proper spacing -->
+
+            <!-- Tool cards grid (your existing content) -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+                <!-- Your existing tool cards go here -->
                 <!-- Merge PDF Tool -->
                 <article class="tool-card bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2 border border-gray-100 lazy-load">
                     <div class="p-4 sm:p-6">
@@ -175,34 +186,6 @@
                         </p>
                         <a href="{% url 'compress_pdf' %}" class="block w-full text-center bg-gray-100 hover:bg-green-500 hover:text-white text-green-500 font-medium py-2 sm:py-3 rounded-lg transition-colors duration-300 touch-target focus-ring">
                             Start Compressing
-                        </a>
-                    </div>
-                </article>
-                
-                <!-- Compress Image Tool with "New" badge -->
-                <article class="tool-card bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2 border border-gray-100 relative lazy-load">
-                    <div class="absolute top-3 right-3 sm:top-4 sm:right-4">
-                        <span class="bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-lg animate-pulse">
-                            New!
-                        </span>
-                    </div>
-                    <div class="p-4 sm:p-6">
-                        <div class="flex items-center mb-4">
-                            <div class="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 mr-3 sm:mr-4 rounded-lg bg-yellow-100 flex items-center justify-center">
-                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                    <polyline points="21 15 16 10 5 21"></polyline>
-                                </svg>
-                            </div>
-                            <h3 class="font-bold text-lg sm:text-xl text-gray-800">Compress Image</h3>
-                        </div>
-                        <p class="text-gray-600 mb-4 text-sm sm:text-base leading-relaxed">
-                            Optimize JPG, PNG, and other image formats for web and email. 
-                            Smart compression maintains visual quality while reducing file size.
-                        </p>
-                        <a href="{% url 'compress_image' %}" class="block w-full text-center bg-gray-100 hover:bg-yellow-500 hover:text-white text-yellow-500 font-medium py-2 sm:py-3 rounded-lg transition-colors duration-300 touch-target focus-ring">
-                            Start Optimizing
                         </a>
                     </div>
                 </article>
@@ -275,7 +258,29 @@
                         </a>
                     </div>
                 </article>
+                <!-- JPG to PDF Tool (replaces Compress Image) -->
+<article class="tool-card bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2 border border-gray-100 lazy-load">
+    <div class="p-4 sm:p-6">
+        <div class="flex items-center mb-4">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 mr-3 sm:mr-4 rounded-lg bg-purple-100 flex items-center justify-center">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-purple-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
             </div>
+            <h3 class="font-bold text-lg sm:text-xl text-gray-800">JPG to PDF</h3>
+        </div>
+        <p class="text-gray-600 mb-4 text-sm sm:text-base leading-relaxed">
+            Convert JPG images to PDF documents instantly. 
+            Combine multiple images or create individual PDFs with custom layouts.
+        </p>
+        <a href="{% url 'jpg_to_pdf' %}" class="block w-full text-center bg-gray-100 hover:bg-purple-500 hover:text-white text-purple-500 font-medium py-2 sm:py-3 rounded-lg transition-colors duration-300 touch-target focus-ring">
+            Start Converting
+        </a>
+    </div>
+</article>            
+</div>
             
             <!-- Call-to-action for more tools -->
             <div class="text-center mt-8 sm:mt-12">
