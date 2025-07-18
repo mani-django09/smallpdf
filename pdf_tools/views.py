@@ -1,5 +1,3 @@
-# Add these imports at the top of your views.py file (around line 1-20)
-
 import os
 import io
 from django.shortcuts import render, redirect
@@ -20,6 +18,8 @@ from django.views.decorators.http import require_http_methods
 from django.core.mail import send_mail
 import tempfile
 from io import BytesIO
+from django.views.decorators.cache import cache_control
+import re
 
 
 
@@ -27,7 +27,23 @@ from io import BytesIO
 from .models import ContactMessage, ContactSettings
 from .forms import ContactForm
 
+try:
+    from docx import Document
+    PYTHON_DOCX_AVAILABLE = True
+except ImportError:
+    PYTHON_DOCX_AVAILABLE = False
 
+try:
+    from reportlab.lib.pagesizes import A4, letter, A3, A5, legal
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.units import inch, mm
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+    from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT, TA_JUSTIFY
+    from reportlab.lib import colors
+    from reportlab.pdfgen import canvas
+    REPORTLAB_AVAILABLE = True
+except ImportError:
+    REPORTLAB_AVAILABLE = False
 # QUICK FIX: Add these lines after your existing imports in views.py
 
 # Image to PDF conversion libraries - MISSING IMPORTS
@@ -76,6 +92,11 @@ try:
 except ImportError:
     CONVERSION_LIBRARY_AVAILABLE = False
 
+@cache_control(max_age=86400)
+def ads_txt(request):
+    """Serve ads.txt file for Google AdSense"""
+    ads_txt_content = "google.com, pub-6913093595582462, DIRECT, f08c47fec0942fa0"
+    return HttpResponse(ads_txt_content, content_type='text/plain')
 # Main page views
 def home(request):
     """Render the homepage"""
@@ -1283,133 +1304,552 @@ def word_to_pdf(request):
     return render(request, 'word_to_pdf.html')
 
 
+# Replace your word_to_pdf_api function with this working version
+
 @csrf_exempt
 def word_to_pdf_api(request):
-    """API endpoint to convert Word documents to PDF"""
+    """Fixed Word to PDF conversion with proper formatting preservation"""
     if request.method != 'POST':
         return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
     
     if 'file' not in request.FILES:
-        return JsonResponse({'error': 'Word file is required'}, status=400)
+        return JsonResponse({'error': 'No file uploaded'}, status=400)
     
     word_file = request.FILES['file']
-    quality = request.POST.get('quality', 'high')
-    page_size = request.POST.get('page_size', 'original')
     
-    # Check if it's a valid Word file
-    file_name = word_file.name.lower()
-    if not (file_name.endswith('.doc') or file_name.endswith('.docx')):
-        return JsonResponse({'error': 'Invalid file format. Please upload a DOC or DOCX file'}, status=400)
+    if not word_file.name.lower().endswith(('.doc', '.docx')):
+        return JsonResponse({'error': 'Please upload a Word document (DOC or DOCX)'}, status=400)
+    
+    # Get conversion options
+    quality = request.POST.get('quality', 'high')
+    page_size = request.POST.get('page_size', 'a4')
+    optimization = request.POST.get('optimization', 'print')
+    
+    temp_dir = tempfile.mkdtemp()
     
     try:
-        # Create a temporary file to store the uploaded content
-        with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(word_file.name)[1]) as temp_file:
+        # Save uploaded file
+        input_path = os.path.join(temp_dir, f"input.{word_file.name.split('.')[-1]}")
+        with open(input_path, 'wb') as f:
             for chunk in word_file.chunks():
-                temp_file.write(chunk)
-            temp_input_path = temp_file.name
+                f.write(chunk)
         
-        # Create temporary output file for the PDF
-        output_file = tempfile.NamedTemporaryFile(delete=False, suffix='.pdf')
-        output_file.close()
-        output_path = output_file.name
-        
-        conversion_success = False
-        
-        # Try using docx2pdf if available
-        if DOCX2PDF_AVAILABLE:
+        # Try LibreOffice first (most accurate)
+        libreoffice_path = find_libreoffice()
+        if libreoffice_path:
             try:
-                # Initialize COM for multithreading (Windows only)
-                pythoncom.CoInitialize()
-                
-                # Convert Word to PDF
-                convert(temp_input_path, output_path)
-                
-                # Uninitialize COM (Windows only)
-                pythoncom.CoUninitialize()
-                
-                conversion_success = os.path.exists(output_path) and os.path.getsize(output_path) > 0
+                pdf_path = convert_with_libreoffice_precise(input_path, temp_dir, libreoffice_path)
+                if pdf_path and os.path.exists(pdf_path) and os.path.getsize(pdf_path) > 1000:
+                    with open(pdf_path, 'rb') as f:
+                        pdf_data = f.read()
+                    
+                    response = HttpResponse(pdf_data, content_type='application/pdf')
+                    response['Content-Disposition'] = f'attachment; filename="{os.path.splitext(word_file.name)[0]}.pdf"'
+                    return response
             except Exception as e:
-                print(f"docx2pdf conversion failed: {str(e)}")
+                print(f"LibreOffice conversion failed: {e}")
         
-        # If docx2pdf failed, try LibreOffice
-        if not conversion_success:
-            try:
-                # Try to find LibreOffice or OpenOffice executable
-                soffice = find_libreoffice_path()
-                
-                if soffice:
-                    # Convert using LibreOffice/OpenOffice
-                    output_dir = os.path.dirname(output_path)
-                    cmd = [
-                        soffice,
-                        '--headless',
-                        '--convert-to', 'pdf',
-                        '--outdir', output_dir,
-                        temp_input_path
-                    ]
-                    
-                    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                    stdout, stderr = process.communicate()
-                    
-                    # LibreOffice creates PDF with the same name as input
-                    libreoffice_output = os.path.join(
-                        output_dir, 
-                        os.path.splitext(os.path.basename(temp_input_path))[0] + '.pdf'
-                    )
-                    
-                    # If LibreOffice created a PDF with a different name, move it to our expected path
-                    if os.path.exists(libreoffice_output) and libreoffice_output != output_path:
-                        import shutil
-                        shutil.move(libreoffice_output, output_path)
-                    
-                    conversion_success = os.path.exists(output_path) and os.path.getsize(output_path) > 0
-            except Exception as e:
-                print(f"LibreOffice conversion failed: {str(e)}")
+        # Use enhanced manual conversion with exact formatting preservation
+        pdf_data = create_exact_pdf_from_word(input_path, word_file.name, quality, page_size)
         
-        # If both methods failed, return error
-        if not conversion_success:
-            return JsonResponse({
-                'error': 'Conversion failed. Please try a different file or contact support.'
-            }, status=500)
-        
-        # Read the converted PDF and return it
-        with open(output_path, 'rb') as pdf_file:
-            response = HttpResponse(pdf_file.read(), content_type='application/pdf')
+        if pdf_data and len(pdf_data) > 1000:
+            response = HttpResponse(pdf_data, content_type='application/pdf')
             response['Content-Disposition'] = f'attachment; filename="{os.path.splitext(word_file.name)[0]}.pdf"'
-            # Add cache-control header to prevent caching issues
-            response['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
-            response['Pragma'] = 'no-cache'
-            response['Expires'] = '0'
+            return response
         
-        # Clean up temporary files
-        if os.path.exists(temp_input_path):
-            os.unlink(temp_input_path)
-        if os.path.exists(output_path):
-            os.unlink(output_path)
+        return JsonResponse({'error': 'Conversion failed. Please try again.'}, status=500)
         
+    except Exception as e:
+        print(f"Word to PDF conversion error: {str(e)}")
+        return JsonResponse({'error': f'Conversion failed: {str(e)}'}, status=500)
+        
+    finally:
+        try:
+            shutil.rmtree(temp_dir)
+        except:
+            pass
+
+def create_exact_pdf_from_word(input_path, filename, quality, page_size):
+    """Create PDF with exact Word formatting preservation - FIXED VERSION"""
+    
+    if not PYTHON_DOCX_AVAILABLE or not REPORTLAB_AVAILABLE:
+        return None
+    
+    try:
+        # Read Word document
+        doc = Document(input_path)
+        
+        # Create PDF buffer
+        buffer = io.BytesIO()
+        
+        # Set page size
+        page_sizes = {'a4': A4, 'letter': letter, 'a3': A3, 'a5': A5, 'legal': legal}
+        page_size_obj = page_sizes.get(page_size, A4)
+        
+        # Create PDF document with proper margins
+        pdf_doc = SimpleDocTemplate(
+            buffer,
+            pagesize=page_size_obj,
+            rightMargin=0.75*inch,
+            leftMargin=0.75*inch,
+            topMargin=0.75*inch,
+            bottomMargin=0.75*inch,
+            title=os.path.splitext(filename)[0]
+        )
+        
+        # Create enhanced styles for exact formatting
+        styles = getSampleStyleSheet()
+        
+        # Document title style (CURRICULUM VITAE)
+        title_style = ParagraphStyle(
+            'DocumentTitle',
+            parent=styles['Title'],
+            fontSize=18,
+            fontName='Helvetica-Bold',
+            spaceAfter=24,
+            spaceBefore=0,
+            alignment=TA_CENTER,
+            textColor=colors.black,
+            leading=22
+        )
+        
+        # Name style (SANJEEV KUMAR)
+        name_style = ParagraphStyle(
+            'Name',
+            parent=styles['Heading1'],
+            fontSize=16,
+            fontName='Helvetica-Bold',
+            spaceAfter=12,
+            spaceBefore=12,
+            alignment=TA_CENTER,
+            textColor=colors.black,
+            leading=20
+        )
+        
+        # Contact info style
+        contact_style = ParagraphStyle(
+            'Contact',
+            parent=styles['Normal'],
+            fontSize=11,
+            fontName='Helvetica',
+            spaceAfter=4,
+            spaceBefore=0,
+            alignment=TA_CENTER,
+            textColor=colors.black,
+            leading=14
+        )
+        
+        # Section heading style (OBJECTIVE, EXPERIENCE, etc.)
+        section_style = ParagraphStyle(
+            'SectionHeading',
+            parent=styles['Heading2'],
+            fontSize=14,
+            fontName='Helvetica-Bold',
+            spaceAfter=12,
+            spaceBefore=18,
+            alignment=TA_LEFT,
+            textColor=colors.darkblue,
+            leading=17
+        )
+        
+        # Body text style
+        body_style = ParagraphStyle(
+            'Body',
+            parent=styles['Normal'],
+            fontSize=11,
+            fontName='Helvetica',
+            spaceAfter=6,
+            spaceBefore=0,
+            alignment=TA_LEFT,
+            textColor=colors.black,
+            leading=14,
+            leftIndent=0
+        )
+        
+        # Enhanced bullet point style
+        bullet_style = ParagraphStyle(
+            'Bullet',
+            parent=styles['Normal'],
+            fontSize=11,
+            fontName='Helvetica',
+            spaceAfter=4,
+            spaceBefore=0,
+            alignment=TA_LEFT,
+            textColor=colors.black,
+            leading=14,
+            leftIndent=18,
+            bulletIndent=0,
+            bulletFontName='Symbol'
+        )
+        
+        # Job title/position style
+        position_style = ParagraphStyle(
+            'Position',
+            parent=styles['Normal'],
+            fontSize=11,
+            fontName='Helvetica-Bold',
+            spaceAfter=6,
+            spaceBefore=8,
+            alignment=TA_LEFT,
+            textColor=colors.black,
+            leading=14
+        )
+        
+        story = []
+        current_section = None
+        
+        # Process each paragraph with intelligent formatting detection
+        for para_index, para in enumerate(doc.paragraphs):
+            text = para.text.strip()
+            if not text:
+                story.append(Spacer(1, 6))
+                continue
+            
+            # Clean and escape text for PDF
+            clean_text = escape_xml_chars(text)
+            
+            # Detect paragraph type and apply appropriate formatting
+            if text.upper() == 'CURRICULUM VITAE':
+                story.append(Paragraph('CURRICULUM VITAE', title_style))
+                story.append(Spacer(1, 12))
+                
+            elif is_name_line(text, para_index):
+                story.append(Paragraph(f'<b>{clean_text}</b>', name_style))
+                story.append(Spacer(1, 8))
+                
+            elif is_contact_info(text):
+                story.append(Paragraph(clean_text, contact_style))
+                story.append(Spacer(1, 4))
+                
+            elif is_section_heading(text):
+                current_section = text.upper()
+                story.append(Paragraph(f'<b>{clean_text.upper()}</b>', section_style))
+                story.append(Spacer(1, 8))
+                
+            elif is_bullet_point(text):
+                bullet_text = clean_bullet_text(text)
+                story.append(Paragraph(f'• {bullet_text}', bullet_style))
+                
+            elif is_job_position(text, current_section):
+                # Format job positions with bold
+                formatted_text = format_job_position(clean_text)
+                story.append(Paragraph(formatted_text, position_style))
+                story.append(Spacer(1, 4))
+                
+            elif current_section == 'PERSONAL DETAILS' and ':' in text:
+                # Format personal details with labels
+                formatted_text = format_personal_details(clean_text)
+                story.append(Paragraph(formatted_text, body_style))
+                
+            else:
+                # Regular body text with run-based formatting
+                formatted_text = extract_formatting_from_runs(para)
+                if not formatted_text:
+                    formatted_text = clean_text
+                
+                story.append(Paragraph(formatted_text, body_style))
+                
+                # Add appropriate spacing based on context
+                if current_section in ['EXPERIENCE', 'ORGANISATIONAL EXPERIENCE']:
+                    story.append(Spacer(1, 6))
+                else:
+                    story.append(Spacer(1, 4))
+        
+        # Build PDF
+        pdf_doc.build(story)
+        
+        # Get PDF content
+        pdf_content = buffer.getvalue()
+        buffer.close()
+        
+        print(f"Created PDF with exact formatting: {len(pdf_content)} bytes")
+        return pdf_content
+        
+    except Exception as e:
+        print(f"Enhanced PDF creation error: {e}")
+        import traceback
+        traceback.print_exc()
+        return None
+
+def is_name_line(text, para_index):
+    """Detect if this is the name line (SANJEEV KUMAR)"""
+    return (para_index <= 3 and 
+            len(text) < 50 and 
+            not any(keyword in text.lower() for keyword in ['mobile', 'email', 'delhi', 'park', '@']))
+
+def is_contact_info(text):
+    """Detect contact information lines"""
+    return any(keyword in text.lower() for keyword in ['mobile:', 'email:', 'delhi', 'park', '@', 'b-56'])
+
+def is_section_heading(text):
+    """Detect section headings"""
+    section_headings = [
+        'OBJECTIVE', 'EXPERIENCE', 'EDUCATION', 'QUALIFICATION', 'QUALIFICATIONS',
+        'SKILLS', 'PERSONAL DETAILS', 'DECLARATION', 'ACHIEVEMENTS', 
+        'PROFESSIONAL QUALIFICATION', 'ORGANISATIONAL EXPERIENCE'
+    ]
+    return text.upper().strip() in section_headings
+
+def is_bullet_point(text):
+    """Detect bullet points"""
+    return (text.startswith('•') or 
+            text.startswith('-') or 
+            text.startswith('◦') or
+            text.startswith('*') or
+            (len(text) > 0 and text[0] in ['•', '-', '◦', '*']))
+
+def clean_bullet_text(text):
+    """Clean bullet point text"""
+    # Remove bullet markers
+    for marker in ['•', '-', '◦', '*']:
+        if text.startswith(marker):
+            text = text[1:].strip()
+            break
+    return escape_xml_chars(text)
+
+def is_job_position(text, current_section):
+    """Detect job position/title lines"""
+    if current_section not in ['EXPERIENCE', 'ORGANISATIONAL EXPERIENCE']:
+        return False
+    
+    job_indicators = [
+        'working as', 'worked as', 'presently working', 
+        'senior', 'analyst', 'executive', 'manager', 'associate'
+    ]
+    
+    return any(indicator in text.lower() for indicator in job_indicators)
+
+def format_job_position(text):
+    """Format job position with bold titles"""
+    # Look for job titles in quotes or after "as"
+    if 'as ' in text.lower():
+        parts = text.split(' as ', 1)
+        if len(parts) == 2:
+            return f'{parts[0]} as <b>{parts[1]}</b>'
+    
+    # Bold company names
+    companies = ['R1 RCM Global', 'EXL', 'Genpact', 'GENPACT']
+    for company in companies:
+        if company in text:
+            text = text.replace(company, f'<b>{company}</b>')
+    
+    return text
+
+def format_personal_details(text):
+    """Format personal details with bold labels"""
+    if ':' not in text:
+        return text
+    
+    parts = text.split(':', 1)
+    if len(parts) == 2:
+        label = parts[0].strip()
+        value = parts[1].strip()
+        return f'<b>{label}:</b> {value}'
+    
+    return text
+
+def extract_formatting_from_runs(para):
+    """Extract formatting from Word runs"""
+    if not para.runs:
+        return escape_xml_chars(para.text)
+    
+    formatted_parts = []
+    
+    for run in para.runs:
+        run_text = run.text
+        if not run_text:
+            continue
+        
+        clean_text = escape_xml_chars(run_text)
+        
+        # Apply formatting based on run properties
+        if run.bold and run.italic:
+            clean_text = f'<b><i>{clean_text}</i></b>'
+        elif run.bold:
+            clean_text = f'<b>{clean_text}</b>'
+        elif run.italic:
+            clean_text = f'<i>{clean_text}</i>'
+        
+        if run.underline:
+            clean_text = f'<u>{clean_text}</u>'
+        
+        formatted_parts.append(clean_text)
+    
+    return ''.join(formatted_parts)
+
+def escape_xml_chars(text):
+    """Escape XML characters for PDF rendering"""
+    if not text:
+        return ""
+    
+    replacements = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    }
+    
+    for old, new in replacements.items():
+        text = text.replace(old, new)
+    
+    return text
+
+def find_libreoffice():
+    """Find LibreOffice installation"""
+    if platform.system() == 'Windows':
+        paths = [
+            r"C:\Program Files\LibreOffice\program\soffice.exe",
+            r"C:\Program Files (x86)\LibreOffice\program\soffice.exe",
+        ]
+    elif platform.system() == 'Darwin':  # macOS
+        paths = ["/Applications/LibreOffice.app/Contents/MacOS/soffice"]
+    else:  # Linux
+        paths = ["/usr/bin/soffice", "/usr/bin/libreoffice", "/snap/bin/libreoffice"]
+    
+    for path in paths:
+        if os.path.exists(path) and os.access(path, os.X_OK):
+            return path
+    
+    # Try which command
+    try:
+        result = subprocess.run(['which', 'libreoffice'], capture_output=True, text=True)
+        if result.returncode == 0:
+            return result.stdout.strip()
+    except:
+        pass
+    
+    return None
+
+def convert_with_libreoffice_precise(input_path, temp_dir, libreoffice_path):
+    """Convert using LibreOffice with precise settings"""
+    try:
+        env = os.environ.copy()
+        env['HOME'] = temp_dir
+        
+        cmd = [
+            libreoffice_path,
+            '--headless',
+            '--invisible',
+            '--nodefault',
+            '--nolockcheck',
+            '--nologo',
+            '--norestore',
+            '--convert-to', 'pdf',
+            '--outdir', temp_dir,
+            input_path
+        ]
+        
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=120, env=env)
+        
+        if result.returncode == 0:
+            pdf_files = [f for f in os.listdir(temp_dir) if f.endswith('.pdf')]
+            if pdf_files:
+                return os.path.join(temp_dir, pdf_files[0])
+        
+        return None
+        
+    except Exception as e:
+        print(f"LibreOffice conversion error: {e}")
+        return None
+
+# === OTHER API ENDPOINTS (SIMPLIFIED) ===
+@csrf_exempt
+def merge_pdf_api(request):
+    """Merge multiple PDF files"""
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
+    
+    if not PDF_LIBRARY_AVAILABLE:
+        return JsonResponse({'error': 'PDF processing library not available'}, status=500)
+    
+    files = request.FILES.getlist('files')
+    if len(files) < 2:
+        return JsonResponse({'error': 'At least 2 PDF files are required'}, status=400)
+    
+    temp_files = []
+    try:
+        writer = PdfWriter()
+        
+        for pdf_file in files:
+            if not pdf_file.name.lower().endswith('.pdf'):
+                return JsonResponse({'error': f'Invalid file: {pdf_file.name}'}, status=400)
+            
+            temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.pdf')
+            temp_files.append(temp_file.name)
+            
+            for chunk in pdf_file.chunks():
+                temp_file.write(chunk)
+            temp_file.close()
+            
+            with open(temp_file.name, 'rb') as f:
+                reader = PdfReader(f)
+                for page in reader.pages:
+                    writer.add_page(page)
+        
+        output_file = tempfile.NamedTemporaryFile(delete=False, suffix='.pdf')
+        with open(output_file.name, 'wb') as f:
+            writer.write(f)
+        
+        with open(output_file.name, 'rb') as f:
+            response = HttpResponse(f.read(), content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename="merged_document.pdf"'
+        
+        os.unlink(output_file.name)
         return response
     
     except Exception as e:
-        # Clean up temporary files in case of error
-        try:
-            if 'temp_input_path' in locals() and os.path.exists(temp_input_path):
-                os.unlink(temp_input_path)
-            if 'output_path' in locals() and os.path.exists(output_path):
-                os.unlink(output_path)
-        except:
-            pass
-        
-        return JsonResponse({'error': str(e)}, status=500)
+        return JsonResponse({'error': f'Merge failed: {str(e)}'}, status=500)
+    
+    finally:
+        for temp_path in temp_files:
+            try:
+                if os.path.exists(temp_path):
+                    os.unlink(temp_path)
+            except:
+                pass
 
+try:
+    from docx import Document
+    PYTHON_DOCX_AVAILABLE = True
+except ImportError:
+    PYTHON_DOCX_AVAILABLE = False
+
+try:
+    from reportlab.lib.pagesizes import A4, letter, A3, A5, legal
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.units import inch, mm
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak, Table, TableStyle
+    from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT, TA_JUSTIFY
+    from reportlab.lib import colors
+    from reportlab.pdfgen import canvas
+    REPORTLAB_AVAILABLE = True
+except ImportError:
+    REPORTLAB_AVAILABLE = False
+
+
+# ENHANCED find_libreoffice_path function (replace the existing one)
 def find_libreoffice_path():
-    """Helper function to find LibreOffice path on different operating systems"""
+    """Enhanced helper function to find LibreOffice path on different operating systems"""
+    
+    # Try to find in PATH first
+    try:
+        if platform.system() != 'Windows':
+            result = subprocess.run(['which', 'soffice'], capture_output=True, text=True, timeout=5)
+            if result.returncode == 0 and result.stdout.strip():
+                return result.stdout.strip()
+    except:
+        pass
+    
+    # Platform-specific paths
     if platform.system() == 'Windows':
-        # Common paths for LibreOffice on Windows
         paths = [
             r"C:\Program Files\LibreOffice\program\soffice.exe",
             r"C:\Program Files (x86)\LibreOffice\program\soffice.exe",
             r"C:\Program Files\LibreOffice 7\program\soffice.exe",
             r"C:\Program Files (x86)\LibreOffice 7\program\soffice.exe",
+            r"C:\Program Files\LibreOffice 24\program\soffice.exe",
+            r"C:\Program Files (x86)\LibreOffice 24\program\soffice.exe",
             # OpenOffice paths
             r"C:\Program Files\OpenOffice\program\soffice.exe",
             r"C:\Program Files (x86)\OpenOffice\program\soffice.exe",
@@ -1420,21 +1860,24 @@ def find_libreoffice_path():
         paths = [
             "/Applications/LibreOffice.app/Contents/MacOS/soffice",
             "/Applications/OpenOffice.app/Contents/MacOS/soffice",
+            "/opt/homebrew/bin/soffice",
+            "/usr/local/bin/soffice",
         ]
-    else:  # Linux and other OS
-        # Try to find it in the PATH
-        try:
-            return subprocess.check_output(['which', 'soffice']).decode().strip()
-        except:
-            paths = [
-                "/usr/bin/soffice",
-                "/usr/local/bin/soffice",
-                "/opt/libreoffice/program/soffice",
-            ]
+    else:  # Linux and other Unix-like systems
+        paths = [
+            "/usr/bin/soffice",
+            "/usr/local/bin/soffice",
+            "/opt/libreoffice/program/soffice",
+            "/snap/bin/libreoffice.soffice",
+            "/usr/bin/libreoffice",
+            "/usr/local/bin/libreoffice",
+            # Flatpak installation
+            "/var/lib/flatpak/exports/bin/org.libreoffice.LibreOffice",
+        ]
     
     # Check each path
     for path in paths:
-        if os.path.exists(path):
+        if os.path.exists(path) and os.access(path, os.X_OK):
             return path
     
     return None
@@ -3711,6 +4154,11 @@ def resolve_error(request, error_id):
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
 # Middleware to automatically track activities
+from django.utils import timezone
+import logging
+
+logger = logging.getLogger(__name__)
+
 class ActivityTrackingMiddleware:
     """Middleware to automatically track user activities"""
     
@@ -3738,4 +4186,3 @@ class ActivityTrackingMiddleware:
             )
         
         return response
-

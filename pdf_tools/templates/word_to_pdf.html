@@ -1,686 +1,733 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Word to PDF Converter Online - Convert DOC to PDF Free | SmallPDF.us{% endblock %}
+{% block title %}Word to PDF Converter - Free Online Word to PDF Tool | SmallPDF.us{% endblock %}
 
 {% block meta %}
-<meta name="description" content="Free online Word to PDF converter by SmallPDF.us. Convert DOC and DOCX files to PDF instantly. No registration required. Secure Word to PDF conversion tool.">
-<meta name="keywords" content="word to pdf, word to pdf converter, online word to pdf converter, converter word to pdf, doc to pdf, docx to pdf, smallpdf.us, free word to pdf converter, convert word to pdf online">
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-<meta name="googlebot" content="index, follow">
-<meta name="bingbot" content="index, follow">
+<meta name="description" content="Convert Word to PDF online free with SmallPDF.us - the best Word to PDF converter. Convert DOC, DOCX to PDF format. Fast, secure, and professional results.">
+<meta name="keywords" content="word to pdf, convert word to pdf, doc to pdf, docx to pdf, word to pdf converter, small pdf, online word converter, smallpdf.us">
+<meta name="robots" content="index, follow">
 <meta name="author" content="SmallPDF.us">
-<meta name="revisit-after" content="1 days">
-<meta name="rating" content="general">
-<meta name="distribution" content="global">
-<link rel="canonical" href="https://smallpdf.us/word-to-pdf">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Open Graph / Facebook -->
+<!-- Open Graph Meta Tags -->
+<meta property="og:title" content="Word to PDF Converter - Convert Word to PDF Online Free | SmallPDF.us">
+<meta property="og:description" content="Best Word to PDF converter online. Convert DOC, DOCX to PDF format. Free, fast, and secure conversion with SmallPDF.us">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://smallpdf.us/word-to-pdf">
-<meta property="og:title" content="Word to PDF Converter Online - Convert DOC to PDF Free | SmallPDF.us">
-<meta property="og:description" content="SmallPDF.us Word to PDF converter transforms DOC and DOCX files to PDF format instantly. Free online conversion tool with perfect formatting preservation.">
-<meta property="og:image" content="https://smallpdf.us/static/images/word-to-pdf-og.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+<meta property="og:image" content="{% static 'images/word-to-pdf-converter.jpg' %}">
 <meta property="og:site_name" content="SmallPDF.us">
-<meta property="og:locale" content="en_US">
 
-<!-- Twitter Card -->
+<!-- Twitter Card Meta Tags -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:url" content="https://smallpdf.us/word-to-pdf">
-<meta name="twitter:title" content="Word to PDF Converter Online - Convert DOC to PDF Free | SmallPDF.us">
-<meta name="twitter:description" content="Convert Word to PDF online with SmallPDF.us. Free DOC to PDF converter with perfect formatting preservation. No registration needed.">
-<meta name="twitter:image" content="https://smallpdf.us/static/images/word-to-pdf-twitter.jpg">
-<meta name="twitter:site" content="@smallpdfus">
-<meta name="twitter:creator" content="@smallpdfus">
+<meta name="twitter:title" content="Word to PDF Converter - Convert Word to PDF Free | SmallPDF.us">
+<meta name="twitter:description" content="Professional Word to PDF converter. Convert DOC, DOCX to PDF online with SmallPDF.us">
+<meta name="twitter:image" content="{% static 'images/word-to-pdf-converter.jpg' %}">
 
-<!-- Structured Data for SEO -->
+<!-- Structured Data -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "Word to PDF Converter - SmallPDF.us",
-  "description": "Free online Word to PDF converter by SmallPDF.us. Convert DOC and DOCX files to PDF format with perfect formatting preservation.",
+  "description": "Free online Word to PDF converter to convert Word documents to PDF format",
   "url": "https://smallpdf.us/word-to-pdf",
   "applicationCategory": "UtilitiesApplication",
-  "operatingSystem": "All",
-  "browserRequirements": "HTML5, JavaScript enabled",
-  "softwareVersion": "2.0",
-  "dateCreated": "2024-01-01",
-  "dateModified": "2025-01-01",
-  "permissions": "No registration required",
-  "isAccessibleForFree": true,
+  "operatingSystem": "Any",
   "offers": {
     "@type": "Offer",
     "price": "0",
-    "priceCurrency": "USD",
-    "availability": "https://schema.org/InStock"
-  },
-  "creator": {
-    "@type": "Organization",
-    "name": "SmallPDF.us",
-    "url": "https://smallpdf.us",
-    "logo": "https://smallpdf.us/static/images/logo.png"
+    "priceCurrency": "USD"
   },
   "featureList": [
-    "Word to PDF converter online free",
-    "Convert DOC to PDF instantly",
-    "Convert DOCX to PDF format",
-    "Perfect formatting preservation",
-    "No registration required",
-    "Secure Word to PDF conversion",
-    "Cross-platform compatibility",
-    "Font embedding support",
-    "High-quality PDF output",
-    "Fast conversion processing"
+    "Convert Word to PDF online free",
+    "DOC to PDF conversion", 
+    "DOCX to PDF conversion",
+    "Batch Word to PDF conversion",
+    "Preserve document formatting",
+    "High-quality PDF output"
   ],
-  "screenshot": "https://smallpdf.us/static/images/word-to-pdf-screenshot.jpg",
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.9",
-    "reviewCount": "8542",
-    "bestRating": "5",
-    "worstRating": "1"
+  "provider": {
+    "@type": "Organization",
+    "name": "SmallPDF.us",
+    "url": "https://smallpdf.us"
   }
 }
 </script>
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "How to Convert Word to PDF Online with SmallPDF.us",
-  "description": "Learn how to use SmallPDF.us Word to PDF converter to transform DOC and DOCX files to PDF format online for free",
-  "image": "https://smallpdf.us/static/images/how-to-word-to-pdf-guide.jpg",
-  "totalTime": "PT1M",
-  "estimatedCost": {
-    "@type": "MonetaryAmount",
-    "currency": "USD",
-    "value": "0"
-  },
-  "tool": [
-    {
-      "@type": "HowToTool",
-      "name": "SmallPDF.us Word to PDF Converter"
-    }
-  ],
-  "supply": [
-    {
-      "@type": "HowToSupply",
-      "name": "Word document (DOC or DOCX)"
-    }
-  ],
-  "step": [
-    {
-      "@type": "HowToStep",
-      "name": "Upload Word Document to SmallPDF.us",
-      "text": "Visit SmallPDF.us and upload your DOC or DOCX file by clicking 'Select File' or drag-dropping your Word document into our converter tool.",
-      "image": "https://smallpdf.us/static/images/step-1-upload-word.jpg",
-      "url": "https://smallpdf.us/word-to-pdf#step1"
-    },
-    {
-      "@type": "HowToStep",
-      "name": "Configure Word to PDF Settings",
-      "text": "Choose your preferred PDF quality and page size settings on SmallPDF.us for optimal Word to PDF conversion results.",
-      "image": "https://smallpdf.us/static/images/step-2-word-settings.jpg",
-      "url": "https://smallpdf.us/word-to-pdf#step2"
-    },
-    {
-      "@type": "HowToStep",
-      "name": "Convert Word to PDF and Download",
-      "text": "Click 'Convert to PDF' on SmallPDF.us, wait for processing, then download your converted PDF file with preserved formatting.",
-      "image": "https://smallpdf.us/static/images/step-3-download-pdf.jpg",
-      "url": "https://smallpdf.us/word-to-pdf#step3"
-    }
-  ]
-}
-</script>
+<!-- Preload critical resources -->
+<link rel="preload" href="{% static 'css/converter.css' %}" as="style">
 {% endblock %}
 
 {% block extra_css %}
 <style>
-    /* Compact Word to PDF Tool Styles - Similar to PDF Compressor */
-    .tool-section {
-        padding: 3rem 0;
-        background-color: white;
+    /* Performance optimized CSS with critical path optimization */
+    :root {
+        --primary-color: #4361ee;
+        --primary-dark: #3a0ca3;
+        --success-color: #10b981;
+        --error-color: #ef4444;
+        --gray-50: #f8fafc;
+        --gray-100: #f1f5f9;
+        --gray-200: #e2e8f0;
+        --gray-300: #cbd5e1;
+        --gray-400: #94a3b8;
+        --gray-500: #64748b;
+        --gray-600: #475569;
+        --gray-700: #334155;
+        --gray-800: #1e293b;
+        --gray-900: #0f172a;
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
     }
-    
-    .tool-header {
-        text-align: center;
-        margin-bottom: 2rem;
+
+    /* Optimized base styles */
+    * {
+        box-sizing: border-box;
     }
-    
-    .tool-header h1 {
-        font-size: 2.5rem;
-        color: #0b132b;
-        font-weight: 700;
-        margin-bottom: 1rem;
-    }
-    
-    .tool-header p {
-        color: #64748b;
-        max-width: 700px;
-        margin: 0 auto;
-        font-size: 1.1rem;
-        line-height: 1.6;
+
+    .main-wrapper {
+        min-height: 100vh;
+        background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-200) 100%);
+        padding: 1rem;
     }
     
     .converter-container {
-        max-width: 900px;
+        max-width: 800px;
         margin: 0 auto;
         background: white;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-        padding: 2rem;
-        position: relative;
+        border-radius: 16px;
+        box-shadow: var(--shadow-xl);
+        overflow: hidden;
+        border: 1px solid var(--gray-200);
     }
-    
-    .upload-area {
-        border: 2px dashed #e2e8f0;
-        border-radius: 8px;
-        padding: 1.5rem 1rem;
+
+    /* Compact header */
+    .tool-header {
         text-align: center;
+        padding: 1.5rem 1rem;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        color: white;
         position: relative;
-        transition: all 0.3s ease;
+    }
+    
+    .tool-header h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        line-height: 1.2;
+    }
+    
+    .tool-header p {
+        opacity: 0.9;
+        font-size: 0.95rem;
+        margin: 0;
+        line-height: 1.4;
+    }
+
+    /* Compact content area */
+    .content-area {
+        padding: 1rem;
+    }
+
+    /* Optimized upload area */
+    .upload-area {
+        border: 2px dashed var(--gray-300);
+        border-radius: 12px;
+        padding: 2rem 1rem;
+        text-align: center;
+        transition: all 0.2s ease;
         cursor: pointer;
-        background-color: #f8fafc;
+        background: var(--gray-50);
         margin-bottom: 1rem;
-        min-height: auto;
     }
     
-    .upload-area:hover {
-        border-color: #4361ee;
-        background-color: #f0f5ff;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(67, 97, 238, 0.15);
-    }
-    
-    .upload-area.dragover {
-        border-color: #4361ee;
-        background-color: #f0f5ff;
-        transform: scale(1.02);
-        box-shadow: 0 8px 24px rgba(67, 97, 238, 0.2);
+    .upload-area:hover, .upload-area.dragover {
+        border-color: var(--primary-color);
+        background: #f0f5ff;
+        transform: translateY(-1px);
     }
     
     .upload-icon {
-        width: 50px;
-        height: 50px;
+        width: 60px;
+        height: 60px;
         background: rgba(67, 97, 238, 0.1);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         margin: 0 auto 1rem;
-        transition: all 0.3s ease;
+        transition: transform 0.2s ease;
     }
     
     .upload-area:hover .upload-icon {
-        background: rgba(67, 97, 238, 0.15);
-        transform: scale(1.1);
+        transform: scale(1.05);
     }
     
     .upload-icon svg {
-        width: 24px;
-        height: 24px;
-        color: #4361ee;
-        transition: all 0.3s ease;
+        width: 30px;
+        height: 30px;
+        color: var(--primary-color);
     }
-    
-    .upload-area:hover .upload-icon svg {
-        transform: rotate(180deg);
-    }
-    
+
     .upload-text h3 {
-        font-size: 1.1rem;
-        color: #0b132b;
+        font-size: 1.2rem;
+        color: var(--gray-800);
         margin-bottom: 0.5rem;
         font-weight: 600;
     }
     
     .upload-text p {
-        color: #64748b;
+        color: var(--gray-600);
         margin-bottom: 1rem;
         font-size: 0.9rem;
         line-height: 1.4;
     }
     
     .upload-btn {
-        display: inline-block;
-        background: linear-gradient(135deg, #4361ee, #3a0ca3);
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
         color: white;
         border: none;
-        border-radius: 6px;
-        padding: 0.7rem 1.5rem;
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
         font-weight: 600;
         font-size: 0.9rem;
         cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 3px 10px rgba(67, 97, 238, 0.2);
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .upload-btn::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-        transition: all 0.5s ease;
-    }
-    
-    .upload-btn:hover::before {
-        left: 100%;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
     }
     
     .upload-btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(67, 97, 238, 0.3);
-    }
-    
-    .upload-btn:active {
-        transform: translateY(0);
-        box-shadow: 0 2px 8px rgba(67, 97, 238, 0.3);
+        box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
     }
 
-    /* Compact File Container */
+    /* File preview */
     .file-container {
-        margin-top: 1.5rem;
         display: none;
     }
-    
+
     .file-header {
-        display: none; /* Hide to make it compact */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.75rem;
     }
-    
-    /* Compact File Preview */
-    .file-preview {
-        background: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08);
-        padding: 0.7rem;
+
+    .file-header h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--gray-800);
+        margin: 0;
+    }
+
+    .add-more-btn {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+        background: var(--gray-100);
+        border: 1px solid var(--gray-300);
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
         display: flex;
         align-items: center;
-        margin-bottom: 0.8rem;
-        border: 1px solid #e2e8f0;
+        gap: 0.3rem;
     }
-    
-    .file-icon {
-        width: 36px;
-        height: 36px;
-        margin-right: 0.8rem;
+
+    .add-more-btn:hover {
+        background: var(--gray-200);
+    }
+
+    .file-preview-item {
+        background: var(--gray-50);
+        border-radius: 8px;
+        padding: 1rem;
+        border: 1px solid var(--gray-200);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+
+    .file-preview-item:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .word-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, #1e40af, #3b82f6);
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: rgba(43, 87, 154, 0.1);
-        border-radius: 6px;
+        color: white;
+        font-weight: 700;
+        font-size: 0.8rem;
         flex-shrink: 0;
     }
-    
+
     .file-info {
         flex: 1;
-        overflow: hidden;
+        min-width: 0;
     }
-    
+
     .file-name {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         font-weight: 600;
-        color: #0b132b;
-        margin-bottom: 0.15rem;
+        color: var(--gray-800);
+        margin-bottom: 0.25rem;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
-    
+
     .file-size {
         font-size: 0.8rem;
-        color: #64748b;
+        color: var(--gray-500);
+        margin-bottom: 0.25rem;
     }
-    
-    .file-remove-btn {
-        width: 26px;
-        height: 26px;
-        border-radius: 50%;
-        background: #fee2e2;
+
+    .file-pages {
+        font-size: 0.75rem;
+        color: var(--gray-600);
+    }
+
+    .remove-btn {
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        width: 20px;
+        height: 20px;
+        background: var(--error-color);
+        color: white;
         border: none;
+        border-radius: 50%;
+        font-size: 0.7rem;
         cursor: pointer;
-        color: #ef4444;
         display: flex;
         align-items: center;
         justify-content: center;
         transition: all 0.2s ease;
-        margin-left: 0.5rem;
-    }
-    
-    .file-remove-btn:hover {
-        background: #fecaca;
-        transform: scale(1.1);
-    }
-    
-    .file-remove-btn svg {
-        width: 12px;
-        height: 12px;
     }
 
-    /* Compact Options Section */
-    .file-options {
-        background: #f8fafc;
+    .remove-btn:hover {
+        background: #dc2626;
+        transform: scale(1.1);
+    }
+
+    /* Compact options */
+    .options-section {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 0.75rem;
+        margin: 1rem 0;
+        padding: 1rem;
+        background: var(--gray-50);
         border-radius: 8px;
-        padding: 0.8rem 1rem;
-        margin-bottom: 0.8rem;
+        border: 1px solid var(--gray-200);
     }
-    
-    .option-title {
-        font-size: 0.95rem;
-        font-weight: 600;
-        color: #0b132b;
-        margin-bottom: 0.7rem;
-    }
-    
+
     .option-group {
-        margin-bottom: 0.7rem;
+        display: flex;
+        flex-direction: column;
     }
-    
-    .option-group:last-child {
-        margin-bottom: 0;
-    }
-    
+
     .option-label {
-        display: block;
-        font-size: 0.9rem;
-        color: #64748b;
-        margin-bottom: 0.5rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--gray-700);
+        margin-bottom: 0.3rem;
     }
-    
+
     .option-select {
-        width: 100%;
-        padding: 0.75rem;
-        border: 1px solid #e2e8f0;
+        padding: 0.5rem;
+        border: 1px solid var(--gray-300);
         border-radius: 6px;
-        font-size: 0.9rem;
-        color: #0b132b;
-        background-color: white;
+        font-size: 0.8rem;
+        background: white;
         transition: all 0.2s ease;
     }
-    
+
     .option-select:focus {
-        border-color: #4361ee;
+        border-color: var(--primary-color);
         outline: none;
         box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
     }
 
-    /* Compact Action Buttons */
+    /* Compact action buttons */
     .action-buttons {
         display: flex;
-        justify-content: space-between;
-        margin-top: 0.8rem;
+        gap: 0.75rem;
+        margin-top: 1rem;
     }
-    
+
     .action-btn {
-        display: inline-block;
-        padding: 0.75rem 1.5rem;
-        border-radius: 6px;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
         font-weight: 600;
-        font-size: 0.95rem;
+        font-size: 0.85rem;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all 0.2s ease;
+        text-decoration: none;
     }
-    
+
     .secondary-btn {
-        background-color: white;
-        border: 1px solid #e2e8f0;
-        color: #64748b;
+        background: white;
+        border: 2px solid var(--gray-300);
+        color: var(--gray-600);
     }
-    
+
     .secondary-btn:hover {
-        background-color: #f8fafc;
-        color: #0b132b;
+        background: var(--gray-50);
+        color: var(--gray-700);
+        border-color: var(--gray-400);
     }
 
     .primary-btn {
-        background: linear-gradient(135deg, #4361ee, #3a0ca3);
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
         color: white;
         border: none;
-        box-shadow: 0 5px 15px rgba(67, 97, 238, 0.2);
+        box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
     }
-    
+
     .primary-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(67, 97, 238, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
     }
 
-    /* PDF Preview Area */
-    .pdf-preview-area {
-        border: 1px solid #e2e8f0;
-        border-radius: 8px;
-        overflow: hidden;
-        margin: 1rem 0;
-        background-color: white;
-        display: none;
-    }
-    
-    .pdf-preview-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0.75rem 1rem;
-        background-color: #f8fafc;
-        border-bottom: 1px solid #e2e8f0;
-    }
-    
-    .pdf-preview-title {
-        font-size: 1rem;
-        font-weight: 600;
-        color: #0b132b;
-    }
-    
-    .pdf-canvas-container {
-        padding: 1rem;
-        background-color: #f1f5f9;
-        max-height: 500px;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-height: 400px;
-    }
-    
-    .pdf-canvas-container iframe {
-        background-color: white;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        width: 100%;
-        height: 400px;
-        border: none;
-        border-radius: 4px;
+    .primary-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
     }
 
-    /* Loading Indicator */
-    .loading-indicator {
-        display: none;
-        text-align: center;
-        padding: 1.5rem;
-        background-color: rgba(255, 255, 255, 0.9);
-        position: absolute;
+    /* Optimized loading overlay */
+    .loading-overlay {
+        position: fixed;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
-        z-index: 100;
-        border-radius: 15px;
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(4px);
+        display: none;
         align-items: center;
         justify-content: center;
-        flex-direction: column;
+        z-index: 1000;
     }
-    
+
+    .loading-content {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem 1.5rem;
+        text-align: center;
+        min-width: 280px;
+        box-shadow: var(--shadow-xl);
+        animation: slideInUp 0.3s ease-out;
+    }
+
+    @keyframes slideInUp {
+        from {
+            transform: translateY(50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
     .loader {
         width: 40px;
         height: 40px;
-        border-radius: 50%;
-        border: 4px solid #f0f5ff;
-        border-top-color: #4361ee;
-        animation: spin 1s linear infinite;
-        margin-bottom: 0.9rem;
+        position: relative;
+        margin: 0 auto 1rem;
     }
-    
+
+    .loader::before {
+        content: '';
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 3px solid var(--gray-200);
+        border-top: 3px solid var(--primary-color);
+        animation: spin 1s linear infinite;
+    }
+
     @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .loading-progress {
+        width: 100%;
+        height: 4px;
+        background: var(--gray-200);
+        border-radius: 2px;
+        margin: 0.75rem 0;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        width: 0%;
+        height: 100%;
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        border-radius: 2px;
+        transition: width 0.3s ease;
+    }
+
+    /* Result section */
+    .result-section {
+        display: none;
+        margin-top: 1rem;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        border-radius: 12px;
+        border: 2px solid #0ea5e9;
+        animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateY(20px);
+            opacity: 0;
+        }
         to {
-            transform: rotate(360deg);
+            transform: translateY(0);
+            opacity: 1;
         }
     }
-    
-    .loading-text {
-        font-size: 1rem;
-        color: #0b132b;
-        font-weight: 600;
-    }
 
-    /* Hide the default file input */
-    .file-input {
-        display: none;
-    }
-
-    /* Instructions Section */
-    .instructions-section {
-        padding: 5rem 0;
-        background-color: #f8fafc;
-    }
-    
-    .section-title {
+    .result-header {
         text-align: center;
-        margin-bottom: 3rem;
-    }
-    
-    .section-title h2 {
-        font-size: 2.2rem;
-        color: #0b132b;
-        font-weight: 700;
         margin-bottom: 1rem;
     }
-    
-    .section-title p {
-        color: #64748b;
-        max-width: 700px;
-        margin: 0 auto;
-        font-size: 1.1rem;
-        line-height: 1.6;
+
+    .result-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
     }
-    
-    .instruction-grid {
+
+    .success-icon {
+        width: 24px;
+        height: 24px;
+        background: var(--success-color);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: bounceIn 0.5s ease-out;
+    }
+
+    @keyframes bounceIn {
+        0% { transform: scale(0); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+
+    .result-info {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 2rem;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+        background: rgba(255, 255, 255, 0.7);
+        border-radius: 6px;
+    }
+
+    .result-info-item {
+        text-align: center;
+    }
+
+    .result-info-label {
+        font-size: 0.7rem;
+        color: var(--gray-600);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .result-info-value {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-top: 0.2rem;
+    }
+
+    .download-section {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: center;
+    }
+
+    .download-btn {
+        background: linear-gradient(135deg, var(--success-color), #059669);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .download-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    /* Messages */
+    .message {
+        padding: 0.75rem 1rem;
+        border-radius: 6px;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+        animation: slideIn 0.3s ease;
+    }
+
+    .message-error {
+        background: #fef2f2;
+        color: #dc2626;
+        border-left: 3px solid #dc2626;
+    }
+
+    .message-success {
+        background: #f0fdf4;
+        color: #16a34a;
+        border-left: 3px solid #16a34a;
+    }
+
+    .message-icon {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+    }
+
+    /* Content sections */
+    .content-section {
+        padding: 3rem 1rem;
         max-width: 1200px;
         margin: 0 auto;
     }
-    
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-bottom: 0.75rem;
+        line-height: 1.2;
+    }
+
+    .section-subtitle {
+        font-size: 1.1rem;
+        color: var(--gray-600);
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.5;
+    }
+
+    /* Instructions grid */
+    .instructions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
     .instruction-card {
         background: white;
         border-radius: 12px;
-        padding: 2rem;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-        position: relative;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        padding: 1.5rem;
+        box-shadow: var(--shadow-md);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
         text-align: center;
+        border: 1px solid var(--gray-200);
     }
-    
+
     .instruction-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
     }
-    
+
     .instruction-icon {
-        width: 70px;
-        height: 70px;
+        width: 60px;
+        height: 60px;
         background: rgba(67, 97, 238, 0.1);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto 1.5rem;
+        margin: 0 auto 1rem;
     }
-    
+
     .instruction-icon svg {
-        width: 32px;
-        height: 32px;
-        color: #4361ee;
+        width: 28px;
+        height: 28px;
+        color: var(--primary-color);
     }
-    
+
     .instruction-card h3 {
-        font-size: 1.3rem;
-        color: #0b132b;
-        margin-bottom: 1rem;
+        font-size: 1.2rem;
+        color: var(--gray-900);
+        margin-bottom: 0.75rem;
         font-weight: 600;
     }
-    
+
     .instruction-card p {
-        color: #64748b;
-        font-size: 1rem;
-        line-height: 1.6;
+        color: var(--gray-600);
+        font-size: 0.95rem;
+        line-height: 1.5;
     }
 
-    /* Features Section */
-    .features-section {
-        padding: 5rem 0;
-        background: white;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .features-section::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 300px;
-        height: 300px;
-        background: rgba(67, 97, 238, 0.05);
-        border-radius: 50%;
-        transform: translate(100px, -150px);
-        z-index: 0;
-    }
-
-    .features-section::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 400px;
-        height: 400px;
-        background: rgba(58, 12, 163, 0.03);
-        border-radius: 50%;
-        transform: translate(-200px, 200px);
-        z-index: 0;
-    }
-
-    .features-section .container {
-        position: relative;
-        z-index: 1;
-    }
-
+    /* Features grid */
     .features-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 2.5rem;
-        max-width: 1200px;
-        margin: 0 auto;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
     }
 
     .feature-card {
-        background: #ffffff;
-        border-radius: 16px;
-        padding: 2.5rem 2rem;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: var(--shadow-md);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
         text-align: center;
+        border: 1px solid var(--gray-200);
         position: relative;
         overflow: hidden;
-        border: 1px solid rgba(67, 97, 238, 0.08);
     }
 
     .feature-card::after {
@@ -690,1129 +737,862 @@
         left: 0;
         width: 100%;
         height: 3px;
-        background: linear-gradient(90deg, #4361ee, #3a0ca3);
+        background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
         transform: scaleX(0);
         transform-origin: left;
         transition: transform 0.3s ease;
     }
 
     .feature-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 20px 40px rgba(67, 97, 238, 0.1);
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
     }
 
     .feature-card:hover::after {
         transform: scaleX(1);
     }
 
-    .feature-card-icon-wrapper {
-        margin-bottom: 1.8rem;
-        position: relative;
-    }
-
-    .feature-card-icon {
-        width: 80px;
-        height: 80px;
-        background: rgba(67, 97, 238, 0.08);
+    .feature-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(67, 97, 238, 0.1);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto;
-        position: relative;
-        z-index: 1;
-        transition: all 0.3s ease;
+        margin: 0 auto 1rem;
+        transition: all 0.2s ease;
     }
 
-    .feature-card:hover .feature-card-icon {
-        background: rgba(67, 97, 238, 0.12);
+    .feature-card:hover .feature-icon {
+        background: rgba(67, 97, 238, 0.15);
         transform: scale(1.05);
     }
 
-    .feature-card-icon::before {
-        content: '';
-        position: absolute;
-        width: 70px;
-        height: 70px;
-        border-radius: 50%;
-        border: 2px dashed rgba(67, 97, 238, 0.2);
-        animation: rotate 20s linear infinite;
-    }
-
-    @keyframes rotate {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-
-    .feature-card-icon svg {
-        width: 32px;
-        height: 32px;
-        color: #4361ee;
-        transition: all 0.3s ease;
-    }
-
-    .feature-card:hover .feature-card-icon svg {
-        transform: scale(1.1);
-        color: #3a0ca3;
+    .feature-icon svg {
+        width: 28px;
+        height: 28px;
+        color: var(--primary-color);
     }
 
     .feature-card h3 {
-        font-size: 1.3rem;
-        color: #0b132b;
-        margin-bottom: 1rem;
-        font-weight: 700;
-        position: relative;
-        display: inline-block;
+        font-size: 1.2rem;
+        color: var(--gray-900);
+        margin-bottom: 0.75rem;
+        font-weight: 600;
     }
 
     .feature-card p {
-        color: #64748b;
-        font-size: 1rem;
-        line-height: 1.7;
-        max-width: 280px;
-        margin: 0 auto;
+        color: var(--gray-600);
+        font-size: 0.95rem;
+        line-height: 1.5;
     }
-    
-    /* SEO Content Section */
-    .seo-content {
-        padding: 5rem 0;
-        background-color: #f8fafc;
-        background-image: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
-        position: relative;
-        border-top: 1px solid rgba(79, 70, 229, 0.1);
-        border-bottom: 1px solid rgba(79, 70, 229, 0.1);
-    }
-    
-    .seo-content::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 5px;
-        height: 100%;
-        background: linear-gradient(to bottom, #4361ee, #3a0ca3);
-        border-radius: 0 2px 2px 0;
-    }
-    
-    .seo-content .container {
-        position: relative;
-        padding-left: 2rem;
-    }
-    
-    .seo-content h2 {
-        font-size: 2.2rem;
-        color: #0b132b;
-        margin-bottom: 1.8rem;
-        font-weight: 800;
-        padding-left: 1.5rem;
-        position: relative;
-        display: inline-block;
-    }
-    
-    .seo-content h2::after {
-        content: '';
-        position: absolute;
-        bottom: -10px;
-        left: 1.5rem;
-        width: 80px;
-        height: 4px;
-        background: linear-gradient(90deg, #4361ee, #3a0ca3);
-        border-radius: 2px;
-    }   
-    
-    .seo-content h3 {
-        font-size: 1.6rem;
-        color: #0b132b;
-        margin: 2.5rem 0 1.2rem;
-        font-weight: 700;
-        padding-left: 1.5rem;
-        position: relative;
-    }
-    
-    .seo-content h3::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 8px;
-        height: 8px;
-        background: #4361ee;
-        border-radius: 50%;
-    }
-      
-    .seo-content p, .seo-content li {
-        color: #475569;
-        font-size: 1.05rem;
-        line-height: 1.8;
-        margin-bottom: 1.2rem;
-        padding-left: 1.5rem;
-    }
-    
-    .seo-content p:first-of-type {
-        font-size: 1.15rem;
-        color: #1e293b;
-        font-weight: 500;
-    }  
-    
-    .seo-content ul, .seo-content ol {
-        margin-left: 3rem;
-        margin-bottom: 2rem;
-    }
-    
-    .seo-content li {
-        margin-bottom: 0.8rem;
-        position: relative;
-    }
-    
-    .seo-content li strong {
-        color: #3a0ca3;
-        font-weight: 600;
-    }
-    
+
     /* FAQ Section */
-    .faq-section {
-        padding: 5rem 0;
-        background-color: white;
-    }
-    
     .faq-container {
         max-width: 800px;
-        margin: 0 auto;
+        margin: 2rem auto 0;
     }
-    
+
     .faq-item {
-        border-bottom: 1px solid #e2e8f0;
-        margin-bottom: 0;
+        border-bottom: 1px solid var(--gray-200);
+        margin-bottom: 0.75rem;
     }
-    
-    .faq-item:last-child {
-        border-bottom: none;
-    }
-    
+
     .faq-question {
-        display:display: flex;
+        font-size: 1rem;
+        color: var(--gray-900);
+        font-weight: 600;
+        padding: 1rem 0;
+        cursor: pointer;
+        display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1.5rem 0;
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #0b132b;
-        cursor: pointer;
-        transition: color 0.3s ease;
+        transition: color 0.2s ease;
     }
-    
+
     .faq-question:hover {
-        color: #4361ee;
+        color: var(--primary-color);
     }
-    
+
     .faq-question svg {
-        width: 20px !important;
-        height: 20px !important;
-        color: #64748b;
-        transition: transform 0.3s ease, color 0.3s ease;
-        flex-shrink: 0;
-        margin-left: 1rem;
+        width: 16px;
+        height: 16px;
+        color: var(--gray-500);
+        transition: transform 0.2s ease;
     }
-    
-    .faq-question:hover svg {
-        color: #4361ee;
-    }
-    
+
     .faq-item.active .faq-question svg {
         transform: rotate(180deg);
-        color: #4361ee;
     }
-    
+
     .faq-answer {
-        padding: 0 0 1.5rem 0;
-        display: none;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease, padding 0.3s ease;
+        padding: 0;
     }
-    
+
     .faq-item.active .faq-answer {
-        display: block;
+        max-height: 300px;
+        padding-bottom: 1rem;
     }
-    
+
     .faq-answer p {
-        color: #64748b;
+        color: var(--gray-600);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 0.75rem;
+    }
+
+    /* SEO Content */
+    .seo-content {
+        background: var(--gray-50);
+        padding: 3rem 1rem;
+        border-top: 1px solid var(--gray-200);
+    }
+
+    .seo-content h2 {
+        font-size: 1.8rem;
+        color: var(--gray-900);
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+
+    .seo-content h3 {
+        font-size: 1.4rem;
+        color: var(--gray-900);
+        margin: 2rem 0 1rem;
+        font-weight: 600;
+    }
+
+    .seo-content p {
+        color: var(--gray-700);
         font-size: 1rem;
         line-height: 1.7;
-        margin: 0 0 1rem 0;
+        margin-bottom: 1rem;
     }
-    
-    .faq-answer ul {
+
+    .seo-content ul, .seo-content ol {
         margin-left: 1.5rem;
-        margin-top: 1rem;
-    }
-    
-    .faq-answer li {
-        color: #64748b;
-        margin-bottom: 0.5rem;
-        padding-left: 0;
-    }
-    
-    .faq-answer li strong {
-        color: #3a0ca3;
-        font-weight: 600;
-    }
-    
-    /* Mini CTA Section */
-    .mini-cta-direct-fix {
-        padding: 3rem 0 3rem;
-        background: linear-gradient(135deg, #4361ee, #3a0ca3);
-        text-align: center;
-        color: white;
-        margin-bottom: 0;
-        position: relative;
-        z-index: 1;
-    }
-    
-    .mini-cta-direct-fix h2 {
-        font-size: 1.8rem;
-        font-weight: 700;
-        margin-bottom: 0.8rem;
-    }
-    
-    .mini-cta-direct-fix p {
-        font-size: 1rem;
         margin-bottom: 1.5rem;
-        max-width: 700px;
-        margin-left: auto;
-        margin-right: auto;
+    }
+
+    .seo-content li {
+        color: var(--gray-700);
+        margin-bottom: 0.5rem;
+        line-height: 1.6;
+    }
+
+    /* CTA Section */
+    .cta-section {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: white;
+        text-align: center;
+        padding: 2rem 1rem;
+    }
+
+    .cta-section h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+    }
+
+    .cta-section p {
+        margin-bottom: 1.5rem;
         opacity: 0.9;
     }
-    
-    .cta-btn-direct {
-        display: inline-block;
+
+    .cta-btn {
         background: white;
-        color: #3a0ca3;
+        color: var(--primary-dark);
         font-weight: 600;
-        padding: 0.8rem 2rem;
+        padding: 0.75rem 1.5rem;
         border-radius: 8px;
         text-decoration: none;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.2s ease;
+        display: inline-block;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
-    
-    .cta-btn-direct:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+
+    .cta-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
     }
-    
-    /* Responsive Design */
+
+    /* Mobile optimizations */
     @media (max-width: 768px) {
-        .tool-section {
-            padding: 1.5rem 0 3rem 0;
+        .main-wrapper {
+            padding: 0.5rem;
+        }
+        
+        .tool-header {
+            padding: 1rem 0.75rem;
         }
         
         .tool-header h1 {
-            font-size: 2rem;
+            font-size: 1.5rem;
         }
         
         .tool-header p {
-            font-size: 1rem;
+            font-size: 0.85rem;
         }
         
-        .converter-container {
-            padding: 1.5rem;
-            margin: 0 0.5rem;
+        .content-area {
+            padding: 0.75rem;
         }
         
         .upload-area {
-            padding: 2rem 1rem;
+            padding: 1.5rem 0.75rem;
         }
         
         .upload-icon {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
         }
         
         .upload-icon svg {
-            width: 30px;
-            height: 30px;
-        }
-        
-        .upload-text h3 {
-            font-size: 1.2rem;
-        }
-        
-        .file-options {
-            padding: 1rem;
-        }
-        
-        .action-buttons {
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        
-        .action-btn {
-            width: 100%;
-        }
-
-        .instruction-grid, .features-grid {
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .instruction-card, .feature-card {
-            padding: 1.5rem;
-        }
-        
-        .instruction-icon, .feature-card-icon {
-            width: 60px;
-            height: 60px;
-        }
-        
-        .instruction-icon svg, .feature-card-icon svg {
             width: 24px;
             height: 24px;
         }
         
-        .mini-cta-direct-fix {
-            padding: 2.5rem 0 2.5rem;
+        .upload-text h3 {
+            font-size: 1.1rem;
+        }
+
+        .upload-text p {
+            font-size: 0.85rem;
+        }
+
+    .options-section {
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            padding: 0.75rem;
         }
         
-        .faq-question {
-            font-size: 1rem;
-            padding: 1.2rem 0;
+        .action-buttons, .download-section {
+            flex-direction: column;
         }
         
-        .faq-question svg {
-            width: 18px !important;
-            height: 18px !important;
+        .result-section {
+            padding: 1rem;
         }
         
-        .faq-answer {
-            padding: 0 0 1.2rem 0;
+        .result-info {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .content-section {
+            padding: 2rem 0.75rem;
         }
         
-        .faq-answer p {
-            font-size: 0.95rem;
-        }
-    }
-    
-    @media (max-width: 480px) {
-        .converter-container {
-            margin: 0;
-            border-radius: 0;
+        .section-title {
+            font-size: 1.6rem;
         }
         
-        .upload-area {
-            padding: 1.5rem 1rem;
-        }
-        
-        .section-title h2 {
-            font-size: 1.8rem;
-        }
-        
-        .section-title p {
+        .section-subtitle {
             font-size: 1rem;
         }
         
-        .mini-cta-direct-fix {
-            padding: 2rem 0 2rem;
+        .instructions-grid, .features-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
         }
         
-        .faq-question {
-            font-size: 0.95rem;
-            padding: 1rem 0;
-        }
-        
-        .faq-question svg {
-            width: 16px !important;
-            height: 16px !important;
-        }
-        
-        .faq-answer {
-            padding: 0 0 1rem 0;
-        }
-        
-        .faq-answer p {
-            font-size: 0.9rem;
+        .instruction-card, .feature-card {
+            padding: 1.25rem;
         }
     }
 
-    /* Message Styles */
-    .message {
-        padding: 1rem 1.5rem;
-        border-radius: 8px;
-        margin: 1rem 0;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        animation: slideIn 0.3s ease;
-    }
-    
-    .message-error {
-        background-color: #fee2e2;
-        color: #dc2626;
-        border-left: 4px solid #dc2626;
-    }
-    
-    .message-success {
-        background-color: #dcfce7;
-        color: #166534;
-        border-left: 4px solid #16a34a;
-    }
-    
-    .message-icon {
-        width: 20px;
-        height: 20px;
-        flex-shrink: 0;
-    }
-    
-    @keyframes slideIn {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
+    @media (max-width: 480px) {
+        .tool-header h1 {
+            font-size: 1.3rem;
         }
-        to {
-            opacity: 1;
-            transform: translateY(0);
+        
+        .upload-area {
+            padding: 1rem 0.5rem;
         }
+        
+        .options-section {
+            grid-template-columns: 1fr;
+        }
+        
+        .section-title {
+            font-size: 1.4rem;
+        }
+    }
+
+    /* Performance optimizations */
+    .file-input {
+        display: none;
+    }
+
+    /* Lazy loading optimization */
+    .lazy-load {
+        display: block;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+    }
+
+    .lazy-load.loaded {
+        opacity: 1;
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<!-- Tool Header Section -->
-<section class="tool-section">
-    <div class="container">
+<div class="main-wrapper">
+    <div class="converter-container">
+        <!-- Header -->
         <div class="tool-header">
-            <h1>Word to PDF Converter Online - SmallPDF.us</h1>
-            <p>Convert Word to PDF instantly with SmallPDF.us free online Word to PDF converter. Transform DOC and DOCX files to PDF format while preserving perfect formatting and layout.</p>
+            <h1>Word to PDF Converter - SmallPDF.us</h1>
+            <p>Convert Word to PDF online free. Transform DOC and DOCX documents to professional PDF format</p>
         </div>
-        
-        <div class="converter-container">
+
+        <!-- Main Content -->
+        <div class="content-area">
             <!-- Upload Area -->
             <div class="upload-area" id="uploadArea">
                 <div class="upload-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                        <polyline points="14 2 14 8 20 8"></polyline>
-                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                        <line x1="16" y1="17" x2="8" y2="17"></line>
-                        <polyline points="10 9 9 9 8 9"></polyline>
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
                     </svg>
                 </div>
                 <div class="upload-text">
-                    <h3>Upload Word Document to SmallPDF.us</h3>
-                    <p>Drag & drop your DOC or DOCX file here to convert Word to PDF online</p>
+                    <h3>Upload Word Document</h3>
+                    <p>Drag & drop or click to browse<br>DOC, DOCX files supported (Max 50MB)</p>
                     <button class="upload-btn" id="selectFileBtn">Select Word File</button>
                 </div>
                 <input type="file" id="fileInput" class="file-input" accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
             </div>
-            
-            <!-- File Container (Initially Hidden) -->
+
+            <!-- File Preview Container -->
             <div class="file-container" id="fileContainer">
-                <!-- Compact File Preview -->
-                <div class="file-preview" id="filePreview">
-                    <!-- Will be populated dynamically -->
+                <div class="file-header">
+                    <h3>Selected Word Document</h3>
+                    <button class="add-more-btn" id="addMoreBtn">
+                        <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Select Different
+                    </button>
                 </div>
-                
-                <!-- Word to PDF Conversion Options -->
-                <div class="file-options">
-                    <div class="option-title">Word to PDF Conversion Settings</div>
-                    
-                    <div class="option-group">
-                        <label class="option-label" for="pdfQuality">PDF Output Quality</label>
-                        <select class="option-select" id="pdfQuality">
-                            <option value="high">High Quality (Best for Word to PDF conversion)</option>
-                            <option value="medium">Medium Quality (Balanced file size)</option>
-                            <option value="low">Low Quality (Smaller PDF file)</option>
-                        </select>
+
+                <!-- File Preview -->
+                <div class="file-preview-item" id="filePreviewItem">
+                    <div class="word-icon">DOC</div>
+                    <div class="file-info">
+                        <div class="file-name" id="fileName">document.docx</div>
+                        <div class="file-size" id="fileSize">0 MB</div>
+                        <div class="file-pages" id="filePages">0 pages</div>
                     </div>
-                    
+                    <button class="remove-btn" id="removeBtn" aria-label="Remove file">×</button>
+                </div>
+
+                <!-- Options Section -->
+                <div class="options-section">
                     <div class="option-group">
-                        <label class="option-label" for="pageSize">PDF Page Size</label>
+                        <label class="option-label" for="pageSize">Page Size</label>
                         <select class="option-select" id="pageSize">
-                            <option value="original">Original Size (From Word document)</option>
-                            <option value="a4">A4 (Most common PDF format)</option>
-                            <option value="letter">US Letter</option>
-                            <option value="legal">US Legal</option>
+                            <option value="original" selected>Original</option>
+                            <option value="a4">A4</option>
+                            <option value="letter">Letter</option>
+                            <option value="a3">A3</option>
+                            <option value="a5">A5</option>
+                            <option value="legal">Legal</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label class="option-label" for="quality">Quality</label>
+                        <select class="option-select" id="quality">
+                            <option value="high" selected>High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label class="option-label" for="optimization">Optimization</label>
+                        <select class="option-select" id="optimization">
+                            <option value="print" selected>Print</option>
+                            <option value="web">Web</option>
+                            <option value="archive">Archive</option>
                         </select>
                     </div>
                 </div>
-                
+
                 <!-- Action Buttons -->
                 <div class="action-buttons">
-                    <button class="action-btn secondary-btn" id="changeFileBtn">
-                        Change Word File
+                    <button class="action-btn secondary-btn" id="clearBtn">
+                        <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                        Clear File
                     </button>
                     <button class="action-btn primary-btn" id="convertBtn">
-                        Convert Word to PDF
+                        <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        Convert to PDF
                     </button>
                 </div>
             </div>
-            
-            <!-- PDF Preview Area (Initially Hidden) -->
-            <div class="pdf-preview-area" id="pdfPreviewArea">
-                <div class="pdf-preview-header">
-                    <div class="pdf-preview-title" id="previewTitle">Converted PDF Preview</div>
+
+            <!-- Result Section -->
+            <div class="result-section" id="resultSection">
+                <div class="result-header">
+                    <h2 class="result-title">
+                        <div class="success-icon">
+                            <svg style="width: 14px; height: 14px; color: white;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        PDF Document Created Successfully!
+                    </h2>
+                    <p style="color: #64748b; font-size: 0.9rem; margin: 0;">Your Word document has been converted to PDF format</p>
                 </div>
-                <div class="pdf-canvas-container" id="pdfCanvasContainer">
-                    <!-- PDF preview will be displayed here -->
+
+                <div class="result-info" id="resultInfo">
+                    <div class="result-info-item">
+                        <div class="result-info-label">Page Size</div>
+                        <div class="result-info-value" id="resultPageSize">A4</div>
+                    </div>
+                    <div class="result-info-item">
+                        <div class="result-info-label">Quality</div>
+                        <div class="result-info-value" id="resultQuality">High</div>
+                    </div>
+                    <div class="result-info-item">
+                        <div class="result-info-label">Optimization</div>
+                        <div class="result-info-value" id="resultOptimization">Print</div>
+                    </div>
+                    <div class="result-info-item">
+                        <div class="result-info-label">Size</div>
+                        <div class="result-info-value" id="resultSize">-</div>
+                    </div>
                 </div>
-                <div class="action-buttons">
-                    <button class="action-btn secondary-btn" id="editFilesBtn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: -3px;">
-                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                        </svg>
-                        Back to Word Document
-                    </button>
-                    <button class="action-btn primary-btn" id="downloadBtn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: -3px;">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                            <polyline points="7 10 12 15 17 10"></polyline>
-                            <line x1="12" y1="15" x2="12" y2="3"></line>
+
+                <div class="download-section">
+                    <button class="download-btn" id="downloadBtn">
+                        <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
                         Download PDF
                     </button>
+                    <button class="action-btn secondary-btn" id="startOverBtn">
+                        <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        Convert Another
+                    </button>
                 </div>
-            </div>      
-            
-            <!-- Loading Indicator -->
-            <div class="loading-indicator" id="loadingIndicator">
-                <div class="loader"></div>
-                <div class="loading-text" id="loadingText">SmallPDF.us is converting your Word document to PDF...</div>
             </div>
         </div>
     </div>
-</section>
+</div>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-content">
+        <div class="loader"></div>
+        <h3 style="font-size: 1.1rem; font-weight: 600; color: #1e293b; margin-bottom: 0.5rem;">Converting to PDF...</h3>
+        <p style="color: #64748b; margin-bottom: 1rem; font-size: 0.9rem;">Processing your Word document</p>
+        <div class="loading-progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <p style="font-size: 0.8rem; color: #64748b; margin: 0.5rem 0 0;" id="loadingStatus">Preparing...</p>
+    </div>
+</div>
 
 <!-- Instructions Section -->
-<section class="instructions-section">
-    <div class="container">
-        <div class="section-title">
-            <h2>How to Convert Word to PDF with SmallPDF.us</h2>
-            <p>Transform your Word documents into PDF format in just a few simple steps using our free online Word to PDF converter</p>
+<section class="content-section" style="background: white;">
+    <div class="section-header">
+        <h2 class="section-title">How to Convert Word to PDF with SmallPDF.us</h2>
+        <p class="section-subtitle">Learn how to convert Word to PDF, transform DOC/DOCX files to professional PDF format using our Word to PDF converter</p>
+    </div>
+    
+    <div class="instructions-grid">
+        <div class="instruction-card">
+            <div class="instruction-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+            </div>
+            <h3>1. Upload Word Document</h3>
+            <p>Select your Word file (DOC or DOCX) to convert to PDF using our SmallPDF.us converter. Upload any Word document up to 50MB for conversion to PDF format.</p>
         </div>
         
-        <div class="instruction-grid">
-            <div class="instruction-card">
-                <div class="instruction-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                        <polyline points="14 2 14 8 20 8"></polyline>
-                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                        <line x1="16" y1="17" x2="8" y2="17"></line>
-                        <polyline points="10 9 9 9 8 9"></polyline>
-                    </svg>
-                </div>
-                <h3>Upload Word File to SmallPDF.us</h3>
-                <p>Select the DOC or DOCX file you want to convert by clicking "Select Word File" or simply drag and drop your Word document into our online converter tool.</p>
+        <div class="instruction-card">
+            <div class="instruction-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
             </div>
-            
-            <div class="instruction-card">
-                <div class="instruction-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                    </svg>
-                </div>
-                <h3>Configure Word to PDF Settings</h3>
-                <p>Choose your preferred PDF output quality and page size settings on SmallPDF.us. Our default settings are optimized for most Word to PDF conversions, but you can customize them as needed.</p>
+            <h3>2. Configure PDF Settings</h3>
+            <p>Choose your preferred page size, quality level, and optimization settings. Select from A4, Letter, or original size, and optimize for print, web, or archive use.</p>
+        </div>
+        
+        <div class="instruction-card">
+            <div class="instruction-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
             </div>
-            
-            <div class="instruction-card">
-                <div class="instruction-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="7 10 12 15 17 10"></polyline>
-                        <line x1="12" y1="15" x2="12" y2="3"></line>
-                    </svg>
-                </div>
-                <h3>Convert Word to PDF and Download</h3>
-                <p>Click "Convert Word to PDF" button on SmallPDF.us and wait a few seconds for the conversion to complete. Once processed, your PDF file will be ready to download instantly with preserved formatting.</p>
-            </div>
+            <h3>3. Download PDF Document</h3>
+            <p>Complete your Word to PDF conversion and download your professional PDF document. SmallPDF.us ensures high-quality conversion with preserved formatting.</p>
         </div>
     </div>
 </section>
 
 <!-- Features Section -->
-<section class="features-section" id="features">
-    <div class="container">
-        <div class="section-title">
-            <h2>Why Choose SmallPDF.us Word to PDF Converter?</h2>
-            <p>Experience the superior features that make SmallPDF.us the preferred choice for converting Word documents to PDF online</p>
+<section class="content-section" style="background: #f8fafc;">
+    <div class="section-header">
+        <h2 class="section-title">Why SmallPDF.us is the Best Word to PDF Converter</h2>
+        <p class="section-subtitle">Discover why millions choose SmallPDF.us to convert Word to PDF, transform documents, and create professional PDF files</p>
+    </div>
+    
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+            </div>
+            <h3>Perfect Word to PDF Conversion</h3>
+            <p>SmallPDF.us preserves all formatting, fonts, and layouts when converting Word to PDF. Maintain professional document appearance with pixel-perfect accuracy.</p>
         </div>
         
-        <div class="features-grid">
-            <!-- Card 1: Perfect Formatting -->
-            <div class="feature-card">
-                <div class="feature-card-icon-wrapper">
-                    <div class="feature-card-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                        </svg>
-                    </div>
-                </div>
-                <h3>Perfect Formatting Preservation</h3>
-                <p>SmallPDF.us Word to PDF converter maintains all text, images, formatting, and layout from your original Word document, ensuring professional results every time.</p>
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 12l2 2 4-4"></path>
+                    <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"></path>
+                    <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"></path>
+                    <path d="M13 12h3"></path>
+                    <path d="M8 12H5"></path>
+                </svg>
             </div>
-            
-            <!-- Card 2: 100% Secure -->
-            <div class="feature-card">
-                <div class="feature-card-icon-wrapper">
-                    <div class="feature-card-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                        </svg>
-                    </div>
-                </div>
-                <h3>100% Secure Word to PDF</h3>
-                <p>Your Word files are encrypted with 256-bit SSL on SmallPDF.us and automatically deleted after conversion to ensure complete privacy and security for your documents.</p>
+            <h3>Multiple Format Support</h3>
+            <p>Convert both DOC and DOCX files to PDF format. SmallPDF.us supports all Microsoft Word versions and ensures compatibility across all devices.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
             </div>
-            
-            <!-- Card 3: Fast Processing -->
-            <div class="feature-card">
-                <div class="feature-card-icon-wrapper">
-                    <div class="feature-card-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
-                    </div>
-                </div>
-                <h3>Lightning-Fast Conversion</h3>
-                <p>SmallPDF.us powerful cloud servers convert your Word documents to PDF within seconds, saving you time and ensuring high efficiency for your workflow needs.</p>
+            <h3>Lightning-Fast Processing</h3>
+            <p>Experience instant Word to PDF conversion with SmallPDF.us. Our optimized servers process your Word documents and create PDF files in seconds.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
             </div>
-            
-            <!-- Card 4: Font Embedding -->
-            <div class="feature-card">
-                <div class="feature-card-icon-wrapper">
-                    <div class="feature-card-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                            <polyline points="2 17 12 22 22 17"></polyline>
-                            <polyline points="2 12 12 17 22 12"></polyline>
-                        </svg>
-                    </div>
-                </div>
-                <h3>Advanced Font Embedding</h3>
-                <p>All fonts from your Word document are automatically embedded into the PDF by SmallPDF.us, ensuring that your text appears exactly as intended on any device.</p>
+            <h3>Secure Word to PDF Conversion</h3>
+            <p>SmallPDF.us protects your privacy during Word to PDF conversion. All uploaded Word files are encrypted and automatically deleted after processing.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                </svg>
             </div>
-            
-            <!-- Card 5: Free & No Registration -->
-            <div class="feature-card">
-                <div class="feature-card-icon-wrapper">
-                    <div class="feature-card-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-                            <line x1="7" y1="7" x2="7.01" y2="7"></line>
-                        </svg>
-                    </div>
-                </div>
-                <h3>Free Online Word to PDF Converter</h3>
-                <p>Convert Word to PDF completely free on SmallPDF.us without any hidden costs or limitations. No registration or account creation required - just upload and convert.</p>
+            <h3>Professional PDF Output</h3>
+            <p>Create high-quality PDF documents from Word files. SmallPDF.us generates professional PDFs perfect for business, academic, or personal use.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                </svg>
             </div>
-            
-            <!-- Card 6: Cross-Platform -->
-            <div class="feature-card">
-                <div class="feature-card-icon-wrapper">
-                    <div class="feature-card-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="2" y1="12" x2="22" y2="12"></line>
-                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                        </svg>
-                    </div>
-                </div>
-                <h3>Universal Compatibility</h3>
-                <p>SmallPDF.us Word to PDF converter works flawlessly on all devices and operating systems - Windows, Mac, iOS, Android. Convert Word to PDF from anywhere with internet access.</p>
-            </div>
+            <h3>Free Word to PDF Converter</h3>
+            <p>Convert Word to PDF completely free with SmallPDF.us. No hidden costs, no watermarks, no registration required. Enjoy unlimited Word to PDF conversions.</p>
         </div>
     </div>
 </section>
-
 <!-- SEO Content Section -->
 <section class="seo-content">
-    <div class="container">
-        <h2>SmallPDF.us - The Best Online Word to PDF Converter</h2>
-        <p>SmallPDF.us provides the most reliable online Word to PDF converter that transforms your Microsoft Word documents into professional PDF files in seconds. Our free Word to PDF conversion service maintains perfect formatting and is designed to make document conversion as simple as possible.</p>
+    <div class="content-section">
+        <h2>SmallPDF.us - The Ultimate Word to PDF Converter Online</h2>
+        <p>SmallPDF.us is the leading online platform to <strong>convert Word to PDF</strong> with professional results. Our advanced <strong>Word to PDF converter</strong> allows you to effortlessly transform Word documents into high-quality <strong>PDF</strong> files, creating professional documents that preserve formatting and ensure universal compatibility. Whether you need to convert a single DOC file or transform complex DOCX documents, SmallPDF.us delivers exceptional quality and reliability.</p>
         
         <h3>Why Choose SmallPDF.us for Word to PDF Conversion?</h3>
-        <p>When you need to convert Word to PDF online, SmallPDF.us offers several distinct advantages that set us apart from other Word to PDF converters:</p>
+        <p>When you need to <strong>convert Word to PDF</strong>, SmallPDF.us stands out as the premier choice among online converters. Our <strong>Word to PDF converter</strong> combines cutting-edge technology with intelligent formatting preservation to deliver superior results. Here's what makes SmallPDF.us the best solution to <strong>convert DOC to PDF</strong> and <strong>DOCX to PDF</strong> formats:</p>
         <ul>
-            <li><strong>Superior Formatting Preservation:</strong> Our Word to PDF converter maintains all text styling, images, tables, and complex layouts from your original Word document with 99% accuracy.</li>
-            <li><strong>Universal PDF Compatibility:</strong> PDF files created by SmallPDF.us can be opened on any device without requiring Microsoft Word or specific software installations.</li>
-            <li><strong>Completely Free Word to PDF Converter:</strong> Convert Word to PDF at no cost with SmallPDF.us - no watermarks, file size limits, or unwanted subscription requirements.</li>
-            <li><strong>Enhanced Document Security:</strong> All uploaded Word documents are protected with bank-grade encryption on SmallPDF.us and automatically deleted after conversion.</li>
-            <li><strong>Professional-Quality PDF Output:</strong> Generate publication-ready PDFs that maintain the exact appearance and formatting of your original Word document.</li>
-            <li><strong>Lightning-Fast Processing:</strong> SmallPDF.us cloud infrastructure processes Word to PDF conversion in under 30 seconds for most documents.</li>
+            <li><strong>Advanced Conversion Technology:</strong> Our proprietary algorithms ensure perfect Word to PDF conversion while maintaining document integrity and professional appearance</li>
+            <li><strong>Multiple Page Size Options:</strong> Choose from A4, Letter, Legal, A3, A5, or maintain original document dimensions for optimal PDF output</li>
+            <li><strong>Quality Control Settings:</strong> Select high, medium, or low quality settings to balance file size and visual fidelity for your specific needs</li>
+            <li><strong>Intelligent Format Recognition:</strong> Advanced algorithms identify and preserve headers, footers, images, tables, and complex formatting during Word to PDF conversion</li>
+            <li><strong>Optimization Options:</strong> Optimize your PDF for print, web viewing, or long-term archival storage with specialized conversion modes</li>
+            <li><strong>Universal Compatibility:</strong> SmallPDF.us creates PDF files that work perfectly across all devices, operating systems, and PDF readers</li>
         </ul>
         
-        <h3>Popular Use Cases for SmallPDF.us Word to PDF Converter</h3>
-        <p>Our online Word to PDF conversion service helps users across various industries streamline their document workflows:</p>
-        <ul>
-            <li><strong>Business Documents:</strong> Convert contracts, proposals, reports, and business plans from Word to PDF format using SmallPDF.us for more professional and secure sharing.</li>
-            <li><strong>Academic Papers:</strong> Transform research papers, dissertations, and assignments from Word to PDF with SmallPDF.us to ensure they appear exactly as intended when submitted.</li>
-            <li><strong>Legal Documents:</strong> Convert legal agreements and contracts from Word to PDF using our converter to prevent unauthorized editing and maintain document integrity.</li>
-            <li><strong>Job Applications:</strong> Turn resumes and cover letters created in Word into polished PDF documents with SmallPDF.us that maintain consistent formatting across all devices.</li>
-            <li><strong>Marketing Materials:</strong> Convert brochures, flyers, and promotional content from Word to PDF format using SmallPDF.us for professional distribution and printing.</li>
-            <li><strong>Educational Content:</strong> Transform lesson plans, worksheets, and educational materials from Word to PDF with our converter for easy sharing with students and colleagues.</li>
-        </ul>
-        
-        <h3>How to Use SmallPDF.us Word to PDF Converter Effectively</h3>
-        <p>Our free online Word to PDF converter makes the conversion process quick, straightforward, and reliable:</p>
+        <h3>Professional Word to PDF Conversion for Every Need</h3>
+        <p>SmallPDF.us serves professionals, students, and individuals who need reliable <strong>Word to PDF conversion</strong>. Our versatile <strong>Word to PDF converter</strong> handles diverse requirements, from simple text documents to complex layouts with images, charts, and special formatting:</p>
         <ol>
-            <li><strong>Upload Your Word File to SmallPDF.us:</strong> Click "Select Word File" or drag and drop your DOC or DOCX file into our Word to PDF converter tool.</li>
-            <li><strong>Configure PDF Settings:</strong> Choose your preferred PDF output quality and page size settings on SmallPDF.us to customize your Word to PDF conversion results.</li>
-            <li><strong>Convert Word to PDF:</strong> Click "Convert Word to PDF," wait for SmallPDF.us to process your document, and download your new PDF file with preserved formatting.</li>
+            <li><strong>Business Documents:</strong> Convert Word reports, proposals, and presentations to PDF format for professional distribution and archival</li>
+            <li><strong>Academic Papers:</strong> Transform Word theses, research papers, and assignments into PDF files for submission and publication</li>
+            <li><strong>Legal Documents:</strong> Convert Word contracts, agreements, and legal briefs to PDF while preserving critical formatting and structure</li>
+            <li><strong>Marketing Materials:</strong> Transform Word brochures, flyers, and newsletters into professional PDF documents for distribution</li>
+            <li><strong>Technical Documentation:</strong> Convert Word manuals, guides, and specifications into PDF format for easy sharing and printing</li>
+            <li><strong>Personal Documents:</strong> Transform Word resumes, letters, and personal files into professional PDF format</li>
         </ol>
-        <p>The entire Word to PDF conversion process on SmallPDF.us takes less than a minute, and your PDF is ready to use immediately with professional-quality results.</p>
         
-        <h3>Advanced Word to PDF Conversion Tips for SmallPDF.us Users</h3>
-        <p>Get the most out of our online Word to PDF converter with these professional tips and optimization strategies:</p>
+        <h3>How SmallPDF.us Creates Perfect PDF Documents from Word</h3>
+        <p>Our advanced <strong>Word to PDF converter</strong> uses intelligent document analysis to create <strong>professional PDF documents</strong> that maintain the original Word file's integrity. When you <strong>convert Word to PDF</strong> with SmallPDF.us, our system performs comprehensive document processing to ensure your PDF files are:</p>
         <ul>
-            <li><strong>Document Preparation:</strong> Before using SmallPDF.us Word to PDF converter, review and update document properties in Word for better metadata in your final PDF file.</li>
-            <li><strong>High-Quality Images:</strong> For the best Word to PDF conversion results on SmallPDF.us, ensure all images in your Word document are high-resolution before converting.</li>
-            <li><strong>Font Optimization:</strong> If your Word document uses custom fonts, make sure they're embedded to ensure they display correctly in the PDF created by SmallPDF.us.</li>
-            <li><strong>Table and Layout Formatting:</strong> Use Word's built-in table and formatting tools before converting to PDF with SmallPDF.us for optimal layout preservation.</li>
-            <li><strong>Page Break Management:</strong> Review page breaks in your Word document before using our converter to ensure proper pagination in the resulting PDF.</li>
-            <li><strong>Hyperlink Preservation:</strong> SmallPDF.us Word to PDF converter maintains all hyperlinks, bookmarks, and cross-references from your original Word document.</li>
+            <li><strong>Format-Perfect:</strong> All fonts, colors, spacing, and styling from the original Word document are preserved in the PDF</li>
+            <li><strong>Layout-Intact:</strong> Maintain paragraphs, headers, page breaks, and document structure exactly as designed</li>
+            <li><strong>Image-Embedded:</strong> All images, charts, and graphics from the Word document are included in high quality</li>
+            <li><strong>Table-Accurate:</strong> Convert Word tables to perfect PDF tables with proper alignment and formatting</li>
+            <li><strong>Text-Searchable:</strong> Generated PDF files include searchable text for easy navigation and indexing</li>
         </ul>
         
-        <h3>Understanding SmallPDF.us Word to PDF Conversion Technology</h3>
-        <p>Our advanced Word to PDF converter uses sophisticated algorithms and multiple techniques to ensure perfect document transformation:</p>
+        <h3>Advanced Features of SmallPDF.us Word to PDF Converter</h3>
+        <p>SmallPDF.us offers the most comprehensive set of features for <strong>Word to PDF conversion</strong>. Our platform goes beyond basic conversion to provide professional-grade tools that <strong>convert DOC to PDF</strong> and <strong>DOCX to PDF</strong> with precision and flexibility:</p>
         <ul>
-            <li><strong>Advanced Layout Engine:</strong> SmallPDF.us uses cutting-edge rendering technology to preserve complex layouts, multi-column text, and precise positioning during Word to PDF conversion.</li>
-            <li><strong>Font Subsetting and Embedding:</strong> Our converter automatically embeds only the necessary font characters, reducing PDF file size while ensuring perfect text rendering.</li>
-            <li><strong>Image Optimization:</strong> SmallPDF.us optimizes images during Word to PDF conversion while maintaining visual quality and appropriate resolution for the intended use.</li>
-            <li><strong>Metadata Preservation:</strong> Document properties, creation dates, and author information from your Word document are preserved in the converted PDF.</li>
-            <li><strong>Interactive Elements:</strong> Hyperlinks, bookmarks, table of contents, and form fields are automatically converted and preserved by SmallPDF.us.</li>
-            <li><strong>Cross-Reference Integrity:</strong> Page numbers, footnotes, endnotes, and cross-references maintain their accuracy in the PDF conversion process.</li>
+            <li><strong>Multiple Page Sizes:</strong> Choose from standard page sizes including A4, Letter, Legal, A3, A5, or maintain original document dimensions</li>
+            <li><strong>Quality Settings:</strong> High, medium, or low quality options to optimize file size and visual quality for your specific use case</li>
+            <li><strong>Optimization Modes:</strong> Print optimization for high-quality printing, web optimization for online viewing, or archive mode for long-term storage</li>
+            <li><strong>Large File Support:</strong> Handle Word documents up to 50MB for comprehensive document conversion without size limitations</li>
+            <li><strong>Batch Processing:</strong> Convert multiple Word files to PDF format in a single operation for improved productivity</li>
+            <li><strong>Format Preservation:</strong> Maintain complex layouts, fonts, images, and styling during the conversion process</li>
+            <li><strong>Cross-Platform Compatibility:</strong> Works seamlessly on Windows, Mac, iOS, Android, and all modern web browsers</li>
+            <li><strong>No Software Required:</strong> Complete Word to PDF conversion entirely online without installing any software or plugins</li>
         </ul>
         
-        <h3>Why Millions Trust SmallPDF.us for Word to PDF Conversion</h3>
-        <p>SmallPDF.us has become the preferred choice for millions of users worldwide who need to convert Word to PDF online:</p>
+        <h3>Security and Privacy with SmallPDF.us</h3>
+        <p>When you <strong>convert Word to PDF</strong> with SmallPDF.us, your privacy and security are our top priorities. Our secure <strong>Word to PDF converter</strong> ensures your documents remain completely private throughout the conversion process:</p>
         <ul>
-            <li><strong>Proven Conversion Accuracy:</strong> Our Word to PDF converter consistently achieves 99%+ formatting retention with perfect text rendering and layout preservation.</li>
-            <li><strong>Fast Cloud Processing:</strong> SmallPDF.us handles Word to PDF conversion quickly and efficiently, regardless of your device's processing power or operating system.</li>
-            <li><strong>Privacy-Focused Security:</strong> Your Word documents are processed securely on SmallPDF.us with 256-bit SSL encryption and automatic deletion after conversion.</li>
-            <li><strong>Universal PDF Compatibility:</strong> Converted PDFs from SmallPDF.us work perfectly with all PDF readers, browsers, devices, and platforms while maintaining full compatibility.</li>
-            <li><strong>No Software Installation:</strong> Use our Word to PDF converter directly in your web browser without downloading or installing any software on your device.</li>
-            <li><strong>Cross-Platform Accessibility:</strong> Convert Word to PDF on SmallPDF.us from any device with internet access - desktop, laptop, tablet, or smartphone.</li>
-            <li><strong>Professional Results:</strong> Our Word to PDF conversion maintains professional document standards suitable for business, academic, legal, and personal use.</li>
-            <li><strong>Reliable Performance:</strong> SmallPDF.us maintains 99.9% uptime with fast processing speeds and consistent Word to PDF conversion results.</li>
+            <li><strong>SSL Encryption:</strong> All Word uploads and PDF downloads are protected with 256-bit SSL encryption for maximum security</li>
+            <li><strong>Automatic File Deletion:</strong> Your Word files and converted PDF documents are automatically deleted within one hour</li>
+            <li><strong>No Registration Required:</strong> Convert Word to PDF without creating accounts or providing personal information</li>
+            <li><strong>Privacy Compliance:</strong> SmallPDF.us complies with GDPR and international privacy regulations for document processing</li>
+            <li><strong>Zero Data Storage:</strong> We never permanently store your Word files or PDF documents on our servers</li>
+            <li><strong>No Human Access:</strong> Automated processing ensures no one can access your files during the conversion process</li>
         </ul>
+        
+        <h3>Tips for Optimal Word to PDF Conversion Results</h3>
+        <p>Maximize the quality of your <strong>Word to PDF conversion</strong> with these expert tips from SmallPDF.us:</p>
+        <ul>
+            <li><strong>Use Standard Fonts:</strong> Stick to common fonts like Arial, Times New Roman, or Calibri for the best PDF compatibility</li>
+            <li><strong>Check Document Layout:</strong> Review your Word document layout before conversion to ensure optimal PDF results</li>
+            <li><strong>Choose Appropriate Quality:</strong> Select high quality for important documents, medium for general use, low for quick sharing</li>
+            <li><strong>Select Correct Page Size:</strong> Use A4 for international documents, Letter for US documents, or original to maintain Word settings</li>
+            <li><strong>Optimize for Purpose:</strong> Choose print optimization for physical printing, web for online viewing, archive for long-term storage</li>
+            <li><strong>Verify File Size:</strong> Ensure your Word document is under 50MB for optimal processing speed and quality</li>
+            <li><strong>Test Complex Documents:</strong> For documents with complex formatting, use high quality settings for best results</li>
+        </ul>
+        
+        <h3>SmallPDF.us vs. Other Word to PDF Converters</h3>
+        <p>SmallPDF.us outperforms other online converters when you need to <strong>convert Word to PDF</strong> or transform documents to professional PDF format. Here's why SmallPDF.us is the superior choice for <strong>Word to PDF conversion</strong>:</p>
+        <ul>
+            <li><strong>Superior Quality:</strong> Advanced conversion technology creates perfect PDF documents with minimal formatting loss</li>
+            <li><strong>Faster Processing:</strong> Optimized servers complete Word to PDF conversion in seconds, not minutes</li>
+            <li><strong>More Options:</strong> Comprehensive page size, quality, and optimization settings not available in basic converters</li>
+            <li><strong>Better Security:</strong> Enhanced privacy protection with automatic file deletion and SSL encryption</li>
+            <li><strong>Format Preservation:</strong> Unique algorithms maintain complex layouts, fonts, and images during conversion</li>
+            <li><strong>Larger File Support:</strong> Handle bigger Word documents than competing services without quality compromise</li>
+            <li><strong>No Limitations:</strong> Unlimited conversions without watermarks, restrictions, or hidden fees</li>
+            <li><strong>Mobile Optimized:</strong> Perfect Word to PDF conversion on any device with responsive design</li>
+        </ul>
+        
+        <h3>Start Converting Word to PDF with SmallPDF.us Today</h3>
+        <p>Experience the difference with SmallPDF.us, the most advanced <strong>Word to PDF converter</strong> available online. Whether you need to convert a single Word document, <strong>transform DOC to PDF</strong> format, or <strong>convert DOCX to PDF</strong> for professional use, SmallPDF.us delivers exceptional results every time. Our commitment to creating <strong>high-quality PDF documents</strong> with maximum accuracy makes us the preferred choice for millions of users worldwide.</p>
+        
+        <p>Join the SmallPDF.us community today and discover why we're the leading platform to <strong>convert Word to PDF</strong> online. With our free, secure, and feature-rich <strong>Word to PDF converter</strong>, you'll never need another document conversion tool. Start your <strong>Word to PDF conversion</strong> now and experience the SmallPDF.us difference!</p>
     </div>
 </section>
 
 <!-- FAQ Section -->
-<section class="faq-section">
-    <div class="container">
-        <div class="section-title">
-            <h2>Frequently Asked Questions About SmallPDF.us Word to PDF Converter</h2>
-            <p>Common questions about our Word to PDF conversion tool and answers to help you get the best results</p>
+<section class="content-section" style="background: white;">
+    <div class="section-header">
+        <h2 class="section-title">Word to PDF Converter FAQ - SmallPDF.us</h2>
+        <p class="section-subtitle">Get answers to common questions about converting Word to PDF, DOC/DOCX formats, and using SmallPDF.us</p>
+    </div>
+    
+    <div class="faq-container">
+        <div class="faq-item">
+            <div class="faq-question">
+                How do I convert Word to PDF online free with SmallPDF.us?
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="faq-answer">
+                <p>To convert Word to PDF with SmallPDF.us, simply upload your Word file (DOC or DOCX) using our free Word to PDF converter above. Choose your page size, quality, and optimization settings, then click "Convert to PDF". Your Word to PDF conversion will be completed in seconds.</p>
+            </div>
         </div>
         
-        <div class="faq-container">
-            <div class="faq-item">
-                <div class="faq-question">
-                    Is SmallPDF.us Word to PDF converter free to use?
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
-                </div>
-                <div class="faq-answer">
-                    <p>Yes, our Word to PDF converter at SmallPDF.us is completely free to use with no hidden fees, watermarks, or limitations. The service is designed to be accessible to everyone without requiring payment or registration.</p>
-                    <p>Our free Word to PDF conversion service includes:</p>
-                    <ul>
-                        <li><strong>Unlimited conversions:</strong> No daily limits on SmallPDF.us for the number of Word documents you can convert to PDF</li>
-                        <li><strong>Perfect formatting preservation:</strong> All text, images, and layouts are maintained during Word to PDF conversion</li>
-                        <li><strong>No watermarks:</strong> Clean, professional PDF output without any branding or marks on your converted files</li>
-                        <li><strong>High-quality output:</strong> Professional-grade PDF files suitable for business, academic, and personal use</li>
-                        <li><strong>Secure processing:</strong> SSL encryption and automatic file deletion for privacy protection on SmallPDF.us</li>
-                        <li><strong>Multiple file format support:</strong> Convert both DOC and DOCX files to PDF format</li>
-                    </ul>
-                </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                What's the difference between DOC and DOCX files for PDF conversion?
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
             </div>
-            
-            <div class="faq-item">
-                <div class="faq-question">
-                    Will my Word document formatting be preserved when converted to PDF?
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
-                </div>
-                <div class="faq-answer">
-                    <p>Yes, SmallPDF.us Word to PDF converter is specifically designed to maintain all formatting elements from your original Word document. We use advanced conversion technology to ensure your document looks exactly the same in PDF format as it does in Word.</p>
-                    <p>Our Word to PDF converter preserves:</p>
-                    <ul>
-                        <li><strong>Text formatting:</strong> Fonts, sizes, colors, bold, italics, underlines, highlights, and all character formatting</li>
-                        <li><strong>Images and graphics:</strong> All embedded images, charts, diagrams, and other visual elements with original quality</li>
-                        <li><strong>Layout elements:</strong> Columns, margins, page breaks, headers, footers, page numbers, and document structure</li>
-                        <li><strong>Tables and lists:</strong> Table structures, borders, cell formatting, bullet points, and numbered lists</li>
-                        <li><strong>Interactive elements:</strong> Hyperlinks, bookmarks, table of contents, and cross-references</li>
-                        <li><strong>Document properties:</strong> Metadata, author information, and document statistics</li>
-                    </ul>
-                    <p>For the most complex Word documents, we recommend selecting "High Quality" in our conversion options on SmallPDF.us for the best Word to PDF results.</p>
-                </div>
+            <div class="faq-answer">
+                <p>DOCX is the modern Word format with better compression and features, while DOC is the legacy format. SmallPDF.us converts both DOC and DOCX files to PDF with equal quality, preserving all formatting, images, and layout elements regardless of the original Word format.</p>
             </div>
-            
-            <div class="faq-item">
-                <div class="faq-question">
-                    Is my data safe when using SmallPDF.us Word to PDF converter?
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
-                </div>
-                <div class="faq-answer">
-                    <p>Absolutely. At SmallPDF.us, we prioritize your privacy and data security with multiple layers of protection and industry-standard security measures for all Word to PDF conversions:</p>
-                    <ul>
-                        <li><strong>Secure file transfer:</strong> All Word documents are encrypted during transfer to SmallPDF.us with industry-standard 256-bit SSL connections</li>
-                        <li><strong>Automatic deletion:</strong> Your files are automatically deleted from SmallPDF.us servers after Word to PDF conversion (typically within 1 hour)</li>
-                        <li><strong>No file access:</strong> We never access, analyze, read, or share the content of your Word documents or converted PDFs</li>
-                        <li><strong>Privacy-first design:</strong> No registration required on SmallPDF.us, so we don't collect personal information, email addresses, or user accounts</li>
-                        <li><strong>Secure infrastructure:</strong> Our Word to PDF conversion servers are located in secure data centers with enterprise-grade protection</li>
-                        <li><strong>GDPR compliance:</strong> SmallPDF.us follows strict European data protection regulations and international privacy standards</li>
-                        <li><strong>No tracking:</strong> We don't track your Word to PDF usage patterns, file contents, or personal data beyond basic analytics</li>
-                    </ul>
-                    <p>Your sensitive Word documents remain completely confidential throughout the entire conversion process on SmallPDF.us.</p>
-                </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                Which page size should I choose for Word to PDF conversion?
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
             </div>
-            
-            <div class="faq-item">
-                <div class="faq-question">
-                    What's the maximum file size for Word to PDF conversion on SmallPDF.us?
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
-                </div>
-                <div class="faq-answer">
-                    <p>Our free Word to PDF converter on SmallPDF.us supports files up to 50MB in size, which is sufficient for most Word documents including:</p>
-                    <ul>
-                        <li><strong>Text-heavy documents:</strong> Reports, dissertations, and manuscripts with 100+ pages</li>
-                        <li><strong>Image-rich documents:</strong> Documents with multiple high-resolution images, charts, and graphics</li>
-                        <li><strong>Complex layouts:</strong> Brochures, newsletters, and formatted business documents</li>
-                        <li><strong>Academic papers:</strong> Research papers, theses, and academic publications with extensive formatting</li>
-                        <li><strong>Business documents:</strong> Contracts, proposals, and comprehensive business plans</li>
-                    </ul>
-                    <p>For premium users on SmallPDF.us, we offer:</p>
-                    <ul>
-                        <li><strong>Increased file size limit:</strong> Up to 100MB for Word to PDF conversion</li>
-                        <li><strong>Batch processing:</strong> Convert multiple Word documents to PDF simultaneously</li>
-                        <li><strong>Priority processing:</strong> Faster Word to PDF conversion with dedicated server resources</li>
-                        <li><strong>Advanced features:</strong> Custom PDF settings and enhanced conversion options</li>
-                    </ul>
-                </div>
+            <div class="faq-answer">
+                <p>Choose "Original" to maintain your Word document's current page size, "A4" for international standard documents, "Letter" for US documents, or other sizes based on your specific needs. SmallPDF.us automatically adjusts content to fit the selected page size while preserving formatting.</p>
             </div>
-            
-            <div class="faq-item">
-                <div class="faq-question">
-                    Which Word formats can I convert to PDF with SmallPDF.us?
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
-                </div>
-                <div class="faq-answer">
-                    <p>SmallPDF.us Word to PDF converter supports a comprehensive range of Microsoft Word and compatible document formats:</p>
-                    <ul>
-                        <li><strong>DOCX:</strong> Modern Word format (Word 2007 and newer) - fully supported with all features</li>
-                        <li><strong>DOC:</strong> Legacy Word format (Word 97-2003) - complete compatibility with all formatting</li>
-                        <li><strong>RTF:</strong> Rich Text Format documents with advanced formatting preservation</li>
-                        <li><strong>ODT:</strong> OpenDocument Text (used by LibreOffice and OpenOffice) with full layout support</li>
-                        <li><strong>TXT:</strong> Plain text files with basic formatting options available</li>
-                    </ul>
-                    <p>Our Word to PDF converter is optimized to handle documents created in any version of Microsoft Word, from the oldest legacy versions to the latest Microsoft 365 edition. For the best Word to PDF conversion results on SmallPDF.us, we recommend using DOCX format when possible as it supports the most advanced features and formatting options.</p>
-                    <p>SmallPDF.us Word to PDF converter also maintains compatibility with documents created in alternative word processors like Google Docs (when exported as Word format), LibreOffice Writer, and Apache OpenOffice Writer.</p>
-                </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                Is SmallPDF.us Word to PDF converter secure and private?
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
             </div>
-            
-            <div class="faq-item">
-                <div class="faq-question">
-                    Can I convert password-protected Word documents to PDF on SmallPDF.us?
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
-                </div>
-                <div class="faq-answer">
-                    <p>Yes, you can convert password-protected Word documents to PDF using SmallPDF.us, but you'll need to provide the correct password during the Word to PDF conversion process:</p>
-                    <p><strong>How to convert password-protected Word to PDF:</strong></p>
-                    <ol>
-                        <li>Upload your password-protected Word document to SmallPDF.us</li>
-                        <li>When prompted, enter the document password in our secure interface</li>
-                        <li>Proceed with the Word to PDF conversion as normal</li>
-                        <li>Download your converted PDF file</li>
-                    </ol>
-                    <p>Important notes about password-protected Word to PDF conversion on SmallPDF.us:</p>
-                    <ul>
-                        <li><strong>Password security:</strong> The password is used only for opening the Word document during conversion and is not stored</li>
-                        <li><strong>Secure processing:</strong> All password handling on SmallPDF.us uses encrypted connections and secure protocols</li>
-                        <li><strong>PDF protection:</strong> The resulting PDF will not have password protection by default</li>
-                        <li><strong>Re-protection option:</strong> You can use our "Protect PDF" tool after Word to PDF conversion to add new password protection</li>
-                        <li><strong>Editing restrictions:</strong> Word documents with editing restrictions (but no opening password) can typically be converted without password input</li>
-                    </ul>
-                </div>
+            <div class="faq-answer">
+                <p>Yes. SmallPDF.us uses SSL encryption for all Word to PDF conversions. Your Word files are automatically deleted after processing, and we never access or store your documents. Convert Word to PDF with complete confidence in your privacy and security.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                What file size limit does SmallPDF.us have for Word to PDF conversion?
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="faq-answer">
+                <p>SmallPDF.us accepts Word files up to 50MB for Word to PDF conversion. This allows you to convert large documents, reports, and presentations while maintaining optimal processing speed and quality for professional results.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                Will my Word formatting be preserved in the PDF?
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="faq-answer">
+                <p>Absolutely! SmallPDF.us preserves all formatting including fonts, colors, images, tables, headers, footers, and layout elements. Our advanced conversion technology ensures your PDF looks identical to your original Word document with professional quality.</p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Mini CTA Section -->
-<section class="mini-cta-direct-fix">
-    <div class="container">
-        <h2>Explore More PDF Tools on SmallPDF.us</h2>
-        <p>SmallPDF.us offers a complete suite of PDF tools to handle all your document processing needs efficiently and securely</p>
-        <a href="{% url 'all_tools' %}" class="cta-btn-direct">View All PDF Tools</a>
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="content-section">
+        <h2>Ready to Convert Word to PDF with SmallPDF.us?</h2>
+        <p>Join millions who trust SmallPDF.us for professional Word to PDF conversion. Transform DOC/DOCX to high-quality PDF format - all free!</p>
+        <a href="#uploadArea" class="cta-btn">Start Converting Word to PDF Now</a>
     </div>
 </section>
-{% endblock %}
 
-{% block extra_js %}
 <script>
-// Enhanced Word to PDF JavaScript with Lazy Loading and Real Document Content
 document.addEventListener('DOMContentLoaded', function() {
-    // DOM Elements
+    // Performance optimized JavaScript
     const uploadArea = document.getElementById('uploadArea');
     const fileInput = document.getElementById('fileInput');
     const selectFileBtn = document.getElementById('selectFileBtn');
     const fileContainer = document.getElementById('fileContainer');
-    const filePreview = document.getElementById('filePreview');
-    const changeFileBtn = document.getElementById('changeFileBtn');
+    const filePreviewItem = document.getElementById('filePreviewItem');
+    const addMoreBtn = document.getElementById('addMoreBtn');
+    const removeBtn = document.getElementById('removeBtn');
+    const clearBtn = document.getElementById('clearBtn');
     const convertBtn = document.getElementById('convertBtn');
-    const loadingIndicator = document.getElementById('loadingIndicator');
-    const loadingText = document.getElementById('loadingText');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const resultSection = document.getElementById('resultSection');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const startOverBtn = document.getElementById('startOverBtn');
+    const progressBar = document.getElementById('progressBar');
+    const loadingStatus = document.getElementById('loadingStatus');
+    
+    // File info elements
+    const fileName = document.getElementById('fileName');
+    const fileSize = document.getElementById('fileSize');
+    const filePages = document.getElementById('filePages');
     
     // Options elements
-    const pdfQuality = document.getElementById('pdfQuality');
     const pageSize = document.getElementById('pageSize');
+    const quality = document.getElementById('quality');
+    const optimization = document.getElementById('optimization');
     
-    // Preview elements
-    const previewArea = document.getElementById('pdfPreviewArea');
-    const previewTitle = document.getElementById('previewTitle');
-    const pdfCanvasContainer = document.getElementById('pdfCanvasContainer');
-    const downloadBtn = document.getElementById('downloadBtn');
-    const editFilesBtn = document.getElementById('editFilesBtn');
+    // Result elements
+    const resultPageSize = document.getElementById('resultPageSize');
+    const resultQuality = document.getElementById('resultQuality');
+    const resultOptimization = document.getElementById('resultOptimization');
+    const resultSize = document.getElementById('resultSize');
     
-    // State variables
+    // State
     let selectedFile = null;
-    let convertedPdfBlob = null;
-    let pdfJsLoaded = false;
-    let pdfJsLoading = false;
-    
-    // Lazy load PDF.js only when needed
-    async function loadPDFJS() {
-        if (pdfJsLoaded || pdfJsLoading) {
-            return pdfJsLoaded;
-        }
-        
-        pdfJsLoading = true;
-        
-        try {
-            // Check if PDF.js is already loaded
-            if (window.pdfjsLib) {
-                pdfJsLoaded = true;
-                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
-                pdfJsLoading = false;
-                return true;
-            }
-            
-            // Load PDF.js dynamically
-            await new Promise((resolve, reject) => {
-                const script = document.createElement('script');
-                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js';
-                script.onload = () => {
-                    if (window.pdfjsLib) {
-                        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
-                        pdfJsLoaded = true;
-                        resolve();
-                    } else {
-                        reject(new Error('PDF.js failed to load'));
-                    }
-                };
-                script.onerror = () => reject(new Error('Failed to load PDF.js script'));
-                document.head.appendChild(script);
-            });
-            
-            pdfJsLoading = false;
-            return true;
-        } catch (error) {
-            console.warn('Failed to load PDF.js library:', error);
-            pdfJsLoading = false;
-            return false;
-        }
-    }
-    
+    let isConverting = false;
+    let convertedFileBlob = null;
+    let conversionSettings = {};
+
     // Event Listeners
-    if (selectFileBtn) {
-        selectFileBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            fileInput.click();
-        });
-    }
-    
-    if (fileInput) {
-        fileInput.addEventListener('change', handleFileSelection);
-    }
-    
-    if (changeFileBtn) {
-        changeFileBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            showUploadArea();
-        });
-    }
-    
-    if (convertBtn) {
-        convertBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            convertToPdf();
-        });
-    }
-    
-    if (downloadBtn) {
-        downloadBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            downloadPdf();
-        });
-    }
-    
-    if (editFilesBtn) {
-        editFilesBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            showFileSelectionView();
-        });
-    }
-    
-    // Drag and drop functionality
-    if (uploadArea) {
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            uploadArea.addEventListener(eventName, preventDefaults, false);
-        });
-        
-        ['dragenter', 'dragover'].forEach(eventName => {
-            uploadArea.addEventListener(eventName, highlight, false);
-        });
-        
-        ['dragleave', 'drop'].forEach(eventName => {
-            uploadArea.addEventListener(eventName, unhighlight, false);
-        });
-        
-        uploadArea.addEventListener('drop', handleDrop, false);
-    }
-    
+    selectFileBtn.addEventListener('click', () => fileInput.click());
+    addMoreBtn.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', handleFileSelection);
+    removeBtn.addEventListener('click', removeFile);
+    clearBtn.addEventListener('click', clearFile);
+    convertBtn.addEventListener('click', convertToPDF);
+    downloadBtn.addEventListener('click', downloadPDF);
+    startOverBtn.addEventListener('click', startOver);
+
+    // Drag and drop
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, preventDefaults, { passive: false });
+    });
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, () => uploadArea.classList.add('dragover'), { passive: true });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, () => uploadArea.classList.remove('dragover'), { passive: true });
+    });
+
+    uploadArea.addEventListener('drop', handleDrop, { passive: false });
+
     function preventDefaults(e) {
         e.preventDefault();
         e.stopPropagation();
     }
-    
-    function highlight() {
-        uploadArea.classList.add('dragover');
-    }
-    
-    function unhighlight() {
-        uploadArea.classList.remove('dragover');
-    }
-    
+
     function handleDrop(e) {
         const dt = e.dataTransfer;
         const files = dt.files;
-        handleFiles(files);
+        if (files && files.length > 0) {
+            handleFiles(files);
+        }
     }
-    
+
     function handleFileSelection(e) {
         const files = e.target.files;
         if (files && files.length > 0) {
@@ -1820,131 +1600,229 @@ document.addEventListener('DOMContentLoaded', function() {
             fileInput.value = '';
         }
     }
-    
+
     function handleFiles(files) {
-        if (files.length === 0) return;
-        
         const file = files[0];
         
-        // Check if it's a Word document
-        const isDoc = file.name.toLowerCase().endsWith('.doc');
-        const isDocx = file.name.toLowerCase().endsWith('.docx');
-        const isMsWord = file.type === 'application/msword' || 
-                         file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+        // Validate file
+        const validExtensions = ['.doc', '.docx'];
+        const validMimeTypes = [
+            'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        ];
         
-        if (!isDoc && !isDocx && !isMsWord) {
-            showMessage('Please select a valid Word document (.doc or .docx) for conversion to PDF on SmallPDF.us.', 'error');
+        const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+        
+        if (!validExtensions.includes(fileExtension) && !validMimeTypes.includes(file.type)) {
+            showMessage('Please select a valid Word document (DOC or DOCX).', 'error');
             return;
-        }
-        
-        // Check file size (50MB limit)
-        const maxFileSize = 50 * 1024 * 1024;
-        if (file.size > maxFileSize) {
-            showMessage('File size exceeds 50MB limit. Please choose a smaller Word document for SmallPDF.us conversion.', 'error');
-            return;
-        }
-        
-        selectedFile = file;
-        updateFilePreview(file);
-        showFileContainer();
-        
-        // Hide preview area if it was showing
-        if (previewArea) {
-            previewArea.style.display = 'none';
         }
 
-        applyCompactFilePreviewStyles();
-        
-        // Start loading PDF.js in background for potential preview
-        loadPDFJS();
+        const maxFileSize = 50 * 1024 * 1024; // 50MB
+        if (file.size > maxFileSize) {
+            showMessage('File size exceeds 50MB limit.', 'error');
+            return;
+        }
+
+        selectedFile = file;
+        updateFilePreview();
+        showFileContainer();
+        showMessage('Word document loaded successfully!', 'success');
     }
-    
-    function applyCompactFilePreviewStyles() {
-        // Remove file header to make it more compact
-        const fileHeader = document.querySelector('.file-header');
-        if (fileHeader) {
-            fileHeader.style.display = 'none';
+
+    function updateFilePreview() {
+        if (!selectedFile) return;
+
+        fileName.textContent = selectedFile.name;
+        fileSize.textContent = formatFileSize(selectedFile.size);
+        
+        // Update icon based on file type
+        const icon = document.querySelector('.word-icon');
+        if (selectedFile.name.toLowerCase().endsWith('.docx')) {
+            icon.textContent = 'DOCX';
+            icon.style.background = 'linear-gradient(135deg, #1e40af, #3b82f6)';
+        } else {
+            icon.textContent = 'DOC';
+            icon.style.background = 'linear-gradient(135deg, #059669, #10b981)';
         }
         
-        // Make the file preview more compact
-        if (filePreview) {
-            filePreview.style.padding = '0.7rem';
-            filePreview.style.marginBottom = '0.8rem';
-        }
-        
-        // Make the file options more compact
-        const fileOptions = document.querySelector('.file-options');
-        if (fileOptions) {
-            fileOptions.style.padding = '0.8rem 1rem';
-            fileOptions.style.marginBottom = '0.8rem';
-        }
-        
-        // Adjust option title padding
-        const optionTitles = document.querySelectorAll('.option-title');
-        optionTitles.forEach(title => {
-            title.style.marginBottom = '0.7rem';
-            title.style.fontSize = '0.95rem';
-        });
-        
-        // Adjust option groups padding
-        const optionGroups = document.querySelectorAll('.option-group');
-        optionGroups.forEach(group => {
-            group.style.marginBottom = '0.7rem';
-        });
-        
-        // Adjust action buttons container
-        const actionButtons = document.querySelector('.action-buttons');
-        if (actionButtons) {
-            actionButtons.style.marginTop = '0.8rem';
-        }
+        // Try to estimate pages (this is approximate)
+        const estimatedPages = Math.max(1, Math.round(selectedFile.size / (100 * 1024))); // Very rough estimation
+        filePages.textContent = `~${estimatedPages} pages`;
     }
-    
-    function updateFilePreview(file) {
-        if (!filePreview) return;
-        
-        const formattedSize = formatFileSize(file.size);
-        const fileExtension = file.name.split('.').pop().toLowerCase();
-        const isDocx = fileExtension === 'docx';
-        const fileType = isDocx ? 'DOCX' : 'DOC';
-        
-        // Create file preview HTML with improved styling
-        filePreview.innerHTML = `
-            <div class="file-icon" style="width:36px; height:36px; margin-right:0.8rem; flex-shrink:0;">
-                <div style="background-color:#2B579A; color:white; width:36px; height:36px; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:10px; border-radius:3px;">
-                    ${fileType}
-                </div>
-            </div>
-            <div class="file-info" style="flex:1; overflow:hidden;">
-                <div class="file-name" style="font-size:0.95rem; font-weight:600; color:#0b132b; margin-bottom:0.15rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${file.name}">${file.name}</div>
-                <div class="file-size" style="font-size:0.8rem; color:#64748b;">${formattedSize} - ${fileType} File</div>
-            </div>
-            <button class="file-remove-btn" style="width:26px; height:26px; margin-left:0.5rem;" onclick="window.removeFile()">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-            </button>
-        `;
-    }
-    
-    function showFileContainer() {
-        if (uploadArea) uploadArea.style.display = 'none';
-        if (fileContainer) fileContainer.style.display = 'block';
-    }
-    
-    function showUploadArea() {
-        if (uploadArea) uploadArea.style.display = 'block';
-        if (fileContainer) fileContainer.style.display = 'none';
-        if (previewArea) previewArea.style.display = 'none';
+
+    function removeFile() {
         selectedFile = null;
+        showUploadArea();
+        hideResult();
+        showMessage('File removed.', 'success');
+    }
+
+    function clearFile() {
+        selectedFile = null;
+        showUploadArea();
+        hideResult();
         clearMessages();
     }
-    
-    function showFileSelectionView() {
-        if (previewArea) previewArea.style.display = 'none';
-        if (fileContainer) fileContainer.style.display = 'block';
+
+    function startOver() {
+        selectedFile = null;
+        convertedFileBlob = null;
+        conversionSettings = {};
+        showUploadArea();
+        hideResult();
+        clearMessages();
     }
-    
+
+    function updateProgress(percentage, status) {
+        progressBar.style.width = percentage + '%';
+        loadingStatus.textContent = status;
+    }
+
+    function convertToPDF() {
+        if (!selectedFile) {
+            showMessage('Please select a Word document first.', 'error');
+            return;
+        }
+
+        if (isConverting) return;
+
+        isConverting = true;
+        convertBtn.disabled = true;
+        showLoading();
+
+        // Store conversion settings
+        conversionSettings = {
+            pageSize: pageSize.value,
+            quality: quality.value,
+            optimization: optimization.value
+        };
+
+        // Simulate progress updates
+        let progress = 0;
+        const progressInterval = setInterval(() => {
+            progress += Math.random() * 10;
+            if (progress > 85) {
+                progress = 85;
+                clearInterval(progressInterval);
+            }
+            
+            let status = 'Preparing...';
+            if (progress > 15) status = 'Analyzing Word document...';
+            if (progress > 35) status = 'Extracting content and formatting...';
+            if (progress > 60) status = 'Creating PDF document...';
+            if (progress > 80) status = 'Finalizing conversion...';
+            
+            updateProgress(progress, status);
+        }, 300);
+
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+        formData.append('page_size', conversionSettings.pageSize);
+        formData.append('quality', conversionSettings.quality);
+        formData.append('optimization', conversionSettings.optimization);
+
+        fetch('/api/word-to-pdf/', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            clearInterval(progressInterval);
+            updateProgress(100, 'Complete!');
+            
+            if (!response.ok) {
+                return response.json().then(err => Promise.reject(err));
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            convertedFileBlob = blob;
+            
+            setTimeout(() => {
+                hideLoading();
+                showResult();
+                updateResultInfo();
+            }, 1000);
+        })
+        .catch(error => {
+            clearInterval(progressInterval);
+            hideLoading();
+            console.error('Conversion error:', error);
+            showMessage(error.error || 'Conversion failed. Please try again.', 'error');
+        })
+        .finally(() => {
+            isConverting = false;
+            convertBtn.disabled = false;
+        });
+    }
+
+    function updateResultInfo() {
+        if (resultPageSize) {
+            resultPageSize.textContent = conversionSettings.pageSize.toUpperCase();
+        }
+
+        if (resultQuality) {
+            resultQuality.textContent = conversionSettings.quality.charAt(0).toUpperCase() + conversionSettings.quality.slice(1);
+        }
+
+        if (resultOptimization) {
+            resultOptimization.textContent = conversionSettings.optimization.charAt(0).toUpperCase() + conversionSettings.optimization.slice(1);
+        }
+
+        if (resultSize && convertedFileBlob) {
+            resultSize.textContent = formatFileSize(convertedFileBlob.size);
+        }
+    }
+
+    function downloadPDF() {
+        if (!convertedFileBlob || !selectedFile) {
+            showMessage('No PDF document available for download.', 'error');
+            return;
+        }
+
+        const url = window.URL.createObjectURL(convertedFileBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        
+        const baseName = selectedFile.name.replace(/\.(doc|docx)$/i, '');
+        a.download = baseName + '.pdf';
+        
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+        showMessage('PDF document downloaded successfully!', 'success');
+    }
+
+    function showFileContainer() {
+        uploadArea.style.display = 'none';
+        fileContainer.style.display = 'block';
+    }
+
+    function showUploadArea() {
+        uploadArea.style.display = 'block';
+        fileContainer.style.display = 'none';
+    }
+
+    function showLoading() {
+        loadingOverlay.style.display = 'flex';
+        updateProgress(0, 'Preparing...');
+    }
+
+    function hideLoading() {
+        loadingOverlay.style.display = 'none';
+    }
+
+    function showResult() {
+        resultSection.style.display = 'block';
+        fileContainer.style.display = 'none';
+    }
+
+    function hideResult() {
+        resultSection.style.display = 'none';
+    }
+
     function formatFileSize(bytes) {
         if (bytes === 0) return '0 Bytes';
         const k = 1024;
@@ -1952,7 +1830,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
-    
+
     function showMessage(message, type = 'error') {
         clearMessages();
         
@@ -1971,22 +1849,9 @@ document.addEventListener('DOMContentLoaded', function() {
             </svg>`;
         
         messageDiv.innerHTML = `${iconSvg}<span>${message}</span>`;
-        messageDiv.style.cssText = `
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            margin: 1rem 0;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            animation: slideIn 0.3s ease;
-            ${type === 'error' ? 
-                'background-color: #fee2e2; color: #dc2626; border-left: 4px solid #dc2626;' : 
-                'background-color: #dcfce7; color: #166534; border-left: 4px solid #16a34a;'
-            }
-        `;
         
-        const container = document.querySelector('.converter-container');
-        container.insertBefore(messageDiv, container.firstChild);
+        const contentArea = document.querySelector('.content-area');
+        contentArea.insertBefore(messageDiv, contentArea.firstChild);
         
         setTimeout(() => {
             if (messageDiv.parentNode) {
@@ -1994,584 +1859,48 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }, 5000);
     }
-    
+
     function clearMessages() {
         const messages = document.querySelectorAll('.message');
         messages.forEach(msg => msg.remove());
     }
-    
-    function convertToPdf() {
-        if (!selectedFile) {
-            showMessage('Please select a Word document to convert to PDF with SmallPDF.us.', 'error');
-            return;
-        }
-        
-        showLoader('SmallPDF.us is converting your Word document to PDF...');
-        
-        const quality = pdfQuality ? pdfQuality.value : 'high';
-        const size = pageSize ? pageSize.value : 'original';
-        
-        const formData = new FormData();
-        formData.append('file', selectedFile);
-        formData.append('quality', quality);
-        formData.append('page_size', size);
-        
-        fetch('/api/word-to-pdf/', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => {
-            hideLoader();
-            
-            if (!response.ok) {
-                return response.text().then(text => {
-                    try {
-                        const errorData = JSON.parse(text);
-                        throw new Error(errorData.error || `SmallPDF.us server error: ${response.status}`);
-                    } catch (e) {
-                        throw new Error(`SmallPDF.us conversion error: ${response.status}`);
-                    }
-                });
-            }
-            
-            return response.blob().then(blob => {
-                const contentDisposition = response.headers.get('Content-Disposition');
-                let filename = `${selectedFile.name.replace(/\.[^/.]+$/, "")}.pdf`;
-                
-                if (contentDisposition) {
-                    const filenameMatch = contentDisposition.match(/filename="(.+)"/);
-                    if (filenameMatch) {
-                        filename = filenameMatch[1];
-                    }
-                }
-                
-                // Store the PDF blob for download and preview
-                convertedPdfBlob = blob;
-                
-                // Display the PDF preview with lazy-loaded PDF.js
-                displayPdfPreview(blob, filename);
-                
-                showMessage(`SmallPDF.us successfully converted your Word document to PDF! File: ${filename}`, 'success');
-            });
-        })
-        .catch(error => {
-            hideLoader();
-            console.error('SmallPDF.us Word to PDF conversion error:', error);
-            
-            // For demonstration, create a realistic PDF with actual content
-            createRealisticPdfFromWord();
-        });
-    }
-    
-    // Create a realistic PDF with actual document content for demo
-    function createRealisticPdfFromWord() {
-        try {
-            // Create a more realistic PDF with actual document structure
-            const docTitle = selectedFile ? selectedFile.name.replace(/\.[^/.]+$/, "") : "Converted Document";
-            
-            const pdfContent = `%PDF-1.4
-1 0 obj
-<<
-/Type /Catalog
-/Pages 2 0 R
-/Metadata 7 0 R
->>
-endobj
 
-2 0 obj
-<<
-/Type /Pages
-/Kids [3 0 R]
-/Count 1
->>
-endobj
-
-3 0 obj
-<<
-/Type /Page
-/Parent 2 0 R
-/MediaBox [0 0 612 792]
-/Resources <<
-  /Font <<
-    /F1 4 0 R
-    /F2 5 0 R
-  >>
->>
-/Contents 6 0 R
->>
-endobj
-
-4 0 obj
-<<
-/Type /Font
-/Subtype /Type1
-/BaseFont /Helvetica-Bold
->>
-endobj
-
-5 0 obj
-<<
-/Type /Font
-/Subtype /Type1
-/BaseFont /Helvetica
->>
-endobj
-
-6 0 obj
-<<
-/Length 890
->>
-stream
-BT
-/F1 24 Tf
-72 720 Td
-(${docTitle}) Tj
-0 -40 Td
-/F2 12 Tf
-(Converted from Word to PDF using SmallPDF.us) Tj
-0 -30 Td
-0 -20 Td
-/F1 16 Tf
-(Document Content:) Tj
-0 -25 Td
-/F2 11 Tf
-(This document was successfully converted from Microsoft Word format) Tj
-0 -15 Td
-(to PDF using SmallPDF.us online converter. All formatting, fonts, and) Tj
-0 -15 Td
-(layout elements have been preserved during the conversion process.) Tj
-0 -25 Td
-(Key Features of SmallPDF.us Word to PDF Converter:) Tj
-0 -20 Td
-(• Perfect formatting preservation) Tj
-0 -15 Td
-(• High-quality PDF output) Tj
-0 -15 Td
-(• Fast conversion processing) Tj
-0 -15 Td
-(• Secure document handling) Tj
-0 -15 Td
-(• Free online conversion tool) Tj
-0 -25 Td
-(Original document: ${selectedFile ? selectedFile.name : 'document.docx'}) Tj
-0 -15 Td
-(File size: ${selectedFile ? formatFileSize(selectedFile.size) : '1.2 MB'}) Tj
-0 -15 Td
-(Conversion date: ${new Date().toLocaleDateString()}) Tj
-0 -15 Td
-(Processed by: SmallPDF.us) Tj
-0 -40 Td
-/F1 14 Tf
-(Thank you for using SmallPDF.us!) Tj
-0 -20 Td
-/F2 10 Tf
-(Visit https://smallpdf.us for more PDF tools and conversion options.) Tj
-ET
-endstream
-endobj
-
-7 0 obj
-<<
-/Type /Metadata
-/Subtype /XML
-/Length 200
->>
-stream
-<?xml version="1.0"?>
-<x:xmpmeta xmlns:x="adobe:ns:meta/">
-<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-<rdf:Description rdf:about="" xmlns:dc="http://purl.org/dc/elements/1.1/">
-<dc:title>${docTitle}</dc:title>
-<dc:creator>SmallPDF.us Word to PDF Converter</dc:creator>
-<dc:subject>Word to PDF Conversion</dc:subject>
-</rdf:Description>
-</rdf:RDF>
-</x:xmpmeta>
-stream
-endobj
-
-xref
-0 8
-0000000000 65535 f 
-0000000010 00000 n 
-0000000079 00000 n 
-0000000136 00000 n 
-0000000264 00000 n 
-0000000337 00000 n 
-0000000404 00000 n 
-0000001346 00000 n 
-trailer
-<<
-/Size 8
-/Root 1 0 R
->>
-startxref
-1598
-%%EOF`;
-            
-            const blob = new Blob([pdfContent], {type: 'application/pdf'});
-            convertedPdfBlob = blob;
-            const filename = `${selectedFile ? selectedFile.name.replace(/\.[^/.]+$/, "") : "document"}_converted.pdf`;
-            displayPdfPreview(blob, filename);
-            
-            showMessage(`SmallPDF.us successfully converted your Word document to PDF! The conversion preserved all formatting and content.`, 'success');
-            
-        } catch (error) {
-            console.error('Error creating realistic PDF:', error);
-            showMessage('SmallPDF.us Word to PDF conversion encountered an issue. Please try again or contact support.', 'error');
-        }
-    }
-    
-    // Display PDF preview with lazy-loaded PDF.js
-    async function displayPdfPreview(pdfBlob, filename) {
-        if (!previewArea || !pdfCanvasContainer) return;
-        
-        // Clear previous content
-        pdfCanvasContainer.innerHTML = '';
-        
-        // Set preview title
-        if (previewTitle) {
-            previewTitle.textContent = `PDF Preview - ${filename}`;
-        }
-        
-        // Try to load PDF.js for preview
-        const pdfJsAvailable = await loadPDFJS();
-        
-        if (pdfJsAvailable && window.pdfjsLib) {
-            try {
-                // Use PDF.js for better preview
-                const arrayBuffer = await pdfBlob.arrayBuffer();
-                const pdf = await pdfjsLib.getDocument({data: arrayBuffer}).promise;
-                const page = await pdf.getPage(1);
-                
-                const scale = 1.2;
-                const viewport = page.getViewport({scale: scale});
-                
-                const canvas = document.createElement('canvas');
-                const context = canvas.getContext('2d');
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-                canvas.style.maxWidth = '100%';
-                canvas.style.height = 'auto';
-                canvas.style.border = '1px solid #e2e8f0';
-                canvas.style.borderRadius = '4px';
-                canvas.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
-                
-                const renderContext = {
-                    canvasContext: context,
-                    viewport: viewport
-                };
-                
-                await page.render(renderContext).promise;
-                
-                // Add page info if multiple pages
-                if (pdf.numPages > 1) {
-                    const pageInfo = document.createElement('div');
-                    pageInfo.style.cssText = `
-                        text-align: center;
-                        margin-bottom: 10px;
-                        color: #64748b;
-                        font-size: 0.9rem;
-                    `;
-                    pageInfo.textContent = `Page 1 of ${pdf.numPages}`;
-                    pdfCanvasContainer.appendChild(pageInfo);
-                }
-                
-                pdfCanvasContainer.appendChild(canvas);
-                
-                // Add conversion success info
-                const conversionInfo = document.createElement('div');
-                conversionInfo.style.cssText = `
-                    text-align: center;
-                    margin-top: 15px;
-                    padding: 10px;
-                    background: #f0fdf4;
-                    border: 1px solid #bbf7d0;
-                    border-radius: 6px;
-                    color: #166534;
-                    font-size: 0.9rem;
-                `;
-                conversionInfo.innerHTML = `
-                    <strong>✓ Word to PDF conversion successful!</strong><br>
-                    Your document has been converted with SmallPDF.us
-                `;
-                pdfCanvasContainer.appendChild(conversionInfo);
-                
-            } catch (error) {
-                console.error('PDF.js preview error:', error);
-                // Fallback to iframe
-                createIframePreview(pdfBlob);
-            }
-        } else {
-            // Fallback to iframe if PDF.js is not available
-            createIframePreview(pdfBlob);
-        }
-        
-        // Show preview area and hide file container
-        previewArea.style.display = 'block';
-        if (fileContainer) fileContainer.style.display = 'none';
-        
-        // Show download button
-        if (downloadBtn) {
-            downloadBtn.style.display = 'inline-block';
-        }
-    }
-    
-    function createIframePreview(pdfBlob) {
-        const pdfUrl = URL.createObjectURL(pdfBlob);
-        
-        const iframe = document.createElement('iframe');
-        iframe.src = pdfUrl;
-        iframe.style.cssText = `
-            width: 100%;
-            height: 400px;
-            border: 1px solid #e2e8f0;
-            border-radius: 4px;
-            background-color: white;
-        `;
-        
-        pdfCanvasContainer.appendChild(iframe);
-        
-        // Add conversion success message
-        const successMessage = document.createElement('div');
-        successMessage.style.cssText = `
-            text-align: center;
-            margin-top: 15px;
-            padding: 12px;
-            background: #f0fdf4;
-            border: 1px solid #bbf7d0;
-            border-radius: 6px;
-            color: #166534;
-            font-size: 0.95rem;
-        `;
-        successMessage.innerHTML = `
-            <strong>✓ SmallPDF.us Word to PDF conversion completed!</strong><br>
-            Your Word document has been successfully converted to PDF format
-        `;
-        pdfCanvasContainer.appendChild(successMessage);
-    }
-    
-    function downloadPdf() {
-        if (!convertedPdfBlob) {
-            showMessage('No PDF available to download from SmallPDF.us. Please convert a Word document first.', 'error');
-            return;
-        }
-        
-        const fileName = selectedFile ? 
-            selectedFile.name.replace(/\.[^/.]+$/, "") + "_converted.pdf" : 
-            "word_to_pdf_converted.pdf";
-        
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(convertedPdfBlob);
-        a.download = fileName;
-        a.style.display = 'none';
-        
-        document.body.appendChild(a);
-        a.click();
-        
-        setTimeout(() => {
-            document.body.removeChild(a);
-            URL.revokeObjectURL(a.href);
-        }, 100);
-        
-        showMessage('Your converted PDF from SmallPDF.us has been downloaded successfully!', 'success');
-    }
-    
-    function showLoader(message = 'SmallPDF.us is converting your document...') {
-        if (loadingIndicator) {
-            const loadingTextElement = loadingIndicator.querySelector('.loading-text');
-            if (loadingTextElement) {
-                loadingTextElement.textContent = message;
-            }
-            loadingIndicator.style.display = 'flex';
-        }
-    }
-    
-    function hideLoader() {
-        if (loadingIndicator) {
-            loadingIndicator.style.display = 'none';
-        }
-    }
-    
-    // Make remove file function available in window scope
-    window.removeFile = function() {
-        selectedFile = null;
-        convertedPdfBlob = null;
-        showUploadArea();
-    };
-    
-    // Initialize FAQ toggle functionality
+    // Initialize FAQ functionality
     const faqItems = document.querySelectorAll('.faq-item');
-    
     faqItems.forEach(item => {
         const question = item.querySelector('.faq-question');
-        
         if (question) {
             question.addEventListener('click', () => {
-                // Close all other FAQ items
-                faqItems.forEach(otherItem => {
-                    if (otherItem !== item) {
-                        otherItem.classList.remove('active');
-                    }
-                });
-                
-                // Toggle current item
                 item.classList.toggle('active');
             });
         }
     });
-    
-    // Performance optimization: Preload PDF.js when user hovers over upload area
-    if (uploadArea) {
-        let preloadTimeout;
-        uploadArea.addEventListener('mouseenter', () => {
-            preloadTimeout = setTimeout(() => {
-                loadPDFJS();
-            }, 500); // Delay to avoid unnecessary loading
-        });
-        
-        uploadArea.addEventListener('mouseleave', () => {
-            if (preloadTimeout) {
-                clearTimeout(preloadTimeout);
+
+    // Initialize lazy loading for images
+    const lazyImages = document.querySelectorAll('.lazy-load');
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('loaded');
+                observer.unobserve(entry.target);
             }
         });
-    }
-    
-    // Also preload when drag starts
-    document.addEventListener('dragstart', (e) => {
-        if (e.dataTransfer && e.dataTransfer.types.includes('Files')) {
-            loadPDFJS();
-        }
     });
-    
-    // For demonstration - automatically show a sample file when testing
-    function showSampleWordFile() {
-        const sampleFile = {
-            name: 'Business_Report_2024.docx',
-            size: 1548000, // 1.5 MB
-            type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-        };
-        
-        selectedFile = sampleFile;
-        updateFilePreview(sampleFile);
-        showFileContainer();
-        applyCompactFilePreviewStyles();
-    }
-    
-    // Uncomment this line to show sample file on page load for testing
-    // showSampleWordFile();
+
+    lazyImages.forEach(img => imageObserver.observe(img));
+
+    // Initialize
+    showUploadArea();
 });
 
-// Add CSS for message animations and enhanced UI
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideIn {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .message-icon {
-        width: 20px;
-        height: 20px;
-        flex-shrink: 0;
-    }
-    
-    /* Enhanced preview container styling */
-    .pdf-canvas-container {
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-        border-radius: 8px;
-        padding: 20px;
-    }
-    
-    .pdf-canvas-container canvas {
-        margin: 0 auto;
-        display: block;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        border-radius: 6px;
-    }
-    
-    /* Loading state improvements */
-    .loading-indicator {
-        backdrop-filter: blur(4px);
-        background-color: rgba(255, 255, 255, 0.95);
-    }
-    
-    .loader {
-        border-color: #e5e7eb;
-        border-top-color: #4361ee;
-        box-shadow: 0 0 20px rgba(67, 97, 238, 0.3);
-    }
-    
-    /* Enhanced file preview */
-    .file-preview {
-        transition: all 0.2s ease;
-        border: 1px solid #e2e8f0;
-    }
-    
-    .file-preview:hover {
-        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-        border-color: #4361ee;
-    }
-    
-    /* Success state for conversion */
-    .conversion-success {
-        background: linear-gradient(135deg, #10b981, #059669);
-        color: white;
-        padding: 12px 20px;
-        border-radius: 8px;
-        text-align: center;
-        margin: 15px 0;
-        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-    }
-    
-    /* Enhanced PDF preview styling */
-    .pdf-preview-area {
-        background: #ffffff;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-    }
-    
-    .pdf-preview-header {
-        background: linear-gradient(135deg, #4361ee, #3a0ca3);
-        color: white;
-        padding: 1rem 1.5rem;
-        border-bottom: none;
-    }
-    
-    .pdf-preview-title {
-        color: white;
-        font-weight: 600;
-        font-size: 1.1rem;
-    }
-    
-    /* Responsive improvements */
-    @media (max-width: 768px) {
-        .pdf-canvas-container {
-            padding: 15px;
-        }
-        
-        .pdf-canvas-container canvas {
-            max-width: 100%;
-            height: auto;
-        }
-        
-        .pdf-preview-header {
-            padding: 0.8rem 1rem;
-        }
-        
-        .pdf-preview-title {
-            font-size: 1rem;
-        }
-    }
-`;
-document.head.appendChild(style);
+// Service Worker for caching (optional performance enhancement)
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => console.log('SW registered'))
+            .catch(error => console.log('SW registration failed'));
+    });
+}
 </script>
+
 {% endblock %}
