@@ -20,12 +20,12 @@ import tempfile
 from io import BytesIO
 from django.views.decorators.cache import cache_control
 import re
-
-
-
-# Add these missing imports for contact functionality
 from .models import ContactMessage, ContactSettings
 from .forms import ContactForm
+from .models import UserActivity, ErrorLog, track_activity, log_error
+import csv
+from django.db.models import Count, Avg, Sum, Q, Max, Min
+from django.shortcuts import render
 
 try:
     from docx import Document
@@ -119,57 +119,146 @@ def terms_of_service(request):
 
 # PDF Tool page views
 def all_tools(request):
-    """Render the all tools page"""
+    """Render the all tools page with all available tools"""
     tools = [
+        # PDF Processing Tools
         {
             'name': 'Merge PDF',
             'description': 'Combine multiple PDFs into a single document.',
             'url': 'merge_pdf',
             'icon': 'merge-icon.svg',
+            'category': 'PDF Processing',
+            'featured': True
         },
-       
+        {
+            'name': 'Split PDF',
+            'description': 'Split PDF into separate pages or extract specific page ranges.',
+            'url': 'split_pdf',
+            'icon': 'split-icon.svg',
+            'category': 'PDF Processing',
+            'featured': True
+        },
         {
             'name': 'Compress PDF',
             'description': 'Reduce PDF file size while maintaining quality.',
             'url': 'compress_pdf',
             'icon': 'compress-icon.svg',
+            'category': 'PDF Processing',
+            'featured': True
         },
         {
             'name': 'Convert PDF',
             'description': 'Transform PDFs to other formats like Word, Excel, etc.',
             'url': 'convert_pdf',
             'icon': 'convert-icon.svg',
+            'category': 'PDF Processing',
+            'featured': False
         },
         
-       
+        # PDF Conversion Tools
         {
             'name': 'PDF to Word',
             'description': 'Convert PDF documents to editable Word files.',
             'url': 'pdf_to_word',
             'icon': 'pdf-to-word-icon.svg',
+            'category': 'PDF Conversion',
+            'featured': True
         },
         {
-            'name': 'PDF to Excel',
-            'description': 'Convert PDF tables to Excel spreadsheets.',
-            'url': 'pdf_to_excel',
-            'icon': 'pdf-to-excel-icon.svg',
+            'name': 'Word to PDF',
+            'description': 'Convert Word documents to PDF format.',
+            'url': 'word_to_pdf',
+            'icon': 'word-to-pdf-icon.svg',
+            'category': 'PDF Conversion',
+            'featured': True
         },
-        
         {
             'name': 'PDF to JPG',
             'description': 'Convert PDF pages to JPG image files.',
             'url': 'pdf_to_jpg',
             'icon': 'pdf-to-jpg-icon.svg',
+            'category': 'PDF Conversion',
+            'featured': True
         },
         {
             'name': 'JPG to PDF',
             'description': 'Convert JPG images to PDF documents.',
             'url': 'jpg_to_pdf',
             'icon': 'jpg-to-pdf-icon.svg',
+            'category': 'PDF Conversion',
+            'featured': True
         },
+        {
+            'name': 'PDF to PNG',
+            'description': 'Convert PDF pages to PNG images with transparency support.',
+            'url': 'pdf_to_png',
+            'icon': 'pdf-to-png-icon.svg',
+            'category': 'PDF Conversion',
+            'featured': False
+        },
+        {
+            'name': 'PNG to PDF',
+            'description': 'Convert PNG images to PDF documents.',
+            'url': 'png_to_pdf',
+            'icon': 'png-to-pdf-icon.svg',
+            'category': 'PDF Conversion',
+            'featured': False
+        },
+        
+        # Image Processing Tools
+        {
+            'name': 'WebP to PNG',
+            'description': 'Convert WebP images to PNG format online free.',
+            'url': 'webp_to_png',
+            'icon': 'webp-to-png-icon.svg',
+            'category': 'Image Processing',
+            'featured': True
+        },
+        {
+            'name': 'PNG to WebP',
+            'description': 'Convert PNG images to WebP format for better compression.',
+            'url': 'png_to_webp',
+            'icon': 'png-to-webp-icon.svg',
+            'category': 'Image Processing',
+            'featured': False
+        },
+        {
+            'name': 'Compress Image',
+            'description': 'Reduce image file size while maintaining quality.',
+            'url': 'compress_image',
+            'icon': 'compress-image-icon.svg',
+            'category': 'Image Processing',
+            'featured': True
+        }
     ]
     
-    return render(request, 'all_tools.html', {'tools': tools})
+    # Group tools by category for better organization
+    tools_by_category = {}
+    featured_tools = []
+    
+    for tool in tools:
+        category = tool['category']
+        if category not in tools_by_category:
+            tools_by_category[category] = []
+        tools_by_category[category].append(tool)
+        
+        # Add to featured tools if marked as featured
+        if tool.get('featured', False):
+            featured_tools.append(tool)
+    
+    # Count total tools
+    total_tools = len(tools)
+    
+    context = {
+        'tools': tools,
+        'tools_by_category': tools_by_category,
+        'featured_tools': featured_tools,
+        'total_tools': total_tools,
+        'categories': list(tools_by_category.keys())
+    }
+    
+    return render(request, 'all_tools.html', context)
+    
 
 def merge_pdf(request):
     """Render the merge PDF tool page"""
@@ -301,9 +390,6 @@ def pdf_to_word_api(request):
         
         return JsonResponse({'error': str(e)}, status=500)
 
-def pdf_to_excel(request):
-    """Render the PDF to Excel tool page"""
-    return render(request, 'pdf_to_excel.html')
 
 
 try:
@@ -1198,98 +1284,6 @@ def convert_pdf_api(request):
     # This is a placeholder. Actual implementation would need specific libraries for each conversion type
     return JsonResponse({'error': 'This feature is in development'}, status=501)
 
-@csrf_exempt
-def edit_pdf_api(request):
-    """API endpoint to edit PDF content"""
-    # PDF editing is complex and would require client-side libraries like PDF.js
-    return JsonResponse({'error': 'This feature is in development'}, status=501)
-
-@csrf_exempt
-def protect_pdf_api(request):
-    """API endpoint to add password protection to a PDF"""
-    if request.method != 'POST':
-        return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
-    
-    if not PDF_LIBRARY_AVAILABLE:
-        return JsonResponse({'error': 'PDF processing library not available'}, status=500)
-    
-    if 'file' not in request.FILES:
-        return JsonResponse({'error': 'PDF file is required'}, status=400)
-    
-    password = request.POST.get('password', '')
-    if not password:
-        return JsonResponse({'error': 'Password is required'}, status=400)
-    
-    try:
-        reader = PdfReader(request.FILES['file'])
-        writer = PdfWriter()
-        
-        # Add all pages to the writer
-        for page in reader.pages:
-            writer.add_page(page)
-        
-        # Encrypt with the provided password
-        writer.encrypt(password)
-        
-        output = tempfile.NamedTemporaryFile(delete=False, suffix='.pdf')
-        with open(output.name, 'wb') as f:
-            writer.write(f)
-        
-        with open(output.name, 'rb') as f:
-            response = HttpResponse(f.read(), content_type='application/pdf')
-            response['Content-Disposition'] = 'attachment; filename="protected.pdf"'
-        
-        # Clean up temporary file
-        os.unlink(output.name)
-        
-        return response
-    
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
-
-@csrf_exempt
-def unlock_pdf_api(request):
-    """API endpoint to remove password protection from a PDF"""
-    if request.method != 'POST':
-        return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
-    
-    if not PDF_LIBRARY_AVAILABLE:
-        return JsonResponse({'error': 'PDF processing library not available'}, status=500)
-    
-    if 'file' not in request.FILES:
-        return JsonResponse({'error': 'PDF file is required'}, status=400)
-    
-    password = request.POST.get('password', '')
-    
-    try:
-        reader = PdfReader(request.FILES['file'])
-        
-        if reader.is_encrypted:
-            reader.decrypt(password)
-        
-        writer = PdfWriter()
-        
-        for page in reader.pages:
-            writer.add_page(page)
-        
-        output = tempfile.NamedTemporaryFile(delete=False, suffix='.pdf')
-        with open(output.name, 'wb') as f:
-            writer.write(f)
-        
-        with open(output.name, 'rb') as f:
-            response = HttpResponse(f.read(), content_type='application/pdf')
-            response['Content-Disposition'] = 'attachment; filename="unlocked.pdf"'
-        
-        # Clean up temporary file
-        os.unlink(output.name)
-        
-        return response
-    
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
-
-
-
 try:
     from docx2pdf import convert
     import pythoncom
@@ -1754,60 +1748,7 @@ def convert_with_libreoffice_precise(input_path, temp_dir, libreoffice_path):
         return None
 
 # === OTHER API ENDPOINTS (SIMPLIFIED) ===
-@csrf_exempt
-def merge_pdf_api(request):
-    """Merge multiple PDF files"""
-    if request.method != 'POST':
-        return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
-    
-    if not PDF_LIBRARY_AVAILABLE:
-        return JsonResponse({'error': 'PDF processing library not available'}, status=500)
-    
-    files = request.FILES.getlist('files')
-    if len(files) < 2:
-        return JsonResponse({'error': 'At least 2 PDF files are required'}, status=400)
-    
-    temp_files = []
-    try:
-        writer = PdfWriter()
-        
-        for pdf_file in files:
-            if not pdf_file.name.lower().endswith('.pdf'):
-                return JsonResponse({'error': f'Invalid file: {pdf_file.name}'}, status=400)
-            
-            temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.pdf')
-            temp_files.append(temp_file.name)
-            
-            for chunk in pdf_file.chunks():
-                temp_file.write(chunk)
-            temp_file.close()
-            
-            with open(temp_file.name, 'rb') as f:
-                reader = PdfReader(f)
-                for page in reader.pages:
-                    writer.add_page(page)
-        
-        output_file = tempfile.NamedTemporaryFile(delete=False, suffix='.pdf')
-        with open(output_file.name, 'wb') as f:
-            writer.write(f)
-        
-        with open(output_file.name, 'rb') as f:
-            response = HttpResponse(f.read(), content_type='application/pdf')
-            response['Content-Disposition'] = 'attachment; filename="merged_document.pdf"'
-        
-        os.unlink(output_file.name)
-        return response
-    
-    except Exception as e:
-        return JsonResponse({'error': f'Merge failed: {str(e)}'}, status=500)
-    
-    finally:
-        for temp_path in temp_files:
-            try:
-                if os.path.exists(temp_path):
-                    os.unlink(temp_path)
-            except:
-                pass
+
 
 try:
     from docx import Document
@@ -1885,39 +1826,6 @@ def find_libreoffice_path():
 def compress_image(request):
     # Your image compression logic will go here
     return render(request, 'pdf_tools/compress_image.html')
-def html_to_pdf(request):
-    return render(request, 'pdf_tools/html_to_pdf.html')
-def excel_to_pdf(request):
-    """Render the Excel to PDF tool page"""
-    return render(request, 'pdf_tools/excel_to_pdf.html')
-
-@csrf_exempt
-def excel_to_pdf_api(request):
-    """API endpoint to convert Excel files to PDF"""
-    if request.method != 'POST':
-        return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
-    
-    if 'file' not in request.FILES:
-        return JsonResponse({'error': 'Excel file is required'}, status=400)
-    
-    excel_file = request.FILES['file']
-    
-    # Check if it's a valid Excel file
-    file_name = excel_file.name.lower()
-    if not (file_name.endswith('.xls') or file_name.endswith('.xlsx')):
-        return JsonResponse({'error': 'Invalid file format. Please upload an XLS or XLSX file'}, status=400)
-    
-    try:
-        # This would be where your Excel to PDF conversion logic goes
-        # For now, we'll return a placeholder response
-        
-        return JsonResponse({
-            'message': 'Excel to PDF conversion is not fully implemented yet. Please check back later.',
-            'status': 'pending'
-        })
-        
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
 
 
 # Import required libraries for PDF compression
@@ -2506,7 +2414,6 @@ def compress_pdf_alternative(input_path, output_dir, compression_level):
 
 from PIL import Image
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
 
 # Check if required libraries are available
 try:
@@ -3674,21 +3581,20 @@ from django.urls import reverse
 from django.utils import timezone
 
 def sitemap_xml(request):
-    """Generate sitemap.xml with correct domain"""
+    """Generate sitemap.xml with correct domain - FIXED VERSION"""
     
     # Get the actual domain from the request
     domain = request.get_host()
     protocol = 'https' if request.is_secure() else 'http'
     
-    # Force your domain for production (replace with your actual domain)
-    if domain == '127.0.0.1:8000' or domain == 'localhost:8000':
-        # For development, use your actual domain
+    # Force your domain for production
+    if domain in ['127.0.0.1:8000', 'localhost:8000']:
         base_url = 'https://smallpdf.us'
     else:
-        # For production, use the request domain
         base_url = f"{protocol}://{domain}"
     
     # Get current date in simple format
+    from datetime import datetime
     current_date = datetime.now().strftime('%Y-%m-%d')
     static_date = '2024-01-01'
     
@@ -3710,6 +3616,11 @@ def sitemap_xml(request):
         {'url': '/word-to-pdf/', 'priority': '0.9', 'changefreq': 'monthly', 'lastmod': current_date},
         {'url': '/pdf-to-jpg/', 'priority': '0.8', 'changefreq': 'monthly', 'lastmod': current_date},
         {'url': '/jpg-to-pdf/', 'priority': '0.8', 'changefreq': 'monthly', 'lastmod': current_date},
+        {'url': '/webp-to-png/', 'priority': '0.8', 'changefreq': 'monthly', 'lastmod': current_date},
+        {'url': '/png-to-webp/', 'priority': '0.8', 'changefreq': 'monthly', 'lastmod': current_date},
+        {'url': '/pdf-to-png/', 'priority': '0.8', 'changefreq': 'monthly', 'lastmod': current_date},
+        {'url': '/png-to-pdf/', 'priority': '0.8', 'changefreq': 'monthly', 'lastmod': current_date},
+        {'url': '/split-pdf/', 'priority': '0.8', 'changefreq': 'monthly', 'lastmod': current_date},
         {'url': '/compress-image/', 'priority': '0.8', 'changefreq': 'monthly', 'lastmod': current_date},
         {'url': '/convert-pdf/', 'priority': '0.8', 'changefreq': 'monthly', 'lastmod': current_date},
     ]
@@ -3734,14 +3645,14 @@ def sitemap_xml(request):
 
 
 def robots_txt(request):
-    """Generate robots.txt with correct domain"""
+    """Generate robots.txt with correct domain - FIXED VERSION"""
     
     # Get the actual domain from the request
     domain = request.get_host()
     protocol = 'https' if request.is_secure() else 'http'
     
     # Force your domain for production
-    if domain == '127.0.0.1:8000' or domain == 'localhost:8000':
+    if domain in ['127.0.0.1:8000', 'localhost:8000']:
         base_url = 'https://smallpdf.us'
     else:
         base_url = f"{protocol}://{domain}"
@@ -3757,6 +3668,11 @@ Allow: /pdf-to-word/
 Allow: /word-to-pdf/
 Allow: /pdf-to-jpg/
 Allow: /jpg-to-pdf/
+Allow: /webp-to-png/
+Allow: /png-to-webp/
+Allow: /pdf-to-png/
+Allow: /png-to-pdf/
+Allow: /split-pdf/
 Allow: /convert-pdf/
 Allow: /tools/
 Allow: /about/
@@ -3774,15 +3690,6 @@ Disallow: /media/contact_attachments/
 # Allow media files but disallow temporary files
 Allow: /media/
 Allow: /static/
-
-# Block certain file types that shouldn't be indexed
-Disallow: *.pdf$
-Disallow: *.doc$
-Disallow: *.docx$
-Disallow: *.jpg$
-Disallow: *.jpeg$
-Disallow: *.png$
-Disallow: *.gif$
 
 # Crawl delay to be respectful
 Crawl-delay: 1
@@ -3812,200 +3719,488 @@ Crawl-delay: 1
 
 # Add these views to your views.py file
 
-from django.shortcuts import render
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Count, Avg, Sum, Q
 from datetime import datetime, timedelta
 from django.http import JsonResponse
 from django.core.paginator import Paginator
 from .models import UserActivity, ErrorLog, SystemMetrics
-from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import user_passes_test
-from django.core.paginator import Paginator
+
 def is_staff_user(user):
     return user.is_authenticated and user.is_staff
-@user_passes_test(is_staff_user)
+
+@staff_member_required
 def admin_dashboard(request):
-    """Main admin analytics dashboard"""
-    
-    # Get date range from request
+    """Enhanced main admin dashboard with real-time capabilities"""
+    # Get date range
     days = int(request.GET.get('days', 7))
     start_date = timezone.now() - timedelta(days=days)
     
-    # Basic stats - Using dummy data if models don't exist
-    try:
-        from .models import UserActivity, ErrorLog
-        
-        total_activities = UserActivity.objects.filter(created_at__gte=start_date).count()
-        total_errors = ErrorLog.objects.filter(created_at__gte=start_date).count()
-        unique_users = UserActivity.objects.filter(
-            created_at__gte=start_date
-        ).values('session_id').distinct().count()
-        
-        # Tool usage stats
-        tool_usage = list(UserActivity.objects.filter(
-            activity_type='tool_access',
-            created_at__gte=start_date
-        ).values('tool_name').annotate(
-            count=Count('id')
-        ).order_by('-count')[:10])
-        
-        # File processing stats
-        file_stats = UserActivity.objects.filter(
-            activity_type='file_process',
-            created_at__gte=start_date
-        ).aggregate(
-            total_files=Count('id'),
-            avg_file_size=Avg('file_size'),
-            total_size=Sum('file_size'),
-            avg_processing_time=Avg('processing_time')
-        )
-        
-        # Error breakdown
-        error_breakdown = list(ErrorLog.objects.filter(
-            created_at__gte=start_date
-        ).values('error_type').annotate(
-            count=Count('id')
-        ).order_by('-count')[:10])
-        
-        # Daily activity chart data
-        daily_activity = []
-        for i in range(days):
-            date = start_date + timedelta(days=i)
-            day_start = date.replace(hour=0, minute=0, second=0, microsecond=0)
-            day_end = day_start + timedelta(days=1)
-            
-            activities = UserActivity.objects.filter(
-                created_at__gte=day_start,
-                created_at__lt=day_end
-            ).count()
-            
-            errors = ErrorLog.objects.filter(
-                created_at__gte=day_start,
-                created_at__lt=day_end
-            ).count()
-            
-            daily_activity.append({
-                'date': date.strftime('%Y-%m-%d'),
-                'activities': activities,
-                'errors': errors
-            })
-        
-        # Device and browser stats
-        device_stats = list(UserActivity.objects.filter(
-            created_at__gte=start_date
-        ).values('device_type').annotate(
-            count=Count('id')
-        ).order_by('-count'))
-        
-        browser_stats = list(UserActivity.objects.filter(
-            created_at__gte=start_date
-        ).values('browser').annotate(
-            count=Count('id')
-        ).order_by('-count'))
-        
-        # Country stats
-        country_stats = list(UserActivity.objects.filter(
-            created_at__gte=start_date,
-            country__isnull=False
-        ).values('country').annotate(
-            count=Count('id')
-        ).order_by('-count')[:10])
-        
-        # Success rate
-        success_rate = UserActivity.objects.filter(
+    # Basic statistics
+    stats = {
+        'total_activities': UserActivity.objects.filter(created_at__gte=start_date).count(),
+        'total_conversions': UserActivity.objects.filter(
             created_at__gte=start_date,
             activity_type='file_process'
-        ).aggregate(
-            total=Count('id'),
-            success=Count('id', filter=Q(status='success'))
-        )
+        ).count(),
+        'total_errors': ErrorLog.objects.filter(created_at__gte=start_date).count(),
+        'unique_users': UserActivity.objects.filter(
+            created_at__gte=start_date
+        ).values('session_id').distinct().count(),
+    }
+    
+    # Calculate success rate
+    successful_conversions = UserActivity.objects.filter(
+        created_at__gte=start_date,
+        activity_type='file_process',
+        status='success'
+    ).count()
+    
+    if stats['total_conversions'] > 0:
+        stats['success_rate'] = (successful_conversions / stats['total_conversions']) * 100
+    else:
+        stats['success_rate'] = 0
+    
+    # Tool usage statistics
+    tool_usage = list(UserActivity.objects.filter(
+        created_at__gte=start_date,
+        activity_type__in=['tool_access', 'file_process'],
+        tool_name__isnull=False
+    ).values('tool_name').annotate(
+        count=Count('id')
+    ).order_by('-count')[:10])
+    
+    # Error breakdown
+    error_breakdown = list(ErrorLog.objects.filter(
+        created_at__gte=start_date
+    ).values('error_type').annotate(
+        count=Count('id')
+    ).order_by('-count')[:10])
+    
+    # File processing statistics
+    file_stats = UserActivity.objects.filter(
+        created_at__gte=start_date,
+        activity_type='file_process'
+    ).aggregate(
+        total_files=Count('id'),
+        avg_file_size=Avg('file_size'),
+        total_size=Sum('file_size'),
+        avg_processing_time=Avg('processing_time')
+    )
+    
+    # Daily activity data for charts
+    daily_activity = []
+    for i in range(days):
+        date = start_date + timedelta(days=i)
+        day_start = date.replace(hour=0, minute=0, second=0, microsecond=0)
+        day_end = day_start + timedelta(days=1)
         
-        success_percentage = 0
-        if success_rate['total'] > 0:
-            success_percentage = (success_rate['success'] / success_rate['total']) * 100
-            
-    except ImportError:
-        # Fallback to dummy data if models don't exist
-        total_activities = 1250
-        total_errors = 15
-        unique_users = 890
-        tool_usage = [
-            {'tool_name': 'PDF to Word', 'count': 450},
-            {'tool_name': 'Merge PDF', 'count': 320},
-            {'tool_name': 'Compress PDF', 'count': 280},
-        ]
-        file_stats = {
-            'total_files': 1200,
-            'avg_file_size': 2048000,
-            'total_size': 2457600000,
-            'avg_processing_time': 2.5
-        }
-        error_breakdown = [
-            {'error_type': 'File Upload Error', 'count': 8},
-            {'error_type': 'Processing Timeout', 'count': 5},
-            {'error_type': 'Invalid File Format', 'count': 2},
-        ]
-        daily_activity = [
-            {'date': '2024-06-14', 'activities': 180, 'errors': 2},
-            {'date': '2024-06-15', 'activities': 195, 'errors': 3},
-            {'date': '2024-06-16', 'activities': 220, 'errors': 1},
-            {'date': '2024-06-17', 'activities': 210, 'errors': 4},
-            {'date': '2024-06-18', 'activities': 235, 'errors': 2},
-            {'date': '2024-06-19', 'activities': 200, 'errors': 3},
-            {'date': '2024-06-20', 'activities': 190, 'errors': 0},
-        ]
-        device_stats = [
-            {'device_type': 'desktop', 'count': 650},
-            {'device_type': 'mobile', 'count': 450},
-            {'device_type': 'tablet', 'count': 150},
-        ]
-        browser_stats = [
-            {'browser': 'Chrome', 'count': 580},
-            {'browser': 'Firefox', 'count': 320},
-            {'browser': 'Safari', 'count': 240},
-            {'browser': 'Edge', 'count': 110},
-        ]
-        country_stats = [
-            {'country': 'United States', 'count': 450},
-            {'country': 'India', 'count': 280},
-            {'country': 'United Kingdom', 'count': 180},
-            {'country': 'Canada', 'count': 120},
-            {'country': 'Germany', 'count': 100},
-        ]
-        success_percentage = 96.8
+        activities = UserActivity.objects.filter(
+            created_at__gte=day_start,
+            created_at__lt=day_end
+        ).count()
+        
+        errors = ErrorLog.objects.filter(
+            created_at__gte=day_start,
+            created_at__lt=day_end
+        ).count()
+        
+        daily_activity.append({
+            'date': date.strftime('%Y-%m-%d'),
+            'activities': activities,
+            'errors': errors
+        })
+    
+    # Device and browser statistics
+    device_stats = list(UserActivity.objects.filter(
+        created_at__gte=start_date
+    ).values('device_type').annotate(
+        count=Count('id')
+    ).order_by('-count'))
+    
+    browser_stats = list(UserActivity.objects.filter(
+        created_at__gte=start_date
+    ).values('browser').annotate(
+        count=Count('id')
+    ).order_by('-count'))
+    
+    # Country statistics
+    country_stats = list(UserActivity.objects.filter(
+        created_at__gte=start_date,
+        country__isnull=False
+    ).values('country').annotate(
+        count=Count('id')
+    ).order_by('-count')[:10])
     
     context = {
-        'days': days,
-        'total_activities': total_activities,
-        'total_errors': total_errors,
-        'unique_users': unique_users,
+        'stats': stats,
         'tool_usage': json.dumps(tool_usage),
-        'file_stats': file_stats,
         'error_breakdown': error_breakdown,
+        'file_stats': file_stats,
         'daily_activity': json.dumps(daily_activity),
         'device_stats': device_stats,
         'browser_stats': browser_stats,
         'country_stats': country_stats,
-        'success_percentage': round(success_percentage, 2)
+        'days': days,
     }
     
     return render(request, 'admin/analytics_dashboard.html', context)
 
+def calculate_error_rate(since_time):
+    """Calculate error rate percentage"""
+    try:
+        total_requests = UserActivity.objects.filter(created_at__gte=since_time).count()
+        error_requests = ErrorLog.objects.filter(created_at__gte=since_time).count()
+        
+        if total_requests == 0:
+            return 0
+        
+        return round((error_requests / total_requests) * 100, 2)
+    except:
+        return 0
+
+def calculate_avg_response_time(since_time):
+    """Calculate average response time"""
+    avg_time = UserActivity.objects.filter(
+        created_at__gte=since_time,
+        processing_time__isnull=False
+    ).aggregate(avg=Avg('processing_time'))['avg']
+    
+    return round(avg_time * 1000, 2) if avg_time else 0  # Convert to milliseconds
+
+def get_active_sessions_count():
+    """Get count of active sessions in last 30 minutes"""
+    last_30_min = timezone.now() - timedelta(minutes=30)
+    return UserActivity.objects.filter(
+        created_at__gte=last_30_min
+    ).values('session_id').distinct().count()
+
+def get_system_disk_usage():
+    """Get disk usage information"""
+    try:
+        import shutil
+        total, used, free = shutil.disk_usage("/")
+        used_percent = (used / total) * 100
+        return {
+            'total_gb': round(total / (1024**3), 2),
+            'used_gb': round(used / (1024**3), 2),
+            'free_gb': round(free / (1024**3), 2),
+            'used_percent': round(used_percent, 1)
+        }
+    except:
+        # Mock data if unable to get real disk usage
+        return {
+            'total_gb': 100.0,
+            'used_gb': 65.0,
+            'free_gb': 35.0,
+            'used_percent': 65.0
+        }
+
+def get_system_cpu_usage():
+    """Get CPU usage information"""
+    try:
+        import psutil
+        cpu_percent = psutil.cpu_percent(interval=1)
+        cpu_count = psutil.cpu_count()
+        return {
+            'usage_percent': cpu_percent,
+            'core_count': cpu_count,
+            'load_average': psutil.getloadavg() if hasattr(psutil, 'getloadavg') else [0, 0, 0]
+        }
+    except:
+        # Mock data if psutil not available
+        return {
+            'usage_percent': 45.0,
+            'core_count': 4,
+            'load_average': [1.2, 1.5, 1.8]
+        }
+       
+def get_system_memory_usage():
+    """Get memory usage information"""
+    try:
+        import psutil
+        memory = psutil.virtual_memory()
+        return {
+            'total_mb': round(memory.total / (1024**2)),
+            'used_mb': round(memory.used / (1024**2)),
+            'available_mb': round(memory.available / (1024**2)),
+            'used_percent': round(memory.percent, 1)
+        }
+    except:
+        # Mock data if psutil not available
+        return {
+            'total_mb': 8192,
+            'used_mb': 5324,
+            'available_mb': 2868,
+            'used_percent': 65.0
+        }    
+    
+
+@staff_member_required
+def real_time_monitor(request):
+    """Real-time monitoring dashboard"""
+    return render(request, 'admin/real_time_monitor.html')
+
+def check_database_health():
+    """Check database connectivity and performance"""
+    try:
+        # Test database connection
+        from django.db import connection
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+            result = cursor.fetchone()
+        
+        # Test query performance
+        start_time = time.time()
+        UserActivity.objects.first()
+        query_time = time.time() - start_time
+        
+        return {
+            'status': 'healthy',
+            'connection': 'ok',
+            'query_time': round(query_time * 1000, 2)  # milliseconds
+        }
+    except Exception as e:
+        return {
+            'status': 'error',
+            'connection': 'failed',
+            'error': str(e)
+        }
+
+
+def check_database_status():
+    """Check database connectivity"""
+    try:
+        UserActivity.objects.first()
+        return {'status': 'healthy', 'message': 'Database connection OK'}
+    except Exception as e:
+        return {'status': 'error', 'message': f'Database error: {str(e)}'}
+
+def get_disk_usage():
+    """Get disk usage (mock implementation)"""
+    # In production, implement actual disk usage monitoring
+    import random
+    return {
+        'used_percent': random.randint(20, 80),
+        'free_gb': random.randint(100, 500),
+        'total_gb': 1000
+    }
+
+def get_memory_usage():
+    """Get memory usage (mock implementation)"""
+    # In production, implement actual memory monitoring
+    import random
+    return {
+        'used_percent': random.randint(30, 70),
+        'used_mb': random.randint(2000, 6000),
+        'total_mb': 8192
+    }
+def get_top_errors(since_time):
+    """Get top errors in the time period"""
+    try:
+        return list(ErrorLog.objects.filter(
+            created_at__gte=since_time
+        ).values('error_type').annotate(
+            count=Count('id')
+        ).order_by('-count')[:5])
+    except:
+        return []
+    
+def get_top_errors(since_time):
+    """Get top errors in the time period"""
+    return list(ErrorLog.objects.filter(
+        created_at__gte=since_time
+    ).values('error_type').annotate(
+        count=Count('id')
+    ).order_by('-count')[:5])
+
+def get_system_uptime():
+    """Get system uptime"""
+    try:
+        import psutil
+        boot_time = psutil.boot_time()
+        uptime_seconds = time.time() - boot_time
+        
+        days = int(uptime_seconds // 86400)
+        hours = int((uptime_seconds % 86400) // 3600)
+        minutes = int((uptime_seconds % 3600) // 60)
+        
+        return {
+            'seconds': int(uptime_seconds),
+            'formatted': f"{days}d {hours}h {minutes}m"
+        }
+    except:
+        return {
+            'seconds': 86400,
+            'formatted': "1d 0h 0m"
+        }
+def calculate_overall_health_score(health_data):
+    """Calculate overall system health score out of 100"""
+    try:
+        score = 100
+        
+        # Deduct points based on various factors
+        if health_data.get('error_rate_24h', 0) > 5:
+            score -= 20
+        elif health_data.get('error_rate_24h', 0) > 2:
+            score -= 10
+        
+        if health_data.get('avg_response_time', 0) > 5000:  # 5 seconds
+            score -= 15
+        elif health_data.get('avg_response_time', 0) > 3000:  # 3 seconds
+            score -= 10
+        
+        if health_data.get('disk_usage', {}).get('used_percent', 0) > 90:
+            score -= 15
+        elif health_data.get('disk_usage', {}).get('used_percent', 0) > 80:
+            score -= 10
+        
+        if health_data.get('memory_usage', {}).get('used_percent', 0) > 90:
+            score -= 15
+        elif health_data.get('memory_usage', {}).get('used_percent', 0) > 80:
+            score -= 10
+        
+        if health_data.get('cpu_usage', {}).get('usage_percent', 0) > 90:
+            score -= 15
+        elif health_data.get('cpu_usage', {}).get('usage_percent', 0) > 80:
+            score -= 10
+        
+        return max(0, score)  # Don't go below 0
+    except:
+        return 75  # Default moderate score if calculation fails
+
+def get_slowest_tools(since_time):
+    """Get tools with highest average processing time"""
+    return list(UserActivity.objects.filter(
+        created_at__gte=since_time,
+        activity_type='file_process',
+        processing_time__isnull=False
+    ).values('tool_name').annotate(
+        avg_time=Avg('processing_time'),
+        total_uses=Count('id')
+    ).order_by('-avg_time')[:5])
+
+@staff_member_required
+def live_data_api(request):
+    """API endpoint for real-time dashboard data"""
+    try:
+        now = timezone.now()
+        last_hour = now - timedelta(hours=1)
+        last_30_minutes = now - timedelta(minutes=30)
+        last_5_minutes = now - timedelta(minutes=5)
+        
+        # Active users (sessions with activity in last 30 minutes)
+        active_users = UserActivity.objects.filter(
+            created_at__gte=last_30_minutes
+        ).values('session_id').distinct().count()
+        
+        # Conversions in the last hour
+        conversions_hour = UserActivity.objects.filter(
+            created_at__gte=last_hour,
+            activity_type='file_process'
+        ).count()
+        
+        # Errors in the last hour
+        errors_hour = ErrorLog.objects.filter(
+            created_at__gte=last_hour
+        ).count()
+        
+        # Success rate calculation
+        successful_conversions_hour = UserActivity.objects.filter(
+            created_at__gte=last_hour,
+            activity_type='file_process',
+            status='success'
+        ).count()
+        
+        success_rate = 0
+        if conversions_hour > 0:
+            success_rate = (successful_conversions_hour / conversions_hour) * 100
+        
+        # Recent activities (last 5 minutes, limit 20)
+        recent_activities = list(UserActivity.objects.filter(
+            created_at__gte=last_5_minutes
+        ).order_by('-created_at')[:20].values(
+            'activity_type', 'tool_name', 'file_name', 'status',
+            'ip_address', 'device_type', 'created_at', 'error_message'
+        ))
+        
+        # Tool performance (last hour)
+        tool_performance = list(UserActivity.objects.filter(
+            created_at__gte=last_hour,
+            activity_type='file_process',
+            tool_name__isnull=False
+        ).values('tool_name').annotate(
+            total_attempts=Count('id'),
+            successful=Count('id', filter=Q(status='success')),
+            failed=Count('id', filter=Q(status='failed')),
+            avg_processing_time=Avg('processing_time')
+        ).order_by('-total_attempts')[:10])
+        
+        # Recent errors (unresolved, last 24 hours)
+        recent_errors = list(ErrorLog.objects.filter(
+            created_at__gte=now - timedelta(hours=24),
+            resolved=False
+        ).order_by('-created_at')[:10].values(
+            'error_type', 'error_message', 'severity',
+            'ip_address', 'created_at'
+        ))
+        
+        # System health metrics
+        avg_processing_time = UserActivity.objects.filter(
+            created_at__gte=last_hour,
+            processing_time__isnull=False
+        ).aggregate(avg=Avg('processing_time'))['avg']
+        
+        system_health = {
+            'avg_response_time': round(avg_processing_time * 1000, 2) if avg_processing_time else None,
+            'memory_usage': 75,  # Mock data - implement actual system monitoring
+            'cpu_usage': 45,     # Mock data
+            'disk_usage': 30,    # Mock data
+        }
+        
+        # Format timestamps for frontend
+        for activity in recent_activities:
+            activity['created_at'] = activity['created_at'].isoformat()
+        
+        for error in recent_errors:
+            error['created_at'] = error['created_at'].isoformat()
+        
+        response_data = {
+            'timestamp': now.isoformat(),
+            'active_users': active_users,
+            'conversions_hour': conversions_hour,
+            'errors_hour': errors_hour,
+            'success_rate': round(success_rate, 1),
+            'recent_activities': recent_activities,
+            'tool_performance': tool_performance,
+            'recent_errors': recent_errors,
+            'system_health': system_health,
+        }
+        
+        return JsonResponse(response_data)
+        
+    except Exception as e:
+        print(f"Error in live_data_api: {str(e)}")
+        return JsonResponse({
+            'error': 'Failed to fetch live data',
+            'timestamp': timezone.now().isoformat()
+        }, status=500)
+
 @staff_member_required
 def user_activity_detail(request):
-    """Detailed user activity view"""
-    
+    """Detailed user activity view with enhanced filtering"""
     # Filters
     activity_type = request.GET.get('activity_type', '')
     tool_name = request.GET.get('tool_name', '')
     status = request.GET.get('status', '')
+    device_type = request.GET.get('device_type', '')
     days = int(request.GET.get('days', 7))
     
     # Base queryset
     activities = UserActivity.objects.filter(
         created_at__gte=timezone.now() - timedelta(days=days)
-    ).select_related('user').order_by('-created_at')
+    ).order_by('-created_at')
     
     # Apply filters
     if activity_type:
@@ -4014,8 +4209,11 @@ def user_activity_detail(request):
         activities = activities.filter(tool_name=tool_name)
     if status:
         activities = activities.filter(status=status)
+    if device_type:
+        activities = activities.filter(device_type=device_type)
     
     # Pagination
+    from django.core.paginator import Paginator
     paginator = Paginator(activities, 50)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -4024,15 +4222,19 @@ def user_activity_detail(request):
     activity_types = UserActivity.ACTIVITY_TYPES
     tools = UserActivity.objects.values_list('tool_name', flat=True).distinct()
     tools = [t for t in tools if t]  # Remove None values
+    device_types = UserActivity.objects.values_list('device_type', flat=True).distinct()
+    device_types = [d for d in device_types if d]
     
     context = {
         'activities': page_obj,
         'activity_types': activity_types,
         'tools': tools,
+        'device_types': device_types,
         'current_filters': {
             'activity_type': activity_type,
             'tool_name': tool_name,
             'status': status,
+            'device_type': device_type,
             'days': days
         }
     }
@@ -4041,8 +4243,7 @@ def user_activity_detail(request):
 
 @staff_member_required
 def error_log_detail(request):
-    """Detailed error log view"""
-    
+    """Detailed error log view with enhanced filtering"""
     # Filters
     error_type = request.GET.get('error_type', '')
     severity = request.GET.get('severity', '')
@@ -4052,7 +4253,7 @@ def error_log_detail(request):
     # Base queryset
     errors = ErrorLog.objects.filter(
         created_at__gte=timezone.now() - timedelta(days=days)
-    ).select_related('user', 'resolved_by').order_by('-created_at')
+    ).order_by('-created_at')
     
     # Apply filters
     if error_type:
@@ -4063,6 +4264,7 @@ def error_log_detail(request):
         errors = errors.filter(resolved=resolved == 'true')
     
     # Pagination
+    from django.core.paginator import Paginator
     paginator = Paginator(errors, 25)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -4083,62 +4285,365 @@ def error_log_detail(request):
     }
     
     return render(request, 'admin/error_log_detail.html', context)
-
 @staff_member_required
-def api_dashboard_data(request):
-    """API endpoint for dashboard data (for AJAX updates)"""
-    
-    days = int(request.GET.get('days', 1))
+def conversion_statistics(request):
+    """Detailed conversion statistics by tool"""
+    days = int(request.GET.get('days', 7))
     start_date = timezone.now() - timedelta(days=days)
     
-    # Real-time stats
-    recent_activities = UserActivity.objects.filter(
-        created_at__gte=start_date
-    ).count()
+    # Conversion stats by tool
+    conversion_stats = list(UserActivity.objects.filter(
+        created_at__gte=start_date,
+        activity_type='file_process',
+        tool_name__isnull=False
+    ).values('tool_name').annotate(
+        total_attempts=Count('id'),
+        successful=Count('id', filter=Q(status='success')),
+        failed=Count('id', filter=Q(status='failed')),
+        avg_file_size=Avg('file_size'),
+        total_file_size=Sum('file_size'),
+        avg_processing_time=Avg('processing_time'),
+        max_processing_time=Max('processing_time'),
+        min_processing_time=Min('processing_time')
+    ).order_by('-total_attempts'))
     
-    recent_errors = ErrorLog.objects.filter(
-        created_at__gte=start_date
-    ).count()
+    # Calculate success rates and format data
+    for stat in conversion_stats:
+        if stat['total_attempts'] > 0:
+            stat['success_rate'] = (stat['successful'] / stat['total_attempts']) * 100
+        else:
+            stat['success_rate'] = 0
     
-    active_sessions = UserActivity.objects.filter(
-        created_at__gte=timezone.now() - timedelta(minutes=30)
-    ).values('session_id').distinct().count()
-    
-    # Hourly data for the last 24 hours
+    # Hourly conversion data for charts
     hourly_data = []
     for i in range(24):
-        hour_start = timezone.now() - timedelta(hours=i+1)
+        hour_start = timezone.now() - timedelta(hours=i)
         hour_end = hour_start + timedelta(hours=1)
         
-        activities = UserActivity.objects.filter(
+        conversions = UserActivity.objects.filter(
             created_at__gte=hour_start,
-            created_at__lt=hour_end
+            created_at__lt=hour_end,
+            activity_type='file_process'
         ).count()
         
-        errors = ErrorLog.objects.filter(
+        successful = UserActivity.objects.filter(
             created_at__gte=hour_start,
-            created_at__lt=hour_end
+            created_at__lt=hour_end,
+            activity_type='file_process',
+            status='success'
         ).count()
         
         hourly_data.append({
             'hour': hour_start.strftime('%H:00'),
-            'activities': activities,
-            'errors': errors
+            'conversions': conversions,
+            'successful': successful,
+            'failed': conversions - successful
         })
     
-    hourly_data.reverse()  # Show oldest to newest
+    hourly_data.reverse()
     
-    return JsonResponse({
-        'recent_activities': recent_activities,
-        'recent_errors': recent_errors,
-        'active_sessions': active_sessions,
-        'hourly_data': hourly_data
-    })
+    context = {
+        'conversion_stats': conversion_stats,
+        'hourly_data': json.dumps(hourly_data),
+        'days': days,
+    }
+    
+    return render(request, 'admin/conversion_statistics.html', context)
 
+@staff_member_required
+def export_activities(request):
+    """Export user activities to CSV"""
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    
+    # Default to last 7 days if no dates provided
+    if not start_date or not end_date:
+        end_date = timezone.now()
+        start_date = end_date - timedelta(days=7)
+    else:
+        start_date = datetime.strptime(start_date, '%Y-%m-%d')
+        end_date = datetime.strptime(end_date, '%Y-%m-%d')
+    
+    # Get activities
+    activities = UserActivity.objects.filter(
+        created_at__gte=start_date,
+        created_at__lte=end_date
+    ).order_by('-created_at')
+    
+    # Create CSV response
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="user_activities_{start_date.strftime("%Y%m%d")}_{end_date.strftime("%Y%m%d")}.csv"'
+    
+    writer = csv.writer(response)
+    
+    # Write CSV headers
+    writer.writerow([
+        'ID', 'Session ID', 'User', 'Activity Type', 'Tool Name', 'File Name', 
+        'File Size (bytes)', 'File Type', 'Processing Time (s)', 'Status',
+        'IP Address', 'Country', 'Device Type', 'Browser', 'Created At (IST)',
+        'Error Message', 'Page URL'
+    ])
+    
+    # Write activity data
+    for activity in activities:
+        writer.writerow([
+            str(activity.id),
+            activity.session_id,
+            activity.user.username if activity.user else 'Anonymous',
+            activity.get_activity_type_display(),
+            activity.tool_name or '',
+            activity.file_name or '',
+            activity.file_size or '',
+            activity.file_type or '',
+            activity.processing_time or '',
+            activity.status,
+            activity.ip_address,
+            activity.country or '',
+            activity.device_type or '',
+            activity.browser or '',
+            activity.get_created_at_ist(),
+            activity.error_message or '',
+            activity.page_url or ''
+        ])
+    
+    return response
+@staff_member_required
+def export_errors(request):
+    """Export error logs to CSV"""
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    
+    # Default to last 7 days if no dates provided
+    if not start_date or not end_date:
+        end_date = timezone.now()
+        start_date = end_date - timedelta(days=7)
+    else:
+        start_date = datetime.strptime(start_date, '%Y-%m-%d')
+        end_date = datetime.strptime(end_date, '%Y-%m-%d')
+    
+    # Get errors
+    errors = ErrorLog.objects.filter(
+        created_at__gte=start_date,
+        created_at__lte=end_date
+    ).order_by('-created_at')
+    
+    # Create CSV response
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="error_logs_{start_date.strftime("%Y%m%d")}_{end_date.strftime("%Y%m%d")}.csv"'
+    
+    writer = csv.writer(response)
+    
+    # Write CSV headers
+    writer.writerow([
+        'ID', 'Session ID', 'User', 'Error Type', 'Error Message', 'Severity',
+        'IP Address', 'File Path', 'Line Number', 'Function Name',
+        'Created At (IST)', 'Resolved', 'Resolved By', 'Resolved At (IST)',
+        'Stack Trace'
+    ])
+    
+    # Write error data
+    for error in errors:
+        writer.writerow([
+            str(error.id),
+            error.session_id,
+            error.user.username if error.user else 'Anonymous',
+            error.error_type,
+            error.error_message,
+            error.severity,
+            error.ip_address,
+            error.file_path or '',
+            error.line_number or '',
+            error.function_name or '',
+            error.get_created_at_ist(),
+            'Yes' if error.resolved else 'No',
+            error.resolved_by.username if error.resolved_by else '',
+            error.get_resolved_at_ist(),
+            error.stack_trace or ''
+        ])
+    
+    return response
+
+
+@staff_member_required
+def api_dashboard_data(request):
+    """API endpoint for dashboard data (for AJAX updates)"""
+    try:
+        days = int(request.GET.get('days', 1))
+        start_date = timezone.now() - timedelta(days=days)
+        
+        # Real-time stats
+        recent_activities = UserActivity.objects.filter(
+            created_at__gte=start_date
+        ).count()
+        
+        recent_errors = ErrorLog.objects.filter(
+            created_at__gte=start_date
+        ).count()
+        
+        active_sessions = UserActivity.objects.filter(
+            created_at__gte=timezone.now() - timedelta(minutes=30)
+        ).values('session_id').distinct().count()
+        
+        # Hourly data for the last 24 hours
+        hourly_data = []
+        for i in range(24):
+            hour_start = timezone.now() - timedelta(hours=i+1)
+            hour_end = hour_start + timedelta(hours=1)
+            
+            activities = UserActivity.objects.filter(
+                created_at__gte=hour_start,
+                created_at__lt=hour_end
+            ).count()
+            
+            errors = ErrorLog.objects.filter(
+                created_at__gte=hour_start,
+                created_at__lt=hour_end
+            ).count()
+            
+            hourly_data.append({
+                'hour': hour_start.strftime('%H:00'),
+                'activities': activities,
+                'errors': errors
+            })
+        
+        hourly_data.reverse()  # Show oldest to newest
+        
+        return JsonResponse({
+            'recent_activities': recent_activities,
+            'recent_errors': recent_errors,
+            'active_sessions': active_sessions,
+            'hourly_data': hourly_data
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'error': 'Failed to fetch dashboard data',
+            'details': str(e)
+        }, status=500)
+def create_admin_templates():
+    """
+    Helper function to create template directories
+    Call this once to set up the template structure
+    """
+    import os
+    from django.conf import settings
+    
+    # Define template directory structure
+    template_dirs = [
+        'templates/admin',
+        'templates/admin/pdf_tools',
+    ]
+    
+    # Create directories if they don't exist
+    for template_dir in template_dirs:
+        full_path = os.path.join(settings.BASE_DIR, template_dir)
+        os.makedirs(full_path, exist_ok=True)
+        print(f"Created directory: {full_path}")
+    
+    print("Template directories created successfully!")
+def setup_admin_tracking():
+    """
+    Quick setup function to initialize admin tracking
+    Run this once after adding the middleware
+    """
+    try:
+        # Create some sample data for testing
+        from django.contrib.sessions.models import Session
+        
+        # Clean up old sessions
+        Session.objects.filter(expire_date__lt=timezone.now()).delete()
+        
+        print("✅ Admin tracking setup completed!")
+        print("📊 You can now access:")
+        print("   - User Activities: /admin/pdf_tools/useractivity/")
+        print("   - Error Logs: /admin/pdf_tools/errorlog/")
+        print("   - Analytics Dashboard: /admin/analytics/")
+        print("   - Real-time Monitor: /admin/real-time/")
+        
+        return True
+        
+    except Exception as e:
+        print(f"❌ Setup failed: {str(e)}")
+        return False
+
+def perform_health_check():
+    """Perform comprehensive health check"""
+    health_results = {
+        'timestamp': timezone.now().isoformat(),
+        'overall_status': 'healthy',
+        'checks': []
+    }
+    
+    # Database check
+    try:
+        UserActivity.objects.first()
+        health_results['checks'].append({
+            'name': 'Database Connection',
+            'status': 'healthy',
+            'message': 'Database connection successful'
+        })
+    except Exception as e:
+        health_results['checks'].append({
+            'name': 'Database Connection',
+            'status': 'unhealthy',
+            'message': f'Database error: {str(e)}'
+        })
+        health_results['overall_status'] = 'unhealthy'
+    
+    # Error rate check
+    try:
+        last_hour = timezone.now() - timedelta(hours=1)
+        error_rate = calculate_error_rate(last_hour)
+        
+        if error_rate > 10:
+            status = 'unhealthy'
+            health_results['overall_status'] = 'unhealthy'
+        elif error_rate > 5:
+            status = 'warning'
+        else:
+            status = 'healthy'
+            
+        health_results['checks'].append({
+            'name': 'Error Rate',
+            'status': status,
+            'message': f'Error rate: {error_rate}%'
+        })
+    except Exception as e:
+        health_results['checks'].append({
+            'name': 'Error Rate',
+            'status': 'unknown',
+            'message': f'Unable to calculate: {str(e)}'
+        })
+    
+    # Response time check
+    try:
+        last_hour = timezone.now() - timedelta(hours=1)
+        avg_response = calculate_avg_response_time(last_hour)
+        
+        if avg_response > 10000:  # 10 seconds
+            status = 'unhealthy'
+            health_results['overall_status'] = 'unhealthy'
+        elif avg_response > 5000:  # 5 seconds
+            status = 'warning'
+        else:
+            status = 'healthy'
+            
+        health_results['checks'].append({
+            'name': 'Response Time',
+            'status': status,
+            'message': f'Average response time: {avg_response}ms'
+        })
+    except Exception as e:
+        health_results['checks'].append({
+            'name': 'Response Time',
+            'status': 'unknown',
+            'message': f'Unable to calculate: {str(e)}'
+        })
+    
+    return health_results     
 @staff_member_required
 def resolve_error(request, error_id):
     """Mark an error as resolved"""
-    
     if request.method == 'POST':
         try:
             error = ErrorLog.objects.get(id=error_id)
@@ -4147,14 +4652,138 @@ def resolve_error(request, error_id):
             error.resolved_by = request.user
             error.save()
             
-            return JsonResponse({'success': True})
+            return JsonResponse({'success': True, 'message': 'Error marked as resolved'})
         except ErrorLog.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Error not found'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
+def track_conversion_start(request, tool_name, file_count=1, total_file_size=0):
+    """Track the start of a conversion process"""
+    track_activity(
+        request,
+        'file_upload',
+        tool_name=tool_name,
+        status='pending',
+        additional_data={
+            'file_count': file_count,
+            'total_file_size': total_file_size,
+            'conversion_started': timezone.now().isoformat()
+        }
+    )
+
+def track_conversion_success(request, tool_name, file_name, file_size, processing_time, output_size=None):
+    """Track successful conversion"""
+    additional_data = {
+        'conversion_completed': timezone.now().isoformat(),
+        'output_size': output_size
+    }
+    
+    track_activity(
+        request,
+        'file_process',
+        tool_name=tool_name,
+        file_name=file_name,
+        file_size=file_size,
+        processing_time=processing_time,
+        status='success',
+        additional_data=additional_data
+    )
+
+def track_conversion_failure(request, tool_name, file_name, file_size, error_message, processing_time=None):
+    """Track failed conversion"""
+    # Track the failed activity
+    track_activity(
+        request,
+        'file_process',
+        tool_name=tool_name,
+        file_name=file_name,
+        file_size=file_size,
+        processing_time=processing_time,
+        status='failed',
+        error_message=error_message
+    )
+    
+    # Also log as an error
+    log_error(
+        request,
+        'CONVERSION_FAILED',
+        f'Conversion failed for {tool_name}: {error_message}',
+        severity='medium',
+        additional_data={
+            'tool_name': tool_name,
+            'file_name': file_name,
+            'file_size': file_size
+        }
+    )
+
+def track_download(request, tool_name, file_name, file_size):
+    """Track file download"""
+    track_activity(
+        request,
+        'file_download',
+        tool_name=tool_name,
+        file_name=file_name,
+        file_size=file_size,
+        status='success'
+    )
+
+# Settings configuration for tracking
+TRACKING_SETTINGS = {
+    'TRACK_PAGE_VIEWS': True,
+    'TRACK_FILE_UPLOADS': True,
+    'TRACK_CONVERSIONS': True,
+    'TRACK_DOWNLOADS': True,
+    'TRACK_ERRORS': True,
+    'LOG_USER_AGENTS': True,
+    'LOG_IP_ADDRESSES': True,
+    'ANONYMIZE_IPS_AFTER_DAYS': 30,  # Anonymize IPs after 30 days for privacy
+    'DELETE_OLD_ACTIVITIES_AFTER_DAYS': 90,  # Delete old activities after 90 days
+    'MAX_ERROR_STACK_TRACE_LENGTH': 5000,
+    'REAL_TIME_UPDATE_INTERVAL': 5,  # seconds
+}
+
+# Utility function to clean old data
+@staff_member_required
+def cleanup_old_data(request):
+    """Cleanup old tracking data based on settings"""
+    if request.method == 'POST':
+        try:
+            # Delete old activities
+            old_activities_date = timezone.now() - timedelta(days=TRACKING_SETTINGS['DELETE_OLD_ACTIVITIES_AFTER_DAYS'])
+            deleted_activities = UserActivity.objects.filter(created_at__lt=old_activities_date).delete()[0]
+            
+            # Delete old errors
+            deleted_errors = ErrorLog.objects.filter(
+                created_at__lt=old_activities_date,
+                resolved=True
+            ).delete()[0]
+            
+            # Anonymize old IPs
+            anonymize_date = timezone.now() - timedelta(days=TRACKING_SETTINGS['ANONYMIZE_IPS_AFTER_DAYS'])
+            anonymized_activities = UserActivity.objects.filter(
+                created_at__lt=anonymize_date
+            ).update(ip_address='0.0.0.0')
+            
+            anonymized_errors = ErrorLog.objects.filter(
+                created_at__lt=anonymize_date
+            ).update(ip_address='0.0.0.0')
+            
+            return JsonResponse({
+                'success': True,
+                'message': f'Cleanup completed: {deleted_activities} activities, {deleted_errors} errors deleted, {anonymized_activities + anonymized_errors} IPs anonymized'
+            })
+            
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'error': f'Cleanup failed: {str(e)}'
+            })
     
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
 # Middleware to automatically track activities
-from django.utils import timezone
 import logging
 
 logger = logging.getLogger(__name__)
@@ -4186,3 +4815,2657 @@ class ActivityTrackingMiddleware:
             )
         
         return response
+
+try:
+    from PIL import Image, ImageOps
+    PIL_AVAILABLE = True
+except ImportError:
+    PIL_AVAILABLE = False
+
+# Add this view function to your views.py
+def webp_to_png(request):
+    """Render the WebP to PNG tool page"""
+    return render(request, 'webp_to_png.html')
+
+# Add this API endpoint to your views.py
+@csrf_exempt
+@require_http_methods(["POST"])
+def webp_to_png_api(request):
+    """
+    API endpoint to convert WebP images to PNG/JPG format
+    """
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
+    
+    if not PIL_AVAILABLE:
+        return JsonResponse({
+            'error': 'Image processing library not available. Please install Pillow: pip install Pillow'
+        }, status=500)
+    
+    # Handle both 'images' and 'files' keys from frontend
+    image_files = []
+    if 'images' in request.FILES:
+        image_files = request.FILES.getlist('images')
+    elif 'files' in request.FILES:
+        image_files = request.FILES.getlist('files')
+    else:
+        return JsonResponse({'error': 'No WebP files found in request'}, status=400)
+    
+    if not image_files:
+        return JsonResponse({'error': 'At least one WebP image is required'}, status=400)
+    
+    # Get conversion options
+    output_format = request.POST.get('output_format', 'png').lower()
+    quality = int(request.POST.get('quality', '100'))
+    resize_option = request.POST.get('resize_option', 'none')
+    resize_value = int(request.POST.get('resize_value', '0')) if request.POST.get('resize_value') else 0
+    
+    print(f"=== WebP to PNG CONVERSION SETTINGS ===")
+    print(f"Files: {len(image_files)}")
+    print(f"Output Format: {output_format}")
+    print(f"Quality: {quality}")
+    print(f"Resize: {resize_option} = {resize_value}")
+    
+    # Validate files
+    max_file_size = 25 * 1024 * 1024  # 25MB per file
+    max_total_size = 100 * 1024 * 1024  # 100MB total
+    max_files = 50
+    
+    if len(image_files) > max_files:
+        return JsonResponse({'error': f'Maximum {max_files} WebP files allowed'}, status=400)
+    
+    total_size = sum(file.size for file in image_files)
+    if total_size > max_total_size:
+        return JsonResponse({'error': 'Total file size exceeds 100MB limit'}, status=400)
+    
+    for file in image_files:
+        if file.size > max_file_size:
+            return JsonResponse({'error': f'File {file.name} exceeds 25MB limit'}, status=400)
+        
+        # Validate WebP format
+        if not (file.content_type == 'image/webp' or file.name.lower().endswith('.webp')):
+            return JsonResponse({'error': f'Invalid file format: {file.name}. Only WebP files are allowed.'}, status=400)
+    
+    # Create temp directory
+    temp_dir = tempfile.mkdtemp(prefix='webp_to_png_')
+    print(f"Created temp directory: {temp_dir}")
+    
+    try:
+        converted_files = []
+        total_original_size = 0
+        total_converted_size = 0
+        
+        for i, image_file in enumerate(image_files):
+            print(f"\n=== Processing WebP file {i+1}: {image_file.name} ===")
+            
+            # Save original file to temp directory
+            temp_input = os.path.join(temp_dir, f"input_{i}_{uuid.uuid4().hex}.webp")
+            
+            with open(temp_input, 'wb') as f:
+                for chunk in image_file.chunks():
+                    f.write(chunk)
+            
+            original_size = os.path.getsize(temp_input)
+            total_original_size += original_size
+            print(f"Original WebP size: {original_size} bytes")
+            
+            try:
+                # Open and process the WebP image
+                with Image.open(temp_input) as img:
+                    print(f"Original WebP image: {img.size} pixels, mode: {img.mode}")
+                    
+                    # Create a copy to work with
+                    processed_img = img.copy()
+                    
+                    # Handle resize if specified
+                    if resize_option != 'none' and resize_value > 0:
+                        original_width, original_height = processed_img.size
+                        
+                        if resize_option == 'width':
+                            ratio = resize_value / original_width
+                            new_height = int(original_height * ratio)
+                            processed_img = processed_img.resize((resize_value, new_height), Image.LANCZOS)
+                            print(f"Resized by width: {processed_img.size}")
+                            
+                        elif resize_option == 'height':
+                            ratio = resize_value / original_height
+                            new_width = int(original_width * ratio)
+                            processed_img = processed_img.resize((new_width, resize_value), Image.LANCZOS)
+                            print(f"Resized by height: {processed_img.size}")
+                            
+                        elif resize_option == 'percentage':
+                            scale = resize_value / 100
+                            new_width = int(original_width * scale)
+                            new_height = int(original_height * scale)
+                            processed_img = processed_img.resize((new_width, new_height), Image.LANCZOS)
+                            print(f"Resized by percentage: {processed_img.size}")
+                    
+                    # Determine output format and filename
+                    if output_format in ['png']:
+                        save_format = 'PNG'
+                        output_extension = '.png'
+                    elif output_format in ['jpg', 'jpeg']:
+                        save_format = 'JPEG'
+                        output_extension = '.jpg'
+                    else:
+                        save_format = 'PNG'  # Default fallback
+                        output_extension = '.png'
+                    
+                    # Convert image mode for JPEG if necessary
+                    if save_format == 'JPEG' and processed_img.mode in ('RGBA', 'P', 'LA'):
+                        # Create white background for JPEG
+                        background = Image.new('RGB', processed_img.size, (255, 255, 255))
+                        if processed_img.mode == 'P':
+                            processed_img = processed_img.convert('RGBA')
+                        if processed_img.mode in ('RGBA', 'LA'):
+                            background.paste(processed_img, mask=processed_img.split()[-1])
+                        processed_img = background
+                        print("Converted to RGB for JPEG")
+                    
+                    # Create output filename
+                    base_name = os.path.splitext(image_file.name)[0]
+                    temp_output = os.path.join(temp_dir, f"converted_{base_name}_{uuid.uuid4().hex}{output_extension}")
+                    
+                    # Save with appropriate settings
+                    save_kwargs = {'optimize': True}
+                    
+                    if save_format == 'JPEG':
+                        save_kwargs['quality'] = quality
+                        save_kwargs['progressive'] = True
+                    elif save_format == 'PNG':
+                        # PNG is lossless, but we can still optimize
+                        save_kwargs['compress_level'] = 6  # Good balance of speed and compression
+                    
+                    processed_img.save(temp_output, save_format, **save_kwargs)
+                    print(f"Saved as {save_format} with options: {save_kwargs}")
+                    
+                    converted_size = os.path.getsize(temp_output)
+                    total_converted_size += converted_size
+                    print(f"Converted size: {converted_size} bytes")
+                    
+                    # Store file info
+                    converted_files.append({
+                        'path': temp_output,
+                        'name': f"converted_{base_name}{output_extension}",
+                        'original_name': image_file.name,
+                        'original_size': original_size,
+                        'converted_size': converted_size
+                    })
+                    
+            except Exception as e:
+                print(f"Error converting {image_file.name}: {str(e)}")
+                # If conversion fails, skip this file
+                continue
+        
+        print(f"\n=== CONVERSION SUMMARY ===")
+        print(f"Files processed: {len(converted_files)}")
+        print(f"Total original size: {total_original_size} bytes")
+        print(f"Total converted size: {total_converted_size} bytes")
+        
+        if not converted_files:
+            return JsonResponse({'error': 'No files could be processed successfully'}, status=500)
+        
+        # Return result
+        if len(converted_files) == 1:
+            # Single file - return the converted image directly
+            file_info = converted_files[0]
+            
+            with open(file_info['path'], 'rb') as f:
+                file_data = f.read()
+                
+                print(f"Returning single file: {len(file_data)} bytes")
+                
+                # Determine content type
+                if file_info['name'].lower().endswith('.png'):
+                    content_type = 'image/png'
+                elif file_info['name'].lower().endswith(('.jpg', '.jpeg')):
+                    content_type = 'image/jpeg'
+                else:
+                    content_type = 'application/octet-stream'
+                
+                response = HttpResponse(file_data, content_type=content_type)
+                response['Content-Disposition'] = f'attachment; filename="{file_info["name"]}"'
+                response['Content-Length'] = str(len(file_data))
+                
+                # Add conversion info headers
+                response['X-Original-Size'] = str(file_info['original_size'])
+                response['X-Converted-Size'] = str(file_info['converted_size'])
+                response['X-Output-Format'] = output_format.upper()
+                response['X-Files-Count'] = '1'
+                
+                # Add cache control headers
+                response['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+                response['Pragma'] = 'no-cache'
+                response['Expires'] = '0'
+                
+                return response
+        else:
+            # Multiple files - create ZIP
+            zip_path = os.path.join(temp_dir, 'converted_webp_images.zip')
+            
+            with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+                for file_info in converted_files:
+                    zip_file.write(file_info['path'], file_info['name'])
+            
+            zip_size = os.path.getsize(zip_path)
+            print(f"Created ZIP file: {zip_size} bytes")
+            
+            with open(zip_path, 'rb') as f:
+                zip_data = f.read()
+                
+                response = HttpResponse(zip_data, content_type='application/zip')
+                response['Content-Disposition'] = 'attachment; filename="converted_webp_images.zip"'
+                response['Content-Length'] = str(len(zip_data))
+                
+                # Add conversion info headers
+                response['X-Original-Size'] = str(total_original_size)
+                response['X-Converted-Size'] = str(total_converted_size)
+                response['X-Output-Format'] = output_format.upper()
+                response['X-Files-Count'] = str(len(converted_files))
+                
+                # Add cache control headers
+                response['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+                response['Pragma'] = 'no-cache'
+                response['Expires'] = '0'
+                
+                return response
+    
+    except Exception as e:
+        print(f"WebP to PNG conversion error: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        
+        return JsonResponse({
+            'error': f'Conversion failed: {str(e)}'
+        }, status=500)
+    
+    finally:
+        # Cleanup temp directory
+        try:
+            shutil.rmtree(temp_dir)
+            print(f"Cleaned up temp directory: {temp_dir}")
+        except Exception as e:
+            print(f"Failed to cleanup temp directory: {e}")
+
+# Helper function for WebP validation
+def is_valid_webp(file_path):
+    """Check if file is a valid WebP image"""
+    try:
+        with Image.open(file_path) as img:
+            return img.format == 'WEBP'
+    except Exception:
+        return False
+
+# Additional helper function for image format detection
+def get_image_info(file_path):
+    """Get detailed information about an image file"""
+    try:
+        with Image.open(file_path) as img:
+            return {
+                'format': img.format,
+                'mode': img.mode,
+                'size': img.size,
+                'width': img.size[0],
+                'height': img.size[1],
+                'has_transparency': img.mode in ('RGBA', 'LA') or 'transparency' in img.info
+            }
+    except Exception as e:
+        return {'error': str(e)}
+
+# Enhanced WebP processing with metadata preservation
+def convert_webp_with_metadata(input_path, output_path, output_format, quality=95, resize_options=None):
+    """
+    Convert WebP to other formats while preserving metadata where possible
+    """
+    try:
+        with Image.open(input_path) as img:
+            # Store original metadata
+            original_info = img.info.copy()
+            
+            # Apply resize if specified
+            if resize_options and resize_options.get('enabled', False):
+                resize_type = resize_options.get('type', 'none')
+                resize_value = resize_options.get('value', 0)
+                
+                if resize_type != 'none' and resize_value > 0:
+                    original_width, original_height = img.size
+                    
+                    if resize_type == 'width':
+                        ratio = resize_value / original_width
+                        new_height = int(original_height * ratio)
+                        img = img.resize((resize_value, new_height), Image.LANCZOS)
+                    elif resize_type == 'height':
+                        ratio = resize_value / original_height
+                        new_width = int(original_width * ratio)
+                        img = img.resize((new_width, resize_value), Image.LANCZOS)
+                    elif resize_type == 'percentage':
+                        scale = resize_value / 100
+                        new_width = int(original_width * scale)
+                        new_height = int(original_height * scale)
+                        img = img.resize((new_width, new_height), Image.LANCZOS)
+            
+            # Handle format-specific conversions
+            save_kwargs = {'optimize': True}
+            
+            if output_format.upper() == 'JPEG':
+                # Convert to RGB for JPEG
+                if img.mode in ('RGBA', 'P', 'LA'):
+                    background = Image.new('RGB', img.size, (255, 255, 255))
+                    if img.mode == 'P':
+                        img = img.convert('RGBA')
+                    if img.mode in ('RGBA', 'LA'):
+                        background.paste(img, mask=img.split()[-1])
+                    img = background
+                
+                save_kwargs.update({
+                    'quality': quality,
+                    'progressive': True,
+                    'format': 'JPEG'
+                })
+                
+            elif output_format.upper() == 'PNG':
+                # PNG preserves transparency
+                save_kwargs.update({
+                    'compress_level': 6,
+                    'format': 'PNG'
+                })
+                
+                # Preserve metadata for PNG
+                if original_info:
+                    save_kwargs['pnginfo'] = original_info
+            
+            # Save the converted image
+            img.save(output_path, **save_kwargs)
+            
+            return True
+            
+    except Exception as e:
+        print(f"Error in convert_webp_with_metadata: {str(e)}")
+        return False
+
+# Add these view functions to your views.py file
+
+def png_to_webp(request):
+    """Render the PNG to WebP tool page"""
+    return render(request, 'png_to_webp.html')
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def png_to_webp_api(request):
+    """
+    API endpoint to convert PNG images to WebP format
+    """
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
+    
+    if not PIL_AVAILABLE:
+        return JsonResponse({
+            'error': 'Image processing library not available. Please install Pillow: pip install Pillow'
+        }, status=500)
+    
+    # Handle both 'images' and 'files' keys from frontend
+    image_files = []
+    if 'images' in request.FILES:
+        image_files = request.FILES.getlist('images')
+    elif 'files' in request.FILES:
+        image_files = request.FILES.getlist('files')
+    else:
+        return JsonResponse({'error': 'No PNG files found in request'}, status=400)
+    
+    if not image_files:
+        return JsonResponse({'error': 'At least one PNG image is required'}, status=400)
+    
+    # Get conversion options
+    quality = int(request.POST.get('quality', '85'))
+    compression = request.POST.get('compression', 'lossy').lower()
+    resize_option = request.POST.get('resize_option', 'none')
+    resize_value = int(request.POST.get('resize_value', '0')) if request.POST.get('resize_value') else 0
+    
+    print(f"=== PNG to WebP CONVERSION SETTINGS ===")
+    print(f"Files: {len(image_files)}")
+    print(f"Quality: {quality}")
+    print(f"Compression: {compression}")
+    print(f"Resize: {resize_option} = {resize_value}")
+    
+    # Validate files
+    max_file_size = 25 * 1024 * 1024  # 25MB per file
+    max_total_size = 100 * 1024 * 1024  # 100MB total
+    max_files = 50
+    
+    if len(image_files) > max_files:
+        return JsonResponse({'error': f'Maximum {max_files} PNG files allowed'}, status=400)
+    
+    total_size = sum(file.size for file in image_files)
+    if total_size > max_total_size:
+        return JsonResponse({'error': 'Total file size exceeds 100MB limit'}, status=400)
+    
+    for file in image_files:
+        if file.size > max_file_size:
+            return JsonResponse({'error': f'File {file.name} exceeds 25MB limit'}, status=400)
+        
+        # Validate PNG format
+        if not (file.content_type == 'image/png' or file.name.lower().endswith('.png')):
+            return JsonResponse({'error': f'Invalid file format: {file.name}. Only PNG files are allowed.'}, status=400)
+    
+    # Create temp directory
+    temp_dir = tempfile.mkdtemp(prefix='png_to_webp_')
+    print(f"Created temp directory: {temp_dir}")
+    
+    try:
+        converted_files = []
+        total_original_size = 0
+        total_converted_size = 0
+        
+        for i, image_file in enumerate(image_files):
+            print(f"\n=== Processing PNG file {i+1}: {image_file.name} ===")
+            
+            # Save original file to temp directory
+            temp_input = os.path.join(temp_dir, f"input_{i}_{uuid.uuid4().hex}.png")
+            
+            with open(temp_input, 'wb') as f:
+                for chunk in image_file.chunks():
+                    f.write(chunk)
+            
+            original_size = os.path.getsize(temp_input)
+            total_original_size += original_size
+            print(f"Original PNG size: {original_size} bytes")
+            
+            try:
+                # Open and process the PNG image
+                with Image.open(temp_input) as img:
+                    print(f"Original PNG image: {img.size} pixels, mode: {img.mode}")
+                    
+                    # Create a copy to work with
+                    processed_img = img.copy()
+                    
+                    # Handle resize if specified
+                    if resize_option != 'none' and resize_value > 0:
+                        original_width, original_height = processed_img.size
+                        
+                        if resize_option == 'width':
+                            ratio = resize_value / original_width
+                            new_height = int(original_height * ratio)
+                            processed_img = processed_img.resize((resize_value, new_height), Image.LANCZOS)
+                            print(f"Resized by width: {processed_img.size}")
+                            
+                        elif resize_option == 'height':
+                            ratio = resize_value / original_height
+                            new_width = int(original_width * ratio)
+                            processed_img = processed_img.resize((new_width, resize_value), Image.LANCZOS)
+                            print(f"Resized by height: {processed_img.size}")
+                            
+                        elif resize_option == 'percentage':
+                            scale = resize_value / 100
+                            new_width = int(original_width * scale)
+                            new_height = int(original_height * scale)
+                            processed_img = processed_img.resize((new_width, new_height), Image.LANCZOS)
+                            print(f"Resized by percentage: {processed_img.size}")
+                    
+                    # Create output filename
+                    base_name = os.path.splitext(image_file.name)[0]
+                    temp_output = os.path.join(temp_dir, f"converted_{base_name}_{uuid.uuid4().hex}.webp")
+                    
+                    # Prepare WebP save options
+                    save_kwargs = {'format': 'WEBP', 'optimize': True}
+                    
+                    if compression == 'lossless':
+                        # Lossless WebP compression
+                        save_kwargs['lossless'] = True
+                        save_kwargs['quality'] = 100  # Quality parameter is ignored in lossless mode
+                        print("Using lossless WebP compression")
+                    else:
+                        # Lossy WebP compression
+                        save_kwargs['quality'] = quality
+                        save_kwargs['method'] = 6  # Compression method (0-6, higher = better compression)
+                        print(f"Using lossy WebP compression with quality {quality}")
+                    
+                    # Convert to RGB if needed for lossy compression
+                    if compression == 'lossy' and processed_img.mode == 'RGBA':
+                        # For lossy WebP with transparency, we can keep RGBA
+                        # But if there's no actual transparency, convert to RGB for better compression
+                        if not has_transparency(processed_img):
+                            background = Image.new('RGB', processed_img.size, (255, 255, 255))
+                            background.paste(processed_img, mask=processed_img.split()[-1])
+                            processed_img = background
+                            print("Converted RGBA to RGB (no transparency detected)")
+                    
+                    # Save as WebP
+                    processed_img.save(temp_output, **save_kwargs)
+                    print(f"Saved as WebP with options: {save_kwargs}")
+                    
+                    converted_size = os.path.getsize(temp_output)
+                    total_converted_size += converted_size
+                    print(f"Converted size: {converted_size} bytes")
+                    
+                    # Calculate compression ratio
+                    compression_ratio = (1 - converted_size / original_size) * 100
+                    print(f"Compression ratio: {compression_ratio:.1f}%")
+                    
+                    # Store file info
+                    converted_files.append({
+                        'path': temp_output,
+                        'name': f"converted_{base_name}.webp",
+                        'original_name': image_file.name,
+                        'original_size': original_size,
+                        'converted_size': converted_size,
+                        'compression_ratio': compression_ratio
+                    })
+                    
+            except Exception as e:
+                print(f"Error converting {image_file.name}: {str(e)}")
+                # If conversion fails, skip this file
+                continue
+        
+        print(f"\n=== CONVERSION SUMMARY ===")
+        print(f"Files processed: {len(converted_files)}")
+        print(f"Total original size: {total_original_size} bytes")
+        print(f"Total converted size: {total_converted_size} bytes")
+        
+        if total_original_size > 0:
+            overall_compression = (1 - total_converted_size / total_original_size) * 100
+            print(f"Overall compression: {overall_compression:.1f}%")
+        
+        if not converted_files:
+            return JsonResponse({'error': 'No files could be processed successfully'}, status=500)
+        
+        # Return result
+        if len(converted_files) == 1:
+            # Single file - return the converted image directly
+            file_info = converted_files[0]
+            
+            with open(file_info['path'], 'rb') as f:
+                file_data = f.read()
+                
+                print(f"Returning single file: {len(file_data)} bytes")
+                
+                response = HttpResponse(file_data, content_type='image/webp')
+                response['Content-Disposition'] = f'attachment; filename="{file_info["name"]}"'
+                response['Content-Length'] = str(len(file_data))
+                
+                # Add conversion info headers
+                response['X-Original-Size'] = str(file_info['original_size'])
+                response['X-Converted-Size'] = str(file_info['converted_size'])
+                response['X-Compression-Ratio'] = f"{file_info['compression_ratio']:.1f}%"
+                response['X-Quality'] = str(quality)
+                response['X-Compression-Type'] = compression
+                response['X-Files-Count'] = '1'
+                
+                # Add cache control headers
+                response['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+                response['Pragma'] = 'no-cache'
+                response['Expires'] = '0'
+                
+                return response
+        else:
+            # Multiple files - create ZIP
+            zip_path = os.path.join(temp_dir, 'converted_png_to_webp.zip')
+            
+            with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+                for file_info in converted_files:
+                    zip_file.write(file_info['path'], file_info['name'])
+            
+            zip_size = os.path.getsize(zip_path)
+            print(f"Created ZIP file: {zip_size} bytes")
+            
+            with open(zip_path, 'rb') as f:
+                zip_data = f.read()
+                
+                response = HttpResponse(zip_data, content_type='application/zip')
+                response['Content-Disposition'] = 'attachment; filename="converted_png_to_webp.zip"'
+                response['Content-Length'] = str(len(zip_data))
+                
+                # Add conversion info headers
+                response['X-Original-Size'] = str(total_original_size)
+                response['X-Converted-Size'] = str(total_converted_size)
+                overall_compression = (1 - total_converted_size / total_original_size) * 100 if total_original_size > 0 else 0
+                response['X-Compression-Ratio'] = f"{overall_compression:.1f}%"
+                response['X-Quality'] = str(quality)
+                response['X-Compression-Type'] = compression
+                response['X-Files-Count'] = str(len(converted_files))
+                
+                # Add cache control headers
+                response['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+                response['Pragma'] = 'no-cache'
+                response['Expires'] = '0'
+                
+                return response
+    
+    except Exception as e:
+        print(f"PNG to WebP conversion error: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        
+        return JsonResponse({
+            'error': f'Conversion failed: {str(e)}'
+        }, status=500)
+    
+    finally:
+        # Cleanup temp directory
+        try:
+            shutil.rmtree(temp_dir)
+            print(f"Cleaned up temp directory: {temp_dir}")
+        except Exception as e:
+            print(f"Failed to cleanup temp directory: {e}")
+
+
+# Helper function to check if image has transparency
+def has_transparency(img):
+    """Check if PNG image has actual transparency"""
+    if img.mode != 'RGBA':
+        return False
+    
+    # Check if alpha channel has any non-255 values
+    alpha = img.split()[-1]
+    return alpha.getextrema()[0] < 255
+
+
+# Helper function for PNG validation
+def is_valid_png(file_path):
+    """Check if file is a valid PNG image"""
+    try:
+        with Image.open(file_path) as img:
+            return img.format == 'PNG'
+    except Exception:
+        return False
+
+
+# Enhanced PNG processing with metadata preservation
+def convert_png_to_webp_with_metadata(input_path, output_path, quality=85, compression='lossy', resize_options=None):
+    """
+    Convert PNG to WebP while preserving metadata where possible
+    """
+    try:
+        with Image.open(input_path) as img:
+            # Store original metadata
+            original_info = img.info.copy()
+            
+            # Apply resize if specified
+            if resize_options and resize_options.get('enabled', False):
+                resize_type = resize_options.get('type', 'none')
+                resize_value = resize_options.get('value', 0)
+                
+                if resize_type != 'none' and resize_value > 0:
+                    original_width, original_height = img.size
+                    
+                    if resize_type == 'width':
+                        ratio = resize_value / original_width
+                        new_height = int(original_height * ratio)
+                        img = img.resize((resize_value, new_height), Image.LANCZOS)
+                    elif resize_type == 'height':
+                        ratio = resize_value / original_height
+                        new_width = int(original_width * ratio)
+                        img = img.resize((new_width, resize_value), Image.LANCZOS)
+                    elif resize_type == 'percentage':
+                        scale = resize_value / 100
+                        new_width = int(original_width * scale)
+                        new_height = int(original_height * scale)
+                        img = img.resize((new_width, new_height), Image.LANCZOS)
+            
+            # Prepare WebP save options
+            save_kwargs = {'format': 'WEBP', 'optimize': True}
+            
+            if compression == 'lossless':
+                save_kwargs['lossless'] = True
+                save_kwargs['quality'] = 100
+            else:
+                save_kwargs['quality'] = quality
+                save_kwargs['method'] = 6
+                
+                # Convert to RGB if no transparency for better compression
+                if img.mode == 'RGBA' and not has_transparency(img):
+                    background = Image.new('RGB', img.size, (255, 255, 255))
+                    background.paste(img, mask=img.split()[-1])
+                    img = background
+            
+            # Save the converted image
+            img.save(output_path, **save_kwargs)
+            
+            return True
+            
+    except Exception as e:
+        print(f"Error in convert_png_to_webp_with_metadata: {str(e)}")
+        return False
+
+
+# Additional helper function for image optimization
+def optimize_png_for_webp_conversion(img, compression_type='lossy'):
+    """
+    Optimize PNG image before WebP conversion
+    """
+    try:
+        # If it's a grayscale image, ensure it's in the right mode
+        if img.mode == 'L':
+            # Keep as grayscale for better compression
+            pass
+        elif img.mode == 'P':
+            # Convert palette to RGBA first, then decide
+            img = img.convert('RGBA')
+        
+        # For lossy compression, remove unnecessary alpha if no transparency
+        if compression_type == 'lossy' and img.mode == 'RGBA':
+            if not has_transparency(img):
+                # Convert to RGB with white background
+                background = Image.new('RGB', img.size, (255, 255, 255))
+                background.paste(img, mask=img.split()[-1])
+                img = background
+        
+        return img
+        
+    except Exception as e:
+        print(f"Error optimizing image: {str(e)}")
+        return img
+
+# Add these view functions to your views.py file
+
+def pdf_to_png(request):
+    """Render the PDF to PNG tool page"""
+    return render(request, 'pdf_to_png.html')
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def pdf_to_png_api(request):
+    """
+    Enhanced API endpoint to convert PDF pages to PNG images
+    """
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
+    
+    if not PYMUPDF_AVAILABLE:
+        return JsonResponse({
+            'error': 'PDF processing library not available. Please install PyMuPDF: pip install PyMuPDF'
+        }, status=500)
+    
+    # Handle PDF files
+    pdf_files = []
+    if 'pdf_files' in request.FILES:
+        pdf_files = request.FILES.getlist('pdf_files')
+    elif 'files' in request.FILES:
+        pdf_files = request.FILES.getlist('files')
+    else:
+        return JsonResponse({'error': 'No PDF files found in request'}, status=400)
+    
+    if not pdf_files:
+        return JsonResponse({'error': 'At least one PDF file is required'}, status=400)
+    
+    # Get conversion options
+    output_format = request.POST.get('output_format', 'png').lower()
+    dpi = int(request.POST.get('dpi', '300'))
+    page_selection = request.POST.get('page_selection', 'all')
+    quality = request.POST.get('quality', 'high')
+    page_range = request.POST.get('page_range', '')
+    custom_pages = request.POST.get('custom_pages', '')
+    
+    print(f"=== PDF to PNG CONVERSION SETTINGS ===")
+    print(f"Files: {len(pdf_files)}")
+    print(f"Output Format: {output_format}")
+    print(f"DPI: {dpi}")
+    print(f"Page Selection: {page_selection}")
+    print(f"Quality: {quality}")
+    print(f"Page Range: {page_range}")
+    print(f"Custom Pages: {custom_pages}")
+    
+    # Validate files
+    max_file_size = 50 * 1024 * 1024  # 50MB per file
+    max_total_size = 200 * 1024 * 1024  # 200MB total
+    max_files = 10
+    
+    if len(pdf_files) > max_files:
+        return JsonResponse({'error': f'Maximum {max_files} PDF files allowed'}, status=400)
+    
+    total_size = sum(file.size for file in pdf_files)
+    if total_size > max_total_size:
+        return JsonResponse({'error': 'Total file size exceeds 200MB limit'}, status=400)
+    
+    for file in pdf_files:
+        if file.size > max_file_size:
+            return JsonResponse({'error': f'File {file.name} exceeds 50MB limit'}, status=400)
+        
+        # Validate PDF format
+        if not (file.content_type == 'application/pdf' or file.name.lower().endswith('.pdf')):
+            return JsonResponse({'error': f'Invalid file format: {file.name}. Only PDF files are allowed.'}, status=400)
+    
+    # Validate DPI range
+    if dpi < 72 or dpi > 600:
+        return JsonResponse({'error': 'DPI must be between 72 and 600'}, status=400)
+    
+    # Create temp directory
+    temp_dir = tempfile.mkdtemp(prefix='pdf_to_png_')
+    print(f"Created temp directory: {temp_dir}")
+    
+    try:
+        converted_images = []
+        total_pages_processed = 0
+        
+        for file_index, pdf_file in enumerate(pdf_files):
+            print(f"\n=== Processing PDF {file_index + 1}: {pdf_file.name} ===")
+            
+            # Save PDF to temp directory
+            temp_pdf_path = os.path.join(temp_dir, f"input_{file_index}_{uuid.uuid4().hex}.pdf")
+            
+            with open(temp_pdf_path, 'wb') as f:
+                for chunk in pdf_file.chunks():
+                    f.write(chunk)
+            
+            try:
+                # Open PDF with PyMuPDF
+                pdf_document = fitz.open(temp_pdf_path)
+                total_pages = len(pdf_document)
+                print(f"PDF has {total_pages} pages")
+                
+                # Determine which pages to process
+                pages_to_process = determine_pages_to_process(
+                    page_selection, total_pages, page_range, custom_pages
+                )
+                
+                if not pages_to_process:
+                    pdf_document.close()
+                    continue
+                
+                print(f"Processing pages: {pages_to_process}")
+                
+                # Convert each page to image
+                for page_num in pages_to_process:
+                    try:
+                        if page_num < 1 or page_num > total_pages:
+                            print(f"Skipping invalid page number: {page_num}")
+                            continue
+                        
+                        # Get page (PyMuPDF uses 0-based indexing)
+                        page = pdf_document[page_num - 1]
+                        
+                        # Calculate zoom for DPI
+                        zoom = dpi / 72.0  # 72 DPI is default
+                        mat = fitz.Matrix(zoom, zoom)
+                        
+                        # Render page to pixmap
+                        pix = page.get_pixmap(matrix=mat, alpha=True)
+                        
+                        # Convert to bytes
+                        if output_format == 'png':
+                            img_data = pix.tobytes("png")
+                            content_type = 'image/png'
+                            file_ext = 'png'
+                        else:  # jpg/jpeg
+                            # For JPEG, we need to remove alpha channel
+                            pix_no_alpha = page.get_pixmap(matrix=mat, alpha=False)
+                            img_data = pix_no_alpha.tobytes("jpeg", jpg_quality=get_jpeg_quality(quality))
+                            content_type = 'image/jpeg'
+                            file_ext = 'jpg'
+                        
+                        # Generate unique filename
+                        unique_id = str(uuid.uuid4())[:8]
+                        if len(pdf_files) == 1:
+                            filename = f"page_{page_num}_{unique_id}.{file_ext}"
+                        else:
+                            filename = f"file_{file_index + 1}_page_{page_num}_{unique_id}.{file_ext}"
+                        
+                        # Save to media storage
+                        file_path = f"converted_images/{filename}"
+                        
+                        # Create a file-like object from bytes
+                        img_buffer = io.BytesIO(img_data)
+                        img_buffer.name = filename
+                        
+                        saved_path = default_storage.save(file_path, img_buffer)
+                        
+                        # Get URL for the saved file
+                        file_url = default_storage.url(saved_path)
+                        
+                        # Get image dimensions
+                        img_width = pix.width
+                        img_height = pix.height
+                        
+                        converted_images.append({
+                            'page': page_num,
+                            'url': file_url,
+                            'filename': filename,
+                            'format': file_ext,
+                            'size': len(img_data),
+                            'width': img_width,
+                            'height': img_height,
+                            'dpi': dpi,
+                            'source_file': pdf_file.name
+                        })
+                        
+                        total_pages_processed += 1
+                        print(f"Converted page {page_num}: {filename} ({len(img_data)} bytes)")
+                        
+                    except Exception as e:
+                        print(f"Error converting page {page_num}: {str(e)}")
+                        continue
+                
+                pdf_document.close()
+                
+            except Exception as e:
+                print(f"Error processing PDF {pdf_file.name}: {str(e)}")
+                continue
+        
+        print(f"\n=== CONVERSION SUMMARY ===")
+        print(f"Total images created: {len(converted_images)}")
+        print(f"Total pages processed: {total_pages_processed}")
+        
+        if not converted_images:
+            return JsonResponse({'error': 'No pages could be converted successfully'}, status=500)
+        
+        # Return JSON response with image information
+        return JsonResponse({
+            'success': True,
+            'images': converted_images,
+            'total_images': len(converted_images),
+            'output_format': output_format,
+            'dpi': dpi,
+            'quality': quality,
+            'page_selection': page_selection
+        })
+    
+    except Exception as e:
+        print(f"PDF to PNG conversion error: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        
+        return JsonResponse({
+            'error': f'Conversion failed: {str(e)}'
+        }, status=500)
+    
+    finally:
+        # Cleanup temp directory
+        try:
+            shutil.rmtree(temp_dir)
+            print(f"Cleaned up temp directory: {temp_dir}")
+        except Exception as e:
+            print(f"Failed to cleanup temp directory: {e}")
+
+
+def determine_pages_to_process(page_selection, total_pages, page_range, custom_pages):
+    """
+    Determine which pages to process based on selection criteria
+    """
+    if page_selection == 'all':
+        return list(range(1, total_pages + 1))
+    
+    elif page_selection == 'first':
+        return [1] if total_pages >= 1 else []
+    
+    elif page_selection == 'last':
+        return [total_pages] if total_pages >= 1 else []
+    
+    elif page_selection == 'range' and page_range:
+        try:
+            # Parse range like "1-5" or "3-10"
+            if '-' in page_range:
+                start, end = map(int, page_range.split('-', 1))
+                start = max(1, start)
+                end = min(total_pages, end)
+                if start <= end:
+                    return list(range(start, end + 1))
+            else:
+                # Single page number
+                page_num = int(page_range)
+                if 1 <= page_num <= total_pages:
+                    return [page_num]
+        except ValueError:
+            pass
+    
+    elif page_selection == 'custom' and custom_pages:
+        try:
+            pages = []
+            # Parse custom pages like "1,3,5-7,10"
+            for part in custom_pages.split(','):
+                part = part.strip()
+                if '-' in part:
+                    # Range
+                    start, end = map(int, part.split('-', 1))
+                    start = max(1, start)
+                    end = min(total_pages, end)
+                    if start <= end:
+                        pages.extend(range(start, end + 1))
+                else:
+                    # Single page
+                    page_num = int(part)
+                    if 1 <= page_num <= total_pages:
+                        pages.append(page_num)
+            
+            # Remove duplicates and sort
+            return sorted(list(set(pages)))
+        except ValueError:
+            pass
+    
+    return []
+
+
+def get_jpeg_quality(quality_setting):
+    """
+    Convert quality setting to JPEG quality value
+    """
+    quality_map = {
+        'high': 95,
+        'medium': 85,
+        'low': 75
+    }
+    return quality_map.get(quality_setting, 95)
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def download_pdf_images_zip(request):
+    """
+    Enhanced download function for PDF to PNG converted images
+    """
+    try:
+        image_urls_json = request.POST.get('image_urls', '[]')
+        file_name = request.POST.get('file_name', 'pdf_pages')
+        format_type = request.POST.get('format', 'png')
+        
+        try:
+            image_data = json.loads(image_urls_json)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid image data format'}, status=400)
+        
+        if not image_data:
+            return JsonResponse({'error': 'No images to download'}, status=400)
+        
+        # If only 1 image, download it directly
+        if len(image_data) == 1:
+            image_info = image_data[0]
+            
+            try:
+                # Get the file path from URL
+                file_url = image_info.get('url', '')
+                if not file_url:
+                    return JsonResponse({'error': 'Invalid image URL'}, status=400)
+                
+                # Extract file path from URL
+                file_path = file_url.replace(settings.MEDIA_URL, '')
+                
+                # Read file from storage
+                if default_storage.exists(file_path):
+                    file_content = default_storage.open(file_path).read()
+                    
+                    # Generate filename for single download
+                    page_num = image_info.get('page', 1)
+                    single_filename = f"{file_name}_page_{page_num}.{format_type}"
+                    
+                    # Determine content type
+                    content_type = 'image/png' if format_type == 'png' else 'image/jpeg'
+                    
+                    # Return single image file
+                    response = HttpResponse(file_content, content_type=content_type)
+                    response['Content-Disposition'] = f'attachment; filename="{single_filename}"'
+                    response['Content-Length'] = str(len(file_content))
+                    
+                    # Add metadata headers
+                    response['X-Image-Count'] = '1'
+                    response['X-Page-Number'] = str(page_num)
+                    response['X-Format'] = format_type.upper()
+                    
+                    return response
+                else:
+                    return JsonResponse({'error': 'Image file not found'}, status=404)
+                    
+            except Exception as e:
+                print(f"Error downloading single image: {str(e)}")
+                return JsonResponse({'error': 'Failed to download image'}, status=500)
+        
+        # For multiple images, create ZIP file
+        else:
+            # Create ZIP file in memory
+            zip_buffer = io.BytesIO()
+            
+            with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+                for i, image_info in enumerate(image_data):
+                    try:
+                        # Get the file path from URL
+                        file_url = image_info.get('url', '')
+                        if not file_url:
+                            continue
+                        
+                        # Extract file path from URL
+                        file_path = file_url.replace(settings.MEDIA_URL, '')
+                        
+                        # Read file from storage
+                        if default_storage.exists(file_path):
+                            file_content = default_storage.open(file_path).read()
+                            
+                            # Generate filename for ZIP
+                            page_num = image_info.get('page', i + 1)
+                            source_file = image_info.get('source_file', 'document')
+                            
+                            # Clean source filename
+                            source_name = os.path.splitext(source_file)[0]
+                            source_name = re.sub(r'[^\w\-_]', '_', source_name)
+                            
+                            zip_filename = f"{source_name}_page_{page_num}.{format_type}"
+                            
+                            # Add file to ZIP
+                            zip_file.writestr(zip_filename, file_content)
+                            
+                    except Exception as e:
+                        print(f"Error adding image to ZIP: {str(e)}")
+                        continue
+            
+            zip_buffer.seek(0)
+            
+            # Create HTTP response with ZIP file
+            response = HttpResponse(zip_buffer.getvalue(), content_type='application/zip')
+            response['Content-Disposition'] = f'attachment; filename="{file_name}_images.zip"'
+            response['Content-Length'] = str(len(zip_buffer.getvalue()))
+            
+            # Add metadata headers
+            response['X-Image-Count'] = str(len(image_data))
+            response['X-Format'] = format_type.upper()
+            response['X-Archive-Type'] = 'ZIP'
+            
+            return response
+    
+    except Exception as e:
+        print(f"Download error: {str(e)}")
+        return JsonResponse({'error': 'Failed to create download'}, status=500)
+
+
+# Helper function to validate PDF file
+def validate_pdf_file(file_path):
+    """
+    Validate if the file is a proper PDF
+    """
+    try:
+        with open(file_path, 'rb') as f:
+            # Check PDF signature
+            header = f.read(5)
+            if header.startswith(b'%PDF-'):
+                return True
+        return False
+    except Exception:
+        return False
+
+
+def get_pdf_info(file_path):
+    """
+    Get detailed information about a PDF file
+    """
+    try:
+        pdf_doc = fitz.open(file_path)
+        info = {
+            'page_count': len(pdf_doc),
+            'title': pdf_doc.metadata.get('title', ''),
+            'author': pdf_doc.metadata.get('author', ''),
+            'subject': pdf_doc.metadata.get('subject', ''),
+            'creator': pdf_doc.metadata.get('creator', ''),
+            'producer': pdf_doc.metadata.get('producer', ''),
+            'creation_date': pdf_doc.metadata.get('creationDate', ''),
+            'modification_date': pdf_doc.metadata.get('modDate', ''),
+            'encrypted': pdf_doc.needs_pass,
+            'pages': []
+        }
+        
+        # Get page dimensions for first few pages
+        for page_num in range(min(3, len(pdf_doc))):
+            page = pdf_doc[page_num]
+            rect = page.rect
+            info['pages'].append({
+                'page': page_num + 1,
+                'width': rect.width,
+                'height': rect.height,
+                'rotation': page.rotation
+            })
+        
+        pdf_doc.close()
+        return info
+        
+    except Exception as e:
+        print(f"Error getting PDF info: {str(e)}")
+        return None
+
+
+def optimize_image_for_web(image_path, max_width=1920, quality=85):
+    """
+    Optimize converted images for web use
+    """
+    try:
+        from PIL import Image
+        
+        with Image.open(image_path) as img:
+            # Resize if too large
+            if img.width > max_width:
+                ratio = max_width / img.width
+                new_height = int(img.height * ratio)
+                img = img.resize((max_width, new_height), Image.Resampling.LANCZOS)
+            
+            # Optimize and save
+            optimized_path = image_path.replace('.png', '_optimized.png')
+            img.save(optimized_path, 'PNG', optimize=True)
+            
+            return optimized_path
+            
+    except Exception as e:
+        print(f"Error optimizing image: {str(e)}")
+        return image_path
+
+
+def create_image_thumbnail(image_path, size=(150, 150)):
+    """
+    Create thumbnail for image preview
+    """
+    try:
+        from PIL import Image
+        
+        with Image.open(image_path) as img:
+            img.thumbnail(size, Image.Resampling.LANCZOS)
+            
+            thumbnail_path = image_path.replace('.png', '_thumb.png')
+            img.save(thumbnail_path, 'PNG')
+            
+            return thumbnail_path
+            
+    except Exception as e:
+        print(f"Error creating thumbnail: {str(e)}")
+        return None
+
+
+def batch_convert_pdf_pages(pdf_paths, output_dir, settings):
+    """
+    Enhanced batch conversion with parallel processing
+    """
+    import concurrent.futures
+    import multiprocessing
+    
+    max_workers = min(multiprocessing.cpu_count(), 4)  # Limit to 4 workers
+    converted_images = []
+    
+    def convert_single_pdf(pdf_info):
+        pdf_path, file_index, settings = pdf_info
+        return convert_pdf_to_images(pdf_path, file_index, output_dir, settings)
+    
+    # Prepare PDF info for parallel processing
+    pdf_infos = [(path, idx, settings) for idx, path in enumerate(pdf_paths)]
+    
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+        future_to_pdf = {executor.submit(convert_single_pdf, pdf_info): pdf_info 
+                        for pdf_info in pdf_infos}
+        
+        for future in concurrent.futures.as_completed(future_to_pdf):
+            try:
+                result = future.result()
+                if result:
+                    converted_images.extend(result)
+            except Exception as e:
+                print(f"Error in parallel conversion: {str(e)}")
+                continue
+    
+    return converted_images
+
+
+def convert_pdf_to_images(pdf_path, file_index, output_dir, settings):
+    """
+    Convert a single PDF to images with advanced options
+    """
+    try:
+        pdf_doc = fitz.open(pdf_path)
+        converted_images = []
+        
+        # Get conversion settings
+        output_format = settings.get('output_format', 'png')
+        dpi = settings.get('dpi', 300)
+        quality = settings.get('quality', 'high')
+        page_selection = settings.get('page_selection', 'all')
+        
+        # Determine pages to process
+        total_pages = len(pdf_doc)
+        pages_to_process = determine_pages_to_process(
+            page_selection, total_pages, 
+            settings.get('page_range', ''), 
+            settings.get('custom_pages', '')
+        )
+        
+        for page_num in pages_to_process:
+            try:
+                page = pdf_doc[page_num - 1]
+                
+                # Calculate zoom for DPI
+                zoom = dpi / 72.0
+                mat = fitz.Matrix(zoom, zoom)
+                
+                # Advanced rendering options
+                if output_format == 'png':
+                    pix = page.get_pixmap(matrix=mat, alpha=True)
+                    img_data = pix.tobytes("png")
+                    file_ext = 'png'
+                else:
+                    pix = page.get_pixmap(matrix=mat, alpha=False)
+                    jpeg_quality = get_jpeg_quality(quality)
+                    img_data = pix.tobytes("jpeg", jpg_quality=jpeg_quality)
+                    file_ext = 'jpg'
+                
+                # Generate filename
+                filename = f"file_{file_index + 1}_page_{page_num}_{uuid.uuid4().hex[:8]}.{file_ext}"
+                image_path = os.path.join(output_dir, filename)
+                
+                # Save image
+                with open(image_path, 'wb') as f:
+                    f.write(img_data)
+                
+                # Create image info
+                image_info = {
+                    'page': page_num,
+                    'filename': filename,
+                    'path': image_path,
+                    'format': file_ext,
+                    'size': len(img_data),
+                    'width': pix.width,
+                    'height': pix.height,
+                    'dpi': dpi
+                }
+                
+                converted_images.append(image_info)
+                
+            except Exception as e:
+                print(f"Error converting page {page_num}: {str(e)}")
+                continue
+        
+        pdf_doc.close()
+        return converted_images
+        
+    except Exception as e:
+        print(f"Error processing PDF: {str(e)}")
+        return []
+
+
+@csrf_exempt
+def get_pdf_preview(request):
+    """
+    API endpoint to get PDF preview information
+    """
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
+    
+    if 'pdf_file' not in request.FILES:
+        return JsonResponse({'error': 'PDF file is required'}, status=400)
+    
+    pdf_file = request.FILES['pdf_file']
+    
+    # Validate file
+    if not pdf_file.name.lower().endswith('.pdf'):
+        return JsonResponse({'error': 'Invalid file type'}, status=400)
+    
+    if pdf_file.size > 50 * 1024 * 1024:  # 50MB limit
+        return JsonResponse({'error': 'File too large'}, status=400)
+    
+    temp_dir = tempfile.mkdtemp(prefix='pdf_preview_')
+    
+    try:
+        # Save PDF temporarily
+        temp_pdf_path = os.path.join(temp_dir, f"preview_{uuid.uuid4().hex}.pdf")
+        with open(temp_pdf_path, 'wb') as f:
+            for chunk in pdf_file.chunks():
+                f.write(chunk)
+        
+        # Get PDF information
+        pdf_info = get_pdf_info(temp_pdf_path)
+        
+        if pdf_info:
+            return JsonResponse({
+                'success': True,
+                'pdf_info': pdf_info
+            })
+        else:
+            return JsonResponse({'error': 'Could not read PDF file'}, status=400)
+    
+    except Exception as e:
+        return JsonResponse({'error': f'Preview failed: {str(e)}'}, status=500)
+    
+    finally:
+        try:
+            shutil.rmtree(temp_dir)
+        except:
+            pass
+
+
+# Advanced error handling and logging
+def log_conversion_error(error, context):
+    """
+    Log conversion errors with context for debugging
+    """
+    import logging
+    
+    logger = logging.getLogger('pdf_converter')
+    logger.error(f"PDF to PNG conversion error: {error}", extra={
+        'context': context,
+        'timestamp': timezone.now().isoformat()
+    })
+
+
+def cleanup_old_converted_files():
+    """
+    Cleanup old converted files (run as scheduled task)
+    """
+    try:
+        # Clean files older than 1 hour
+        cutoff_time = datetime.now() - timedelta(hours=1)
+        
+        converted_dir = os.path.join(settings.MEDIA_ROOT, 'converted_images')
+        if os.path.exists(converted_dir):
+            for filename in os.listdir(converted_dir):
+                file_path = os.path.join(converted_dir, filename)
+                
+                # Check file age
+                file_time = datetime.fromtimestamp(os.path.getctime(file_path))
+                if file_time < cutoff_time:
+                    try:
+                        os.remove(file_path)
+                        print(f"Cleaned up old file: {filename}")
+                    except Exception as e:
+                        print(f"Error removing file {filename}: {e}")
+    
+    except Exception as e:
+        print(f"Error in cleanup task: {e}")
+
+
+# Performance monitoring decorator
+def monitor_conversion_performance(func):
+    """
+    Decorator to monitor conversion performance
+    """
+    def wrapper(*args, **kwargs):
+        import time
+        start_time = time.time()
+        
+        try:
+            result = func(*args, **kwargs)
+            
+            end_time = time.time()
+            duration = end_time - start_time
+            
+            print(f"Conversion completed in {duration:.2f} seconds")
+            
+            return result
+            
+        except Exception as e:
+            end_time = time.time()
+            duration = end_time - start_time
+            
+            print(f"Conversion failed after {duration:.2f} seconds: {str(e)}")
+            raise
+    
+    return wrapper
+
+try:
+    from reportlab.pdfgen import canvas
+    from reportlab.lib.pagesizes import letter, A4, A3, A5, legal
+    from reportlab.lib.units import mm, inch
+    from reportlab.lib.utils import ImageReader
+    REPORTLAB_AVAILABLE = True
+except ImportError:
+    REPORTLAB_AVAILABLE = False
+
+# For image processing
+try:
+    from PIL import Image
+    PIL_AVAILABLE = True
+except ImportError:
+    PIL_AVAILABLE = False
+
+def png_to_pdf(request):
+    """Render the PNG to PDF tool page"""
+    return render(request, 'png_to_pdf.html')
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def png_to_pdf_api(request):
+    """
+    API endpoint to convert PNG images to PDF format
+    """
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
+    
+    if not REPORTLAB_AVAILABLE:
+        return JsonResponse({
+            'error': 'PDF generation library not available. Please install ReportLab: pip install reportlab'
+        }, status=500)
+    
+    if not PIL_AVAILABLE:
+        return JsonResponse({
+            'error': 'Image processing library not available. Please install Pillow: pip install Pillow'
+        }, status=500)
+    
+    # Handle both 'images' and 'files' keys from frontend
+    image_files = []
+    if 'images' in request.FILES:
+        image_files = request.FILES.getlist('images')
+    elif 'files' in request.FILES:
+        image_files = request.FILES.getlist('files')
+    else:
+        return JsonResponse({'error': 'No PNG files found in request'}, status=400)
+    
+    if not image_files:
+        return JsonResponse({'error': 'At least one PNG image is required'}, status=400)
+    
+    # Get conversion options
+    page_size = request.POST.get('page_size', 'A4').upper()
+    orientation = request.POST.get('orientation', 'portrait')
+    layout = request.POST.get('layout', 'one-per-page')
+    margin = request.POST.get('margin', 'medium')
+    
+    print(f"=== PNG to PDF CONVERSION SETTINGS ===")
+    print(f"Files: {len(image_files)}")
+    print(f"Page Size: {page_size}")
+    print(f"Orientation: {orientation}")
+    print(f"Layout: {layout}")
+    print(f"Margin: {margin}")
+    
+    # Validate files
+    max_file_size = 25 * 1024 * 1024  # 25MB per file
+    max_total_size = 100 * 1024 * 1024  # 100MB total
+    max_files = 50
+    
+    if len(image_files) > max_files:
+        return JsonResponse({'error': f'Maximum {max_files} PNG files allowed'}, status=400)
+    
+    total_size = sum(file.size for file in image_files)
+    if total_size > max_total_size:
+        return JsonResponse({'error': 'Total file size exceeds 100MB limit'}, status=400)
+    
+    for file in image_files:
+        if file.size > max_file_size:
+            return JsonResponse({'error': f'File {file.name} exceeds 25MB limit'}, status=400)
+        
+        # Validate PNG format
+        if not (file.content_type == 'image/png' or file.name.lower().endswith('.png')):
+            return JsonResponse({'error': f'Invalid file format: {file.name}. Only PNG files are allowed.'}, status=400)
+    
+    # Create temp directory
+    temp_dir = tempfile.mkdtemp(prefix='png_to_pdf_')
+    print(f"Created temp directory: {temp_dir}")
+    
+    try:
+        # Define page sizes and margins
+        page_sizes = {
+            'A4': A4,
+            'LETTER': letter,
+            'A3': A3,
+            'A5': A5,
+            'LEGAL': legal,
+        }
+        
+        margin_sizes = {
+            'none': 0,
+            'small': 10 * mm,
+            'medium': 20 * mm,
+            'large': 30 * mm,
+        }
+        
+        # Get page size
+        if page_size in page_sizes:
+            page_width, page_height = page_sizes[page_size]
+        else:
+            page_width, page_height = A4  # Default to A4
+        
+        # Handle orientation
+        if orientation == 'landscape':
+            page_width, page_height = page_height, page_width
+        
+        # Get margin
+        margin_size = margin_sizes.get(margin, 20 * mm)
+        
+        # Calculate available space
+        available_width = page_width - (2 * margin_size)
+        available_height = page_height - (2 * margin_size)
+        
+        print(f"Page dimensions: {page_width} x {page_height}")
+        print(f"Available space: {available_width} x {available_height}")
+        
+        # Create PDF file
+        pdf_filename = f"converted_png_to_pdf_{uuid.uuid4().hex}.pdf"
+        pdf_path = os.path.join(temp_dir, pdf_filename)
+        
+        # Create PDF canvas
+        c = canvas.Canvas(pdf_path, pagesize=(page_width, page_height))
+        
+        processed_images = 0
+        current_page_images = 0
+        images_per_page = 1 if layout == 'one-per-page' else 2  # Can be adjusted
+        
+        for i, image_file in enumerate(image_files):
+            print(f"\n=== Processing PNG file {i+1}: {image_file.name} ===")
+            
+            # Save original file to temp directory
+            temp_input = os.path.join(temp_dir, f"input_{i}_{uuid.uuid4().hex}.png")
+            
+            with open(temp_input, 'wb') as f:
+                for chunk in image_file.chunks():
+                    f.write(chunk)
+            
+            try:
+                # Open and process the PNG image
+                with Image.open(temp_input) as img:
+                    print(f"Original PNG image: {img.size} pixels, mode: {img.mode}")
+                    
+                    # Convert to RGB if necessary (for better PDF compatibility)
+                    if img.mode in ('RGBA', 'LA'):
+                        # Create white background for transparent images
+                        background = Image.new('RGB', img.size, (255, 255, 255))
+                        if img.mode == 'LA':
+                            img = img.convert('RGBA')
+                        background.paste(img, mask=img.split()[-1] if img.mode == 'RGBA' else None)
+                        img = background
+                    elif img.mode == 'P':
+                        img = img.convert('RGB')
+                    elif img.mode not in ('RGB', 'L'):
+                        img = img.convert('RGB')
+                    
+                    # Get image dimensions
+                    img_width, img_height = img.size
+                    
+                    # Calculate scaling to fit available space
+                    if layout == 'fit-to-page':
+                        # Scale to fill entire available space
+                        scale_x = available_width / img_width
+                        scale_y = available_height / img_height
+                        scale = min(scale_x, scale_y)  # Maintain aspect ratio
+                    else:
+                        # Scale to fit within available space
+                        scale_x = available_width / img_width
+                        scale_y = available_height / img_height
+                        
+                        if layout == 'multiple-per-page' and images_per_page > 1:
+                            # Adjust available height for multiple images
+                            adjusted_height = available_height / images_per_page
+                            scale_y = adjusted_height / img_height
+                        
+                        scale = min(scale_x, scale_y, 1.0)  # Don't upscale beyond original size
+                    
+                    # Calculate final image dimensions
+                    final_width = img_width * scale
+                    final_height = img_height * scale
+                    
+                    print(f"Scale factor: {scale}")
+                    print(f"Final dimensions: {final_width} x {final_height}")
+                    
+                    # Determine image position based on layout
+                    if layout == 'multiple-per-page' and images_per_page > 1:
+                        # Position for multiple images per page
+                        y_offset = current_page_images * (available_height / images_per_page)
+                        x_pos = margin_size + (available_width - final_width) / 2
+                        y_pos = page_height - margin_size - y_offset - final_height
+                    else:
+                        # Center the image on the page
+                        x_pos = margin_size + (available_width - final_width) / 2
+                        y_pos = margin_size + (available_height - final_height) / 2
+                    
+                    # Handle auto orientation
+                    if orientation == 'auto':
+                        # Determine best orientation based on image aspect ratio
+                        img_aspect = img_width / img_height
+                        page_aspect = page_width / page_height
+                        
+                        if (img_aspect > 1 and page_aspect < 1) or (img_aspect < 1 and page_aspect > 1):
+                            # Switch page orientation for better fit
+                            page_width, page_height = page_height, page_width
+                            available_width = page_width - (2 * margin_size)
+                            available_height = page_height - (2 * margin_size)
+                            
+                            # Recalculate scaling and position
+                            scale_x = available_width / img_width
+                            scale_y = available_height / img_height
+                            scale = min(scale_x, scale_y, 1.0)
+                            final_width = img_width * scale
+                            final_height = img_height * scale
+                            x_pos = margin_size + (available_width - final_width) / 2
+                            y_pos = margin_size + (available_height - final_height) / 2
+                            
+                            # Create new page with updated dimensions
+                            c.setPageSize((page_width, page_height))
+                    
+                    # Create a temporary resized image
+                    if scale != 1.0:
+                        resized_img = img.resize((int(final_width), int(final_height)), Image.LANCZOS)
+                    else:
+                        resized_img = img
+                    
+                    # Save resized image to temp file
+                    temp_resized = os.path.join(temp_dir, f"resized_{i}_{uuid.uuid4().hex}.png")
+                    resized_img.save(temp_resized, 'PNG')
+                    
+                    # Add image to PDF
+                    try:
+                        c.drawImage(temp_resized, x_pos, y_pos, width=final_width, height=final_height)
+                        print(f"Added image to PDF at position ({x_pos}, {y_pos})")
+                    except Exception as e:
+                        print(f"Error adding image to PDF: {str(e)}")
+                        # Try with ImageReader as fallback
+                        img_reader = ImageReader(temp_resized)
+                        c.drawImage(img_reader, x_pos, y_pos, width=final_width, height=final_height)
+                    
+                    processed_images += 1
+                    current_page_images += 1
+                    
+                    # Check if we need a new page
+                    if layout == 'one-per-page' or (layout == 'multiple-per-page' and current_page_images >= images_per_page):
+                        if i < len(image_files) - 1:  # Not the last image
+                            c.showPage()  # Start new page
+                            current_page_images = 0
+                            print("Created new page")
+                    
+                    # Clean up temp resized image
+                    try:
+                        os.remove(temp_resized)
+                    except:
+                        pass
+                        
+            except Exception as e:
+                print(f"Error processing {image_file.name}: {str(e)}")
+                # Continue with next image instead of failing completely
+                continue
+        
+        # Finalize PDF
+        c.save()
+        pdf_size = os.path.getsize(pdf_path)
+        
+        print(f"\n=== PDF CREATION SUMMARY ===")
+        print(f"Images processed: {processed_images}")
+        print(f"PDF size: {pdf_size} bytes")
+        print(f"PDF path: {pdf_path}")
+        
+        if processed_images == 0:
+            return JsonResponse({'error': 'No images could be processed successfully'}, status=500)
+        
+        # Return the PDF file
+        with open(pdf_path, 'rb') as f:
+            pdf_data = f.read()
+            
+            print(f"Returning PDF: {len(pdf_data)} bytes")
+            
+            response = HttpResponse(pdf_data, content_type='application/pdf')
+            response['Content-Disposition'] = f'attachment; filename="converted_images.pdf"'
+            response['Content-Length'] = str(len(pdf_data))
+            
+            # Add conversion info headers
+            response['X-Images-Count'] = str(processed_images)
+            response['X-Page-Size'] = page_size
+            response['X-Orientation'] = orientation
+            response['X-Layout'] = layout
+            response['X-PDF-Size'] = str(pdf_size)
+            
+            # Add cache control headers
+            response['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+            response['Pragma'] = 'no-cache'
+            response['Expires'] = '0'
+            
+            return response
+    
+    except Exception as e:
+        print(f"PNG to PDF conversion error: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        
+        return JsonResponse({
+            'error': f'Conversion failed: {str(e)}'
+        }, status=500)
+    
+    finally:
+        # Cleanup temp directory
+        try:
+            shutil.rmtree(temp_dir)
+            print(f"Cleaned up temp directory: {temp_dir}")
+        except Exception as e:
+            print(f"Failed to cleanup temp directory: {e}")
+
+# Helper function for PNG validation
+def is_valid_png(file_path):
+    """Check if file is a valid PNG image"""
+    try:
+        with Image.open(file_path) as img:
+            return img.format == 'PNG'
+    except Exception:
+        return False
+
+# Enhanced PNG to PDF with advanced layout options
+def create_pdf_with_layout(image_files, settings):
+    """
+    Create PDF with advanced layout options
+    """
+    try:
+        page_size = settings.get('page_size', 'A4')
+        orientation = settings.get('orientation', 'portrait')
+        layout = settings.get('layout', 'one-per-page')
+        margin = settings.get('margin', 'medium')
+        
+        # Page size mapping
+        page_sizes = {
+            'A4': A4,
+            'LETTER': letter,
+            'A3': A3,
+            'A5': A5,
+            'LEGAL': legal,
+        }
+        
+        # Margin mapping
+        margin_sizes = {
+            'none': 0,
+            'small': 10 * mm,
+            'medium': 20 * mm,
+            'large': 30 * mm,
+        }
+        
+        page_width, page_height = page_sizes.get(page_size, A4)
+        
+        if orientation == 'landscape':
+            page_width, page_height = page_height, page_width
+        
+        margin_size = margin_sizes.get(margin, 20 * mm)
+        
+        return {
+            'page_width': page_width,
+            'page_height': page_height,
+            'margin': margin_size,
+            'available_width': page_width - (2 * margin_size),
+            'available_height': page_height - (2 * margin_size)
+        }
+        
+    except Exception as e:
+        print(f"Error in create_pdf_with_layout: {str(e)}")
+        return None
+
+# Advanced image positioning for PDF
+def calculate_image_position(img_size, available_space, layout_type, page_index=0):
+    """
+    Calculate optimal image position based on layout type
+    """
+    img_width, img_height = img_size
+    avail_width, avail_height = available_space
+    
+    # Calculate scale to fit
+    scale_x = avail_width / img_width
+    scale_y = avail_height / img_height
+    scale = min(scale_x, scale_y, 1.0)  # Don't upscale
+    
+    final_width = img_width * scale
+    final_height = img_height * scale
+    
+    if layout_type == 'center':
+        x_pos = (avail_width - final_width) / 2
+        y_pos = (avail_height - final_height) / 2
+    elif layout_type == 'top-left':
+        x_pos = 0
+        y_pos = avail_height - final_height
+    elif layout_type == 'top-center':
+        x_pos = (avail_width - final_width) / 2
+        y_pos = avail_height - final_height
+    elif layout_type == 'top-right':
+        x_pos = avail_width - final_width
+        y_pos = avail_height - final_height
+    else:
+        # Default to center
+        x_pos = (avail_width - final_width) / 2
+        y_pos = (avail_height - final_height) / 2
+    
+    return {
+        'x': x_pos,
+        'y': y_pos,
+        'width': final_width,
+        'height': final_height,
+        'scale': scale
+    }
+
+# Batch PNG to PDF conversion with progress tracking
+def batch_png_to_pdf_conversion(image_files, settings, progress_callback=None):
+    """
+    Convert multiple PNG files to PDF with progress tracking
+    """
+    total_files = len(image_files)
+    processed_files = 0
+    
+    try:
+        # Initialize PDF settings
+        pdf_settings = create_pdf_with_layout(image_files, settings)
+        if not pdf_settings:
+            raise Exception("Failed to initialize PDF settings")
+        
+        # Process each image
+        for i, image_file in enumerate(image_files):
+            try:
+                # Process individual image
+                # ... (image processing code here)
+                
+                processed_files += 1
+                
+                # Call progress callback if provided
+                if progress_callback:
+                    progress = (processed_files / total_files) * 100
+                    progress_callback(progress, f"Processed {processed_files}/{total_files} images")
+                    
+            except Exception as e:
+                print(f"Error processing file {i+1}: {str(e)}")
+                continue
+        
+        return {
+            'success': True,
+            'processed_files': processed_files,
+            'total_files': total_files
+        }
+        
+    except Exception as e:
+        return {
+            'success': False,
+            'error': str(e),
+            'processed_files': processed_files,
+            'total_files': total_files
+        }
+
+# PDF optimization and compression
+def optimize_pdf_output(pdf_path, quality='medium'):
+    """
+    Optimize PDF file size and quality
+    """
+    try:
+        # This would require additional libraries like PyPDF2 or similar
+        # For now, return the original file
+        return pdf_path
+        
+    except Exception as e:
+        print(f"PDF optimization error: {str(e)}")
+        return pdf_path
+
+# Image quality and format validation
+def validate_and_prepare_image(image_path, target_format='RGB'):
+    """
+    Validate and prepare image for PDF conversion
+    """
+    try:
+        with Image.open(image_path) as img:
+            # Check if image is valid
+            img.verify()
+            
+            # Reopen for processing (verify() closes the image)
+            img = Image.open(image_path)
+            
+            # Convert to target format if needed
+            if img.mode != target_format:
+                if img.mode in ('RGBA', 'LA'):
+                    # Handle transparency
+                    background = Image.new('RGB', img.size, (255, 255, 255))
+                    if img.mode == 'RGBA':
+                        background.paste(img, mask=img.split()[-1])
+                    else:
+                        background.paste(img)
+                    img = background
+                else:
+                    img = img.convert(target_format)
+            
+            return img
+            
+    except Exception as e:
+        print(f"Image validation error: {str(e)}")
+        return None
+
+try:
+    import PyPDF2
+    from PyPDF2 import PdfReader, PdfWriter
+    PYPDF2_AVAILABLE = True
+except ImportError:
+    try:
+        import pypdf
+        from pypdf import PdfReader, PdfWriter
+        PYPDF2_AVAILABLE = True
+    except ImportError:
+        PYPDF2_AVAILABLE = False
+
+def split_pdf(request):
+    """Render the Split PDF tool page"""
+    return render(request, 'split_pdf.html')
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def split_pdf_api(request):
+    """
+    API endpoint to split PDF files into separate pages or ranges
+    """
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
+    
+    if not PYPDF2_AVAILABLE:
+        return JsonResponse({
+            'error': 'PDF processing library not available. Please install PyPDF2: pip install PyPDF2'
+        }, status=500)
+    
+    # Get PDF file
+    if 'pdf_file' not in request.FILES:
+        return JsonResponse({'error': 'No PDF file found in request'}, status=400)
+    
+    pdf_file = request.FILES['pdf_file']
+    
+    if not pdf_file:
+        return JsonResponse({'error': 'PDF file is required'}, status=400)
+    
+    # Get split options
+    split_mode = request.POST.get('split_mode', 'all')
+    start_page = request.POST.get('start_page')
+    end_page = request.POST.get('end_page')
+    custom_ranges = request.POST.get('custom_ranges', '')
+    selected_pages = request.POST.get('selected_pages', '[]')
+    
+    print(f"=== SPLIT PDF SETTINGS ===")
+    print(f"File: {pdf_file.name}")
+    print(f"Split Mode: {split_mode}")
+    print(f"Start Page: {start_page}")
+    print(f"End Page: {end_page}")
+    print(f"Custom Ranges: {custom_ranges}")
+    print(f"Selected Pages: {selected_pages}")
+    
+    # Validate file
+    max_file_size = 100 * 1024 * 1024  # 100MB
+    if pdf_file.size > max_file_size:
+        return JsonResponse({'error': 'File exceeds 100MB limit'}, status=400)
+    
+    # Validate PDF format
+    if not (pdf_file.content_type == 'application/pdf' or pdf_file.name.lower().endswith('.pdf')):
+        return JsonResponse({'error': 'Invalid file format. Only PDF files are allowed.'}, status=400)
+    
+    # Create temp directory
+    temp_dir = tempfile.mkdtemp(prefix='split_pdf_')
+    print(f"Created temp directory: {temp_dir}")
+    
+    try:
+        # Save PDF file to temp directory
+        temp_pdf_path = os.path.join(temp_dir, f"input_{uuid.uuid4().hex}.pdf")
+        
+        with open(temp_pdf_path, 'wb') as f:
+            for chunk in pdf_file.chunks():
+                f.write(chunk)
+        
+        print(f"Saved PDF to: {temp_pdf_path}")
+        
+        # Read and analyze PDF
+        try:
+            pdf_reader = PdfReader(temp_pdf_path)
+            total_pages = len(pdf_reader.pages)
+            print(f"PDF has {total_pages} pages")
+            
+            if total_pages == 0:
+                return JsonResponse({'error': 'PDF file appears to be empty'}, status=400)
+            
+        except Exception as e:
+            print(f"Error reading PDF: {str(e)}")
+            return JsonResponse({'error': f'Invalid or corrupted PDF file: {str(e)}'}, status=400)
+        
+        # Determine which pages to extract based on split mode
+        pages_to_extract = []
+        
+        if split_mode == 'all':
+            pages_to_extract = list(range(1, total_pages + 1))
+            
+        elif split_mode == 'range':
+            try:
+                start = int(start_page) if start_page else 1
+                end = int(end_page) if end_page else total_pages
+                
+                if start < 1 or end > total_pages or start > end:
+                    return JsonResponse({'error': f'Invalid page range. PDF has {total_pages} pages.'}, status=400)
+                
+                pages_to_extract = list(range(start, end + 1))
+                
+            except ValueError:
+                return JsonResponse({'error': 'Invalid page numbers in range'}, status=400)
+                
+        elif split_mode == 'custom':
+            if not custom_ranges.strip():
+                return JsonResponse({'error': 'Custom ranges cannot be empty'}, status=400)
+            
+            try:
+                pages_to_extract = parse_custom_ranges(custom_ranges, total_pages)
+                if not pages_to_extract:
+                    return JsonResponse({'error': 'No valid pages found in custom ranges'}, status=400)
+                    
+            except Exception as e:
+                return JsonResponse({'error': f'Invalid custom ranges: {str(e)}'}, status=400)
+                
+        elif split_mode == 'select':
+            try:
+                selected_pages_list = json.loads(selected_pages)
+                if not selected_pages_list:
+                    return JsonResponse({'error': 'No pages selected'}, status=400)
+                
+                # Validate selected pages
+                for page in selected_pages_list:
+                    if not isinstance(page, int) or page < 1 or page > total_pages:
+                        return JsonResponse({'error': f'Invalid page number: {page}'}, status=400)
+                
+                pages_to_extract = sorted(selected_pages_list)
+                
+            except (json.JSONDecodeError, ValueError) as e:
+                return JsonResponse({'error': f'Invalid selected pages format: {str(e)}'}, status=400)
+        
+        else:
+            return JsonResponse({'error': 'Invalid split mode'}, status=400)
+        
+        print(f"Pages to extract: {pages_to_extract}")
+        
+        # Create output PDFs
+        output_files = []
+        total_output_size = 0
+        
+        if split_mode == 'all' or split_mode == 'select':
+            # Create individual PDF for each page
+            for page_num in pages_to_extract:
+                pdf_writer = PdfWriter()
+                pdf_writer.add_page(pdf_reader.pages[page_num - 1])  # PyPDF2 uses 0-based indexing
+                
+                output_filename = f"page_{page_num:03d}.pdf"
+                output_path = os.path.join(temp_dir, output_filename)
+                
+                with open(output_path, 'wb') as output_file:
+                    pdf_writer.write(output_file)
+                
+                file_size = os.path.getsize(output_path)
+                total_output_size += file_size
+                
+                output_files.append({
+                    'path': output_path,
+                    'name': output_filename,
+                    'size': file_size
+                })
+                
+                print(f"Created: {output_filename} ({file_size} bytes)")
+                
+        elif split_mode == 'range':
+            # Create single PDF with the range
+            pdf_writer = PdfWriter()
+            
+            for page_num in pages_to_extract:
+                pdf_writer.add_page(pdf_reader.pages[page_num - 1])
+            
+            start = pages_to_extract[0]
+            end = pages_to_extract[-1]
+            output_filename = f"pages_{start:03d}-{end:03d}.pdf"
+            output_path = os.path.join(temp_dir, output_filename)
+            
+            with open(output_path, 'wb') as output_file:
+                pdf_writer.write(output_file)
+            
+            file_size = os.path.getsize(output_path)
+            total_output_size += file_size
+            
+            output_files.append({
+                'path': output_path,
+                'name': output_filename,
+                'size': file_size
+            })
+            
+            print(f"Created: {output_filename} ({file_size} bytes)")
+            
+        elif split_mode == 'custom':
+            # Create PDFs based on custom ranges
+            ranges = parse_custom_ranges_detailed(custom_ranges, total_pages)
+            
+            for i, page_range in enumerate(ranges):
+                pdf_writer = PdfWriter()
+                
+                for page_num in page_range:
+                    pdf_writer.add_page(pdf_reader.pages[page_num - 1])
+                
+                if len(page_range) == 1:
+                    output_filename = f"page_{page_range[0]:03d}.pdf"
+                else:
+                    output_filename = f"pages_{page_range[0]:03d}-{page_range[-1]:03d}.pdf"
+                
+                output_path = os.path.join(temp_dir, output_filename)
+                
+                with open(output_path, 'wb') as output_file:
+                    pdf_writer.write(output_file)
+                
+                file_size = os.path.getsize(output_path)
+                total_output_size += file_size
+                
+                output_files.append({
+                    'path': output_path,
+                    'name': output_filename,
+                    'size': file_size
+                })
+                
+                print(f"Created: {output_filename} ({file_size} bytes)")
+        
+        if not output_files:
+            return JsonResponse({'error': 'No PDF files were created'}, status=500)
+        
+        print(f"\n=== SPLIT SUMMARY ===")
+        print(f"Files created: {len(output_files)}")
+        print(f"Total output size: {total_output_size} bytes")
+        
+        # Return result
+        if len(output_files) == 1:
+            # Single file - return directly
+            file_info = output_files[0]
+            
+            with open(file_info['path'], 'rb') as f:
+                pdf_data = f.read()
+                
+                response = HttpResponse(pdf_data, content_type='application/pdf')
+                response['Content-Disposition'] = f'attachment; filename="{file_info["name"]}"'
+                response['Content-Length'] = str(len(pdf_data))
+                
+                # Add split info headers
+                response['X-Split-Mode'] = split_mode
+                response['X-Pages-Extracted'] = str(len(pages_to_extract))
+                response['X-Output-Files'] = '1'
+                response['X-Total-Size'] = str(file_info['size'])
+                
+                # Add cache control headers
+                response['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+                response['Pragma'] = 'no-cache'
+                response['Expires'] = '0'
+                
+                return response
+        else:
+            # Multiple files - create ZIP
+            zip_filename = f"split_{pdf_file.name.replace('.pdf', '')}.zip"
+            zip_path = os.path.join(temp_dir, zip_filename)
+            
+            with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+                for file_info in output_files:
+                    zip_file.write(file_info['path'], file_info['name'])
+            
+            zip_size = os.path.getsize(zip_path)
+            print(f"Created ZIP file: {zip_filename} ({zip_size} bytes)")
+            
+            with open(zip_path, 'rb') as f:
+                zip_data = f.read()
+                
+                response = HttpResponse(zip_data, content_type='application/zip')
+                response['Content-Disposition'] = f'attachment; filename="{zip_filename}"'
+                response['Content-Length'] = str(len(zip_data))
+                
+                # Add split info headers
+                response['X-Split-Mode'] = split_mode
+                response['X-Pages-Extracted'] = str(len(pages_to_extract))
+                response['X-Output-Files'] = str(len(output_files))
+                response['X-Total-Size'] = str(total_output_size)
+                
+                # Add cache control headers
+                response['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+                response['Pragma'] = 'no-cache'
+                response['Expires'] = '0'
+                
+                return response
+    
+    except Exception as e:
+        print(f"Split PDF error: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        
+        return JsonResponse({
+            'error': f'PDF splitting failed: {str(e)}'
+        }, status=500)
+    
+    finally:
+        # Cleanup temp directory
+        try:
+            shutil.rmtree(temp_dir)
+            print(f"Cleaned up temp directory: {temp_dir}")
+        except Exception as e:
+            print(f"Failed to cleanup temp directory: {e}")
+
+def parse_custom_ranges(ranges_str, total_pages):
+    """
+    Parse custom ranges string and return list of page numbers
+    Format: "1-3, 5, 8-10, 15"
+    """
+    pages = []
+    ranges_str = ranges_str.strip()
+    
+    if not ranges_str:
+        return pages
+    
+    # Split by commas and process each part
+    parts = [part.strip() for part in ranges_str.split(',')]
+    
+    for part in parts:
+        if not part:
+            continue
+            
+        if '-' in part:
+            # Range format: "5-10"
+            range_parts = part.split('-')
+            if len(range_parts) != 2:
+                raise ValueError(f"Invalid range format: {part}")
+            
+            try:
+                start = int(range_parts[0].strip())
+                end = int(range_parts[1].strip())
+                
+                if start < 1 or end > total_pages or start > end:
+                    raise ValueError(f"Invalid range {start}-{end}. PDF has {total_pages} pages.")
+                
+                pages.extend(range(start, end + 1))
+                
+            except ValueError as e:
+                if "invalid literal" in str(e):
+                    raise ValueError(f"Invalid page numbers in range: {part}")
+                raise
+        else:
+            # Single page
+            try:
+                page = int(part.strip())
+                if page < 1 or page > total_pages:
+                    raise ValueError(f"Page {page} is out of range. PDF has {total_pages} pages.")
+                pages.append(page)
+                
+            except ValueError as e:
+                if "invalid literal" in str(e):
+                    raise ValueError(f"Invalid page number: {part}")
+                raise
+    
+    # Remove duplicates and sort
+    return sorted(list(set(pages)))
+
+def parse_custom_ranges_detailed(ranges_str, total_pages):
+    """
+    Parse custom ranges and return list of page ranges (for creating separate PDFs)
+    Format: "1-3, 5, 8-10, 15" -> [[1,2,3], [5], [8,9,10], [15]]
+    """
+    ranges = []
+    ranges_str = ranges_str.strip()
+    
+    if not ranges_str:
+        return ranges
+    
+    # Split by commas and process each part
+    parts = [part.strip() for part in ranges_str.split(',')]
+    
+    for part in parts:
+        if not part:
+            continue
+            
+        if '-' in part:
+            # Range format: "5-10"
+            range_parts = part.split('-')
+            if len(range_parts) != 2:
+                raise ValueError(f"Invalid range format: {part}")
+            
+            try:
+                start = int(range_parts[0].strip())
+                end = int(range_parts[1].strip())
+                
+                if start < 1 or end > total_pages or start > end:
+                    raise ValueError(f"Invalid range {start}-{end}. PDF has {total_pages} pages.")
+                
+                ranges.append(list(range(start, end + 1)))
+                
+            except ValueError as e:
+                if "invalid literal" in str(e):
+                    raise ValueError(f"Invalid page numbers in range: {part}")
+                raise
+        else:
+            # Single page
+            try:
+                page = int(part.strip())
+                if page < 1 or page > total_pages:
+                    raise ValueError(f"Page {page} is out of range. PDF has {total_pages} pages.")
+                ranges.append([page])
+                
+            except ValueError as e:
+                if "invalid literal" in str(e):
+                    raise ValueError(f"Invalid page number: {part}")
+                raise
+    
+    return ranges
+
+# Helper function for PDF validation
+def is_valid_pdf(file_path):
+    """Check if file is a valid PDF"""
+    try:
+        pdf_reader = PdfReader(file_path)
+        return len(pdf_reader.pages) > 0
+    except Exception:
+        return False
+
+# Advanced PDF analysis
+def analyze_pdf_structure(file_path):
+    """
+    Analyze PDF structure and return detailed information
+    """
+    try:
+        pdf_reader = PdfReader(file_path)
+        
+        info = {
+            'page_count': len(pdf_reader.pages),
+            'encrypted': pdf_reader.is_encrypted,
+            'metadata': {},
+            'pages_info': []
+        }
+        
+        # Get metadata
+        if pdf_reader.metadata:
+            metadata = pdf_reader.metadata
+            info['metadata'] = {
+                'title': metadata.get('/Title', ''),
+                'author': metadata.get('/Author', ''),
+                'subject': metadata.get('/Subject', ''),
+                'creator': metadata.get('/Creator', ''),
+                'producer': metadata.get('/Producer', ''),
+                'creation_date': str(metadata.get('/CreationDate', '')),
+                'modification_date': str(metadata.get('/ModDate', ''))
+            }
+        
+        # Analyze each page
+        for i, page in enumerate(pdf_reader.pages):
+            page_info = {
+                'page_number': i + 1,
+                'rotation': page.rotation if hasattr(page, 'rotation') else 0,
+                'mediabox': {
+                    'width': float(page.mediabox.width),
+                    'height': float(page.mediabox.height)
+                }
+            }
+            
+            # Get page content info
+            try:
+                if hasattr(page, 'extract_text'):
+                    text = page.extract_text()
+                    page_info['has_text'] = len(text.strip()) > 0
+                    page_info['text_length'] = len(text)
+                else:
+                    page_info['has_text'] = False
+                    page_info['text_length'] = 0
+            except:
+                page_info['has_text'] = False
+                page_info['text_length'] = 0
+            
+            info['pages_info'].append(page_info)
+        
+        return info
+        
+    except Exception as e:
+        return {'error': str(e)}
+
+# Optimize split PDFs
+def optimize_split_pdf(input_path, output_path, optimization_level='medium'):
+    """
+    Optimize split PDF files for size and quality
+    """
+    try:
+        pdf_reader = PdfReader(input_path)
+        pdf_writer = PdfWriter()
+        
+        for page in pdf_reader.pages:
+            # Add page to writer
+            pdf_writer.add_page(page)
+        
+        # Apply optimization based on level
+        if optimization_level == 'high':
+            # Maximum compression
+            pdf_writer.compress_identical_objects()
+        elif optimization_level == 'medium':
+            # Balanced compression
+            pdf_writer.compress_identical_objects()
+        # 'low' or default - minimal optimization
+        
+        with open(output_path, 'wb') as output_file:
+            pdf_writer.write(output_file)
+        
+        return True
+        
+    except Exception as e:
+        print(f"PDF optimization error: {str(e)}")
+        # If optimization fails, copy original file
+        shutil.copy2(input_path, output_path)
+        return False
+
+# Batch PDF splitting with progress tracking
+def batch_split_pdf(pdf_files, split_options, progress_callback=None):
+    """
+    Split multiple PDF files with progress tracking
+    """
+    results = []
+    total_files = len(pdf_files)
+    
+    for i, pdf_file in enumerate(pdf_files):
+        try:
+            # Process individual PDF
+            result = split_single_pdf(pdf_file, split_options)
+            results.append(result)
+            
+            # Call progress callback if provided
+            if progress_callback:
+                progress = ((i + 1) / total_files) * 100
+                progress_callback(progress, f"Processed {i + 1}/{total_files} files")
+                
+        except Exception as e:
+            results.append({'error': str(e), 'file': pdf_file.name})
+    
+    return results
+
+# Enhanced page range validation
+def validate_page_ranges(ranges_str, total_pages):
+    """
+    Validate page ranges and provide detailed error messages
+    """
+    try:
+        pages = parse_custom_ranges(ranges_str, total_pages)
+        
+        if not pages:
+            return {'valid': False, 'error': 'No valid pages specified'}
+        
+        # Check for reasonable page count
+        if len(pages) > total_pages:
+            return {'valid': False, 'error': 'More pages specified than available in PDF'}
+        
+        return {
+            'valid': True,
+            'pages': pages,
+            'count': len(pages),
+            'ranges_count': len(parse_custom_ranges_detailed(ranges_str, total_pages))
+        }
+        
+    except Exception as e:
+        return {'valid': False, 'error': str(e)}
+
+# PDF security check
+def check_pdf_security(file_path):
+    """
+    Check PDF security restrictions
+    """
+    try:
+        pdf_reader = PdfReader(file_path)
+        
+        security_info = {
+            'encrypted': pdf_reader.is_encrypted,
+            'can_extract': True,  # Assume can extract unless proven otherwise
+            'restrictions': []
+        }
+        
+        if pdf_reader.is_encrypted:
+            # Try to decrypt with empty password
+            try:
+                pdf_reader.decrypt('')
+                security_info['can_extract'] = True
+            except:
+                security_info['can_extract'] = False
+                security_info['restrictions'].append('Password protected')
+        
+        return security_info
+        
+    except Exception as e:
+        return {'error': str(e), 'can_extract': False}
+
+@staff_member_required
+def system_health(request):
+    """System health monitoring dashboard"""
+    try:
+        now = timezone.now()
+        last_hour = now - timedelta(hours=1)
+        last_24h = now - timedelta(hours=24)
+        
+        # Get system health metrics
+        health_data = {
+            'timestamp': now.isoformat(),
+            'status': 'healthy',  # overall status
+            'uptime': get_system_uptime(),
+            'cpu_usage': get_system_cpu_usage(),
+            'memory_usage': get_system_memory_usage(),
+            'disk_usage': get_system_disk_usage(),
+            'database_status': check_database_status(),
+        }
+        
+        # Activity metrics
+        activity_metrics = {
+            'total_requests_1h': UserActivity.objects.filter(created_at__gte=last_hour).count(),
+            'total_requests_24h': UserActivity.objects.filter(created_at__gte=last_24h).count(),
+            'unique_sessions_1h': UserActivity.objects.filter(
+                created_at__gte=last_hour
+            ).values('session_id').distinct().count(),
+            'active_sessions': get_active_sessions_count(),
+        }
+        
+        # Error metrics
+        error_metrics = {
+            'errors_1h': ErrorLog.objects.filter(created_at__gte=last_hour).count(),
+            'errors_24h': ErrorLog.objects.filter(created_at__gte=last_24h).count(),
+            'error_rate_1h': calculate_error_rate(last_hour),
+            'error_rate_24h': calculate_error_rate(last_24h),
+            'unresolved_errors': ErrorLog.objects.filter(resolved=False).count(),
+        }
+        
+        # Performance metrics
+        performance_metrics = {
+            'avg_response_time_1h': calculate_avg_response_time(last_hour),
+            'avg_response_time_24h': calculate_avg_response_time(last_24h),
+        }
+        
+        # Top errors
+        top_errors = get_top_errors(last_24h)
+        
+        # Slowest tools
+        slowest_tools = get_slowest_tools(last_24h)
+        
+        # Calculate overall health score
+        health_score = calculate_overall_health_score(health_data)
+        
+        # Combine all metrics
+        context = {
+            'health_data': health_data,
+            'activity_metrics': activity_metrics,
+            'error_metrics': error_metrics,
+            'performance_metrics': performance_metrics,
+            'top_errors': top_errors,
+            'slowest_tools': slowest_tools,
+            'health_score': health_score,
+            'last_updated': now.strftime('%Y-%m-%d %H:%M:%S UTC'),
+        }
+        
+        # If it's an AJAX request, return JSON
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse(context)
+        
+        return render(request, 'admin/system_health.html', context)
+        
+    except Exception as e:
+        print(f"Error in system_health view: {str(e)}")
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'error': 'Failed to fetch system health data',
+                'timestamp': timezone.now().isoformat()
+            }, status=500)
+        
+        # Return basic error page for non-AJAX requests
+        return render(request, 'admin/system_health.html', {
+            'error': 'Unable to load system health data',
+            'health_score': 0
+        })

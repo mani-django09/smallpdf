@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversion Statistics - SmallPDF.us Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .card { @apply bg-white rounded-lg shadow-sm border border-gray-200 p-6; }
+        .stat-card { @apply bg-gradient-to-r text-white rounded-lg p-6 shadow-lg; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <a href="/admin/" class="text-blue-600 hover:text-blue-800">← Back to Admin</a>
+                    <h1 class="text-2xl font-bold text-gray-900">Conversion Statistics</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <select id="timePeriod" class="border border-gray-300 rounded-md px-3 py-2">
+                        <option value="1">Last 24 Hours</option>
+                        <option value="7" selected>Last 7 Days</option>
+                        <option value="30">Last 30 Days</option>
+                        <option value="90">Last 90 Days</option>
+                    </select>
+                    <button onclick="exportReport()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                        Export Report
+                    </button>
+                    <button onclick="refreshData()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                        Refresh
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        
+        <!-- Overall Statistics -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="stat-card from-blue-500 to-blue-600">
+                <div class="text-center">
+                    <p class="text-blue-100 text-sm">Total Conversions</p>
+                    <p class="text-3xl font-bold" id="totalConversions">0</p>
+                    <p class="text-blue-200 text-xs mt-1" id="conversionChange">+0% from last period</p>
+                </div>
+            </div>
+            <div class="stat-card from-green-500 to-green-600">
+                <div class="text-center">
+                    <p class="text-green-100 text-sm">Success Rate</p>
+                    <p class="text-3xl font-bold" id="successRate">0%</p>
+                    <p class="text-green-200 text-xs mt-1" id="successChange">+0% from last period</p>
+                </div>
+            </div>
+            <div class="stat-card from-purple-500 to-purple-600">
+                <div class="text-center">
+                    <p class="text-purple-100 text-sm">Avg Processing Time</p>
+                    <p class="text-3xl font-bold" id="avgProcessingTime">0s</p>
+                    <p class="text-purple-200 text-xs mt-1" id="timeChange">+0% from last period</p>
+                </div>
+            </div>
+            <div class="stat-card from-indigo-500 to-indigo-600">
+                <div class="text-center">
+                    <p class="text-indigo-100 text-sm">Data Processed</p>
+                    <p class="text-3xl font-bold" id="dataProcessed">0 GB</p>
+                    <p class="text-indigo-200 text-xs mt-1" id="dataChange">+0% from last period</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Conversion Trends Chart -->
+            <div class="card">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Conversion Trends</h3>
+                <canvas id="conversionTrendsChart" width="400" height="200"></canvas>
+            </div>
+            
+            <!-- Tool Performance Chart -->
+            <div class="card">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Tool Performance</h3>
+                <canvas id="toolPerformanceChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Tool Statistics Table -->
+        <div class="card mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-900">Tool Performance Details</h3>
+                <div class="text-sm text-gray-500">
+                    Last updated: <span id="lastUpdated">--</span>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Tool Name
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Total Attempts
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Success Rate
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Avg File Size
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Avg Processing Time
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Total Data
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Performance
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="toolStatsTable" class="bg-white divide-y divide-gray-200">
+                        <!-- Tool stats will be loaded here -->
+                        <tr>
+                            <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+                                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+                                Loading tool statistics...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Error Analysis -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Error Breakdown -->
+            <div class="card">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Error Breakdown</h3>
+                <canvas id="errorBreakdownChart" width="400" height="200"></canvas>
+            </div>
+            
+            <!-- Performance Metrics -->
+            <div class="card">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Performance Metrics</h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-600">Fastest Processing Time</span>
+                        <span class="text-sm font-semibold text-green-600" id="fastestTime">0.5s</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-600">Slowest Processing Time</span>
+                        <span class="text-sm font-semibold text-red-600" id="slowestTime">45.2s</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-600">Peak Hour</span>
+                        <span class="text-sm font-semibold" id="peakHour">2:00 PM - 3:00 PM</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-600">Most Active Day</span>
+                        <span class="text-sm font-semibold" id="mostActiveDay">Wednesday</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-600">Average Files per User</span>
+                        <span class="text-sm font-semibold" id="avgFilesPerUser">2.3</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-600">Conversion Efficiency</span>
+                        <span class="text-sm font-semibold text-green-600" id="efficiency">92.5%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hourly Performance -->
+        <div class="card">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Hourly Performance (Last 24 Hours)</h3>
+            <canvas id="hourlyPerformanceChart" width="800" height="300"></canvas>
+        </div>
+    </div>
+
+    <script>
+        let charts = {};
+        let currentPeriod = 7;
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStatistics();
+            initializeCharts();
+            updateLastUpdated();
+            
+            // Time period change handler
+            document.getElementById('timePeriod').addEventListener('change', function() {
+                currentPeriod = parseInt(this.value);
+                loadStatistics();
+                updateCharts();
+            });
+        });
+
+        async function loadStatistics() {
+            try {
+                // Mock data - replace with actual API call
+                const stats = generateMockStatistics();
+                updateOverallStats(stats.overall);
+                updateToolStatsTable(stats.tools);
+                updatePerformanceMetrics(stats.performance);
+                
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+            }
+        }
+
+        function generateMockStatistics() {
+            const tools = [
+                { name: 'PDF to Word', attempts: 1250, success: 1180, failed: 70 },
+                { name: 'Merge PDF', attempts: 890, success: 860, failed: 30 },
+                { name: 'Compress PDF', attempts: 765, success: 740, failed: 25 },
+                { name: 'PDF to JPG', attempts: 654, success: 620, failed: 34 },
+                { name: 'JPG to PDF', attempts: 543, success: 510, failed: 33 },
+                { name: 'Word to PDF', attempts: 432, success: 410, failed: 22 },
+            ];
+
+            return {
+                overall: {
+                    total_conversions: 4534,
+                    success_rate: 92.3,
+                    avg_processing_time: 3.2,
+                    data_processed: 45.6
+                },
+                tools: tools.map(tool => ({
+                    ...tool,
+                    success_rate: (tool.success / tool.attempts * 100).toFixed(1),
+                    avg_file_size: (Math.random() * 10 + 1).toFixed(1),
+                    avg_processing_time: (Math.random() * 5 + 1).toFixed(1),
+                    total_data: (tool.attempts * Math.random() * 5).toFixed(1)
+                })),
+                performance: {
+                    fastest: 0.5,
+                    slowest: 45.2,
+                    peak_hour: '2:00 PM - 3:00 PM',
+                    most_active_day: 'Wednesday',
+                    avg_files_per_user: 2.3,
+                    efficiency: 92.5
+                }
+            };
+        }
+
+        function updateOverallStats(stats) {
+            document.getElementById('totalConversions').textContent = stats.total_conversions.toLocaleString();
+            document.getElementById('successRate').textContent = stats.success_rate + '%';
+            document.getElementById('avgProcessingTime').textContent = stats.avg_processing_time + 's';
+            document.getElementById('dataProcessed').textContent = stats.data_processed + ' GB';
+            
+            // Mock change percentages
+            document.getElementById('conversionChange').textContent = '+12.5% from last period';
+            document.getElementById('successChange').textContent = '+2.1% from last period';
+            document.getElementById('timeChange').textContent = '-5.3% from last period';
+            document.getElementById('dataChange').textContent = '+18.7% from last period';
+        }
+
+        function updateToolStatsTable(tools) {
+            const tbody = document.getElementById('toolStatsTable');
+            
+            const rows = tools.map(tool => {
+                const performanceScore = parseFloat(tool.success_rate);
+                const performanceColor = performanceScore >= 95 ? 'text-green-600' : 
+                                       performanceScore >= 90 ? 'text-yellow-600' : 'text-red-600';
+                
+                return `
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">${tool.name}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">${tool.attempts.toLocaleString()}</div>
+                            <div class="text-xs text-gray-500">${tool.success} success, ${tool.failed} failed</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-1 bg-gray-200 rounded-full h-2 mr-2">
+                                    <div class="bg-green-600 h-2 rounded-full" style="width: ${tool.success_rate}%"></div>
+                                </div>
+                                <span class="text-sm font-medium ${performanceColor}">${tool.success_rate}%</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            ${tool.avg_file_size} MB
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            ${tool.avg_processing_time}s
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            ${tool.total_data} GB
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                performanceScore >= 95 ? 'bg-green-100 text-green-800' :
+                                performanceScore >= 90 ? 'bg-yellow-100 text-yellow-800' : 
+                                'bg-red-100 text-red-800'
+                            }">
+                                ${performanceScore >= 95 ? 'Excellent' : performanceScore >= 90 ? 'Good' : 'Needs Attention'}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            
+            tbody.innerHTML = rows;
+        }
+
+        function updatePerformanceMetrics(performance) {
+            document.getElementById('fastestTime').textContent = performance.fastest + 's';
+            document.getElementById('slowestTime').textContent = performance.slowest + 's';
+            document.getElementById('peakHour').textContent = performance.peak_hour;
+            document.getElementById('mostActiveDay').textContent = performance.most_active_day;
+            document.getElementById('avgFilesPerUser').textContent = performance.avg_files_per_user;
+            document.getElementById('efficiency').textContent = performance.efficiency + '%';
+        }
+
+        function initializeCharts() {
+            createConversionTrendsChart();
+            createToolPerformanceChart();
+            createErrorBreakdownChart();
+            createHourlyPerformanceChart();
+        }
+
+        function createConversionTrendsChart() {
+            const ctx = document.getElementById('conversionTrendsChart').getContext('2d');
+            
+            // Mock data for the last 7 days
+            const data = {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Successful Conversions',
+                    data: [650, 720, 890, 670, 810, 450, 320],
+                    borderColor: 'rgb(34, 197, 94)',
+                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                    tension: 0.1
+                }, {
+                    label: 'Failed Conversions',
+                    data: [45, 58, 72, 51, 63, 38, 25],
+                    borderColor: 'rgb(239, 68, 68)',
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                    tension: 0.1
+                }]
+            };
+            
+            charts.conversionTrends = new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function createToolPerformanceChart() {
+            const ctx = document.getElementById('toolPerformanceChart').getContext('2d');
+            
+            const data = {
+                labels: ['PDF to Word', 'Merge PDF', 'Compress PDF', 'PDF to JPG', 'JPG to PDF', 'Word to PDF'],
+                datasets: [{
+                    data: [1250, 890, 765, 654, 543, 432],
+                    backgroundColor: [
+                        '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#06B6D4'
+                    ]
+                }]
+            };
+            
+            charts.toolPerformance = new Chart(ctx, {
+                type: 'doughnut',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        function createErrorBreakdownChart() {
+            const ctx = document.getElementById('errorBreakdownChart').getContext('2d');
+            
+            const data = {
+                labels: ['File Format Error', 'Processing Timeout', 'Upload Error', 'System Error', 'Other'],
+                datasets: [{
+                    data: [45, 28, 22, 15, 12],
+                    backgroundColor: [
+                        '#EF4444', '#F59E0B', '#8B5CF6', '#6B7280', '#374151'
+                    ]
+                }]
+            };
+            
+            charts.errorBreakdown = new Chart(ctx, {
+                type: 'pie',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        function createHourlyPerformanceChart() {
+            const ctx = document.getElementById('hourlyPerformanceChart').getContext('2d');
+            
+            const hours = Array.from({length: 24}, (_, i) => `${i}:00`);
+            const conversions = hours.map(() => Math.floor(Math.random() * 100) + 20);
+            
+            const data = {
+                labels: hours,
+                datasets: [{
+                    label: 'Conversions per Hour',
+                    data: conversions,
+                    borderColor: 'rgb(59, 130, 246)',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    tension: 0.1,
+                    fill: true
+                }]
+            };
+            
+            charts.hourlyPerformance = new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateCharts() {
+            // Update chart data based on selected time period
+            // This would typically fetch new data from your API
+            Object.values(charts).forEach(chart => {
+                if (chart) {
+                    chart.update();
+                }
+            });
+        }
+
+        function updateLastUpdated() {
+            document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
+        }
+
+        function exportReport() {
+            // Generate and download report
+            window.open(`/admin/export/conversion-report/?days=${currentPeriod}`, '_blank');
+        }
+
+        function refreshData() {
+            loadStatistics();
+            updateCharts();
+            updateLastUpdated();
+        }
+
+        // Auto-refresh every 5 minutes
+        setInterval(() => {
+            if (document.visibilityState === 'visible') {
+                refreshData();
+            }
+        }, 300000);
+    </script>
+</body>
+</html>

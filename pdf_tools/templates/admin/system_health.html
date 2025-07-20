@@ -1,0 +1,271 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}System Health - SmallPDF.us Admin{% endblock %}
+
+{% block extra_head %}
+<meta http-equiv="refresh" content="30">
+<style>
+    .health-card {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+    .health-score {
+        font-size: 48px;
+        font-weight: bold;
+        text-align: center;
+    }
+    .health-good { color: #28a745; }
+    .health-warning { color: #ffc107; }
+    .health-critical { color: #dc3545; }
+    .metric-value {
+        font-size: 24px;
+        font-weight: bold;
+        color: #007bff;
+    }
+    .status-badge {
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+    .status-healthy { background: #d4edda; color: #155724; }
+    .status-warning { background: #fff3cd; color: #856404; }
+    .status-error { background: #f8d7da; color: #721c24; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1>System Health Dashboard</h1>
+            <p class="text-muted">Last updated: {{ last_updated }}</p>
+        </div>
+    </div>
+
+    {% if error %}
+    <div class="alert alert-danger">
+        <h4>Error</h4>
+        <p>{{ error }}</p>
+    </div>
+    {% else %}
+
+    <!-- Overall Health Score -->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="health-card text-center">
+                <h5>Overall Health</h5>
+                <div class="health-score {% if health_score >= 90 %}health-good{% elif health_score >= 70 %}health-warning{% else %}health-critical{% endif %}">
+                    {{ health_score }}%
+                </div>
+                <small class="text-muted">System Health Score</small>
+            </div>
+        </div>
+        
+        <!-- Active Sessions -->
+        <div class="col-md-3">
+            <div class="health-card text-center">
+                <h5>Active Sessions</h5>
+                <div class="metric-value">{{ activity_metrics.active_sessions }}</div>
+                <small class="text-muted">Current Active Users</small>
+            </div>
+        </div>
+        
+        <!-- Error Rate -->
+        <div class="col-md-3">
+            <div class="health-card text-center">
+                <h5>Error Rate (1h)</h5>
+                <div class="metric-value {% if error_metrics.error_rate_1h > 5 %}text-danger{% elif error_metrics.error_rate_1h > 2 %}text-warning{% else %}text-success{% endif %}">
+                    {{ error_metrics.error_rate_1h }}%
+                </div>
+                <small class="text-muted">Errors per Hour</small>
+            </div>
+        </div>
+        
+        <!-- Response Time -->
+        <div class="col-md-3">
+            <div class="health-card text-center">
+                <h5>Avg Response Time</h5>
+                <div class="metric-value">{{ performance_metrics.avg_response_time_1h|default:"N/A" }}ms</div>
+                <small class="text-muted">Last Hour Average</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Resources -->
+    <div class="row">
+        <div class="col-md-4">
+            <div class="health-card">
+                <h5>CPU Usage</h5>
+                <div class="progress mb-2">
+                    <div class="progress-bar {% if health_data.cpu_usage.usage_percent > 80 %}bg-danger{% elif health_data.cpu_usage.usage_percent > 60 %}bg-warning{% else %}bg-success{% endif %}" 
+                         style="width: {{ health_data.cpu_usage.usage_percent }}%">
+                        {{ health_data.cpu_usage.usage_percent }}%
+                    </div>
+                </div>
+                <small>{{ health_data.cpu_usage.core_count }} cores available</small>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="health-card">
+                <h5>Memory Usage</h5>
+                <div class="progress mb-2">
+                    <div class="progress-bar {% if health_data.memory_usage.used_percent > 80 %}bg-danger{% elif health_data.memory_usage.used_percent > 60 %}bg-warning{% else %}bg-success{% endif %}" 
+                         style="width: {{ health_data.memory_usage.used_percent }}%">
+                        {{ health_data.memory_usage.used_percent }}%
+                    </div>
+                </div>
+                <small>{{ health_data.memory_usage.used_mb }} MB / {{ health_data.memory_usage.total_mb }} MB</small>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="health-card">
+                <h5>Disk Usage</h5>
+                <div class="progress mb-2">
+                    <div class="progress-bar {% if health_data.disk_usage.used_percent > 80 %}bg-danger{% elif health_data.disk_usage.used_percent > 60 %}bg-warning{% else %}bg-success{% endif %}" 
+                         style="width: {{ health_data.disk_usage.used_percent }}%">
+                        {{ health_data.disk_usage.used_percent }}%
+                    </div>
+                </div>
+                <small>{{ health_data.disk_usage.free_gb }} GB free of {{ health_data.disk_usage.total_gb }} GB</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Database Status -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="health-card">
+                <h5>Database Status</h5>
+                <span class="status-badge {% if health_data.database_status.status == 'healthy' %}status-healthy{% else %}status-error{% endif %}">
+                    {{ health_data.database_status.status|title }}
+                </span>
+                <p class="mt-2 mb-0">{{ health_data.database_status.message }}</p>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="health-card">
+                <h5>System Uptime</h5>
+                <div class="metric-value">{{ health_data.uptime.formatted }}</div>
+                <small class="text-muted">System running for {{ health_data.uptime.formatted }}</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity Metrics -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="health-card">
+                <h5>Request Activity</h5>
+                <table class="table table-sm">
+                    <tr>
+                        <td>Last Hour:</td>
+                        <td><strong>{{ activity_metrics.total_requests_1h }}</strong> requests</td>
+                    </tr>
+                    <tr>
+                        <td>Last 24 Hours:</td>
+                        <td><strong>{{ activity_metrics.total_requests_24h }}</strong> requests</td>
+                    </tr>
+                    <tr>
+                        <td>Unique Sessions (1h):</td>
+                        <td><strong>{{ activity_metrics.unique_sessions_1h }}</strong> users</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="health-card">
+                <h5>Error Summary</h5>
+                <table class="table table-sm">
+                    <tr>
+                        <td>Errors (1h):</td>
+                        <td><strong>{{ error_metrics.errors_1h }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Errors (24h):</td>
+                        <td><strong>{{ error_metrics.errors_24h }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Unresolved:</td>
+                        <td><strong class="{% if error_metrics.unresolved_errors > 0 %}text-danger{% else %}text-success{% endif %}">
+                            {{ error_metrics.unresolved_errors }}
+                        </strong></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Errors -->
+    {% if top_errors %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="health-card">
+                <h5>Top Errors (24h)</h5>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Error Type</th>
+                                <th>Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for error in top_errors %}
+                            <tr>
+                                <td>{{ error.error_type }}</td>
+                                <td><span class="badge badge-danger">{{ error.count }}</span></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="health-card">
+                <h5>Slowest Tools (24h)</h5>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Tool</th>
+                                <th>Avg Time</th>
+                                <th>Uses</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for tool in slowest_tools %}
+                            <tr>
+                                <td>{{ tool.tool_name }}</td>
+                                <td>{{ tool.avg_time|floatformat:2 }}s</td>
+                                <td>{{ tool.total_uses }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% endif %}
+</div>
+
+<script>
+// Auto-refresh every 30 seconds
+setTimeout(function() {
+    location.reload();
+}, 30000);
+</script>
+{% endblock %}

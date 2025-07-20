@@ -1,0 +1,1798 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}PNG to WebP Converter - Free Online PNG to WebP Tool | SmallPDF.us{% endblock %}
+
+{% block meta %}
+<meta name="description" content="Convert PNG to WebP online free with SmallPDF.us - the best PNG to WebP converter. Transform PNG images to WebP format instantly. Fast, secure, and professional results.">
+<meta name="keywords" content="png to webp, convert png to webp, png to webp converter, online png to webp, png to webp online, smallpdf.us, free png converter">
+<meta name="robots" content="index, follow">
+<meta name="author" content="SmallPDF.us">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Open Graph Meta Tags -->
+<meta property="og:title" content="PNG to WebP Converter - Convert PNG to WebP Online Free | SmallPDF.us">
+<meta property="og:description" content="Best PNG to WebP converter online. Transform PNG images to WebP format instantly. Free, fast, and secure conversion with SmallPDF.us">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://smallpdf.us/png-to-webp">
+<meta property="og:image" content="{% static 'images/png-to-webp-converter.jpg' %}">
+<meta property="og:site_name" content="SmallPDF.us">
+
+<!-- Twitter Card Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PNG to WebP Converter - Convert PNG to WebP Free | SmallPDF.us">
+<meta name="twitter:description" content="Professional PNG to WebP converter. Transform PNG images to WebP format online with SmallPDF.us">
+<meta name="twitter:image" content="{% static 'images/png-to-webp-converter.jpg' %}">
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "PNG to WebP Converter - SmallPDF.us",
+  "description": "Free online PNG to WebP converter to transform PNG images to WebP format",
+  "url": "https://smallpdf.us/png-to-webp",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Convert PNG to WebP online free",
+    "Batch PNG to WebP conversion",
+    "Preserve image quality",
+    "High-quality WebP output",
+    "Fast PNG processing",
+    "Secure image conversion"
+  ],
+  "provider": {
+    "@type": "Organization",
+    "name": "SmallPDF.us",
+    "url": "https://smallpdf.us"
+  }
+}
+</script>
+
+<!-- Preload critical resources -->
+<link rel="preload" href="{% static 'css/converter.css' %}" as="style">
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Performance optimized CSS with critical path optimization */
+    :root {
+        --primary-color: #4361ee;
+        --primary-dark: #3a0ca3;
+        --success-color: #10b981;
+        --error-color: #ef4444;
+        --gray-50: #f8fafc;
+        --gray-100: #f1f5f9;
+        --gray-200: #e2e8f0;
+        --gray-300: #cbd5e1;
+        --gray-400: #94a3b8;
+        --gray-500: #64748b;
+        --gray-600: #475569;
+        --gray-700: #334155;
+        --gray-800: #1e293b;
+        --gray-900: #0f172a;
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+    }
+
+    /* Optimized base styles */
+    * {
+        box-sizing: border-box;
+    }
+
+    .main-wrapper {
+        min-height: 100vh;
+        background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-200) 100%);
+        padding: 1rem;
+    }
+    
+    .converter-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 16px;
+        box-shadow: var(--shadow-xl);
+        overflow: hidden;
+        border: 1px solid var(--gray-200);
+    }
+
+    /* Compact header */
+    .tool-header {
+        text-align: center;
+        padding: 1.5rem 1rem;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        color: white;
+        position: relative;
+    }
+    
+    .tool-header h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        line-height: 1.2;
+    }
+    
+    .tool-header p {
+        opacity: 0.9;
+        font-size: 0.95rem;
+        margin: 0;
+        line-height: 1.4;
+    }
+
+    /* Compact content area */
+    .content-area {
+        padding: 1rem;
+    }
+
+    /* Optimized upload area */
+    .upload-area {
+        border: 2px dashed var(--gray-300);
+        border-radius: 12px;
+        padding: 2rem 1rem;
+        text-align: center;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        background: var(--gray-50);
+        margin-bottom: 1rem;
+    }
+    
+    .upload-area:hover, .upload-area.dragover {
+        border-color: var(--primary-color);
+        background: #f0f5ff;
+        transform: translateY(-1px);
+    }
+    
+    .upload-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(67, 97, 238, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        transition: transform 0.2s ease;
+    }
+    
+    .upload-area:hover .upload-icon {
+        transform: scale(1.05);
+    }
+    
+    .upload-icon svg {
+        width: 30px;
+        height: 30px;
+        color: var(--primary-color);
+    }
+
+    .upload-text h3 {
+        font-size: 1.2rem;
+        color: var(--gray-800);
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+    }
+    
+    .upload-text p {
+        color: var(--gray-600);
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+    
+    .upload-btn {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+    }
+    
+    .upload-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+    }
+
+    /* File preview */
+    .file-container {
+        display: none;
+    }
+
+    .file-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.75rem;
+    }
+
+    .file-header h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--gray-800);
+        margin: 0;
+    }
+
+    .add-more-btn {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+        background: var(--gray-100);
+        border: 1px solid var(--gray-300);
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .add-more-btn:hover {
+        background: var(--gray-200);
+    }
+
+    .files-grid {
+        display: grid;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .file-preview-item {
+        background: var(--gray-50);
+        border-radius: 8px;
+        padding: 1rem;
+        border: 1px solid var(--gray-200);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+
+    .file-preview-item:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .png-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 0.7rem;
+        flex-shrink: 0;
+    }
+
+    .file-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .file-name {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--gray-800);
+        margin-bottom: 0.25rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .file-size {
+        font-size: 0.8rem;
+        color: var(--gray-500);
+        margin-bottom: 0.25rem;
+    }
+
+    .file-dimensions {
+        font-size: 0.75rem;
+        color: var(--gray-600);
+    }
+
+    .remove-btn {
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        width: 20px;
+        height: 20px;
+        background: var(--error-color);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        font-size: 0.7rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+
+    .remove-btn:hover {
+        background: #dc2626;
+        transform: scale(1.1);
+    }
+
+    /* Compact options */
+    .options-section {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 0.75rem;
+        margin: 1rem 0;
+        padding: 1rem;
+        background: var(--gray-50);
+        border-radius: 8px;
+        border: 1px solid var(--gray-200);
+    }
+
+    .option-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .option-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--gray-700);
+        margin-bottom: 0.3rem;
+    }
+
+    .option-select, .option-input {
+        padding: 0.5rem;
+        border: 1px solid var(--gray-300);
+        border-radius: 6px;
+        font-size: 0.8rem;
+        background: white;
+        transition: all 0.2s ease;
+    }
+
+    .option-select:focus, .option-input:focus {
+        border-color: var(--primary-color);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    }
+
+    .quality-info {
+        font-size: 0.7rem;
+        color: var(--gray-500);
+        margin-top: 0.25rem;
+    }
+
+    /* Compact action buttons */
+    .action-buttons {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+
+    .action-btn {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+    }
+
+    .secondary-btn {
+        background: white;
+        border: 2px solid var(--gray-300);
+        color: var(--gray-600);
+    }
+
+    .secondary-btn:hover {
+        background: var(--gray-50);
+        color: var(--gray-700);
+        border-color: var(--gray-400);
+    }
+
+    .primary-btn {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: white;
+        border: none;
+        box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+    }
+
+    .primary-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+    }
+
+    .primary-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* Optimized loading overlay */
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(4px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+
+    .loading-content {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem 1.5rem;
+        text-align: center;
+        min-width: 280px;
+        box-shadow: var(--shadow-xl);
+        animation: slideInUp 0.3s ease-out;
+    }
+
+    @keyframes slideInUp {
+        from {
+            transform: translateY(50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .loader {
+        width: 40px;
+        height: 40px;
+        position: relative;
+        margin: 0 auto 1rem;
+    }
+
+    .loader::before {
+        content: '';
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 3px solid var(--gray-200);
+        border-top: 3px solid var(--primary-color);
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .loading-progress {
+        width: 100%;
+        height: 4px;
+        background: var(--gray-200);
+        border-radius: 2px;
+        margin: 0.75rem 0;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        width: 0%;
+        height: 100%;
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        border-radius: 2px;
+        transition: width 0.3s ease;
+    }
+
+    /* Result section */
+    .result-section {
+        display: none;
+        margin-top: 1rem;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        border-radius: 12px;
+        border: 2px solid #0ea5e9;
+        animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .result-header {
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .result-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .success-icon {
+        width: 24px;
+        height: 24px;
+        background: var(--success-color);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: bounceIn 0.5s ease-out;
+    }
+
+    @keyframes bounceIn {
+        0% { transform: scale(0); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+
+    .result-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+        background: rgba(255, 255, 255, 0.7);
+        border-radius: 6px;
+    }
+
+    .result-info-item {
+        text-align: center;
+    }
+
+    .result-info-label {
+        font-size: 0.7rem;
+        color: var(--gray-600);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .result-info-value {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-top: 0.2rem;
+    }
+
+    .download-section {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: center;
+    }
+
+    .download-btn {
+        background: linear-gradient(135deg, var(--success-color), #059669);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .download-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    /* Messages */
+    .message {
+        padding: 0.75rem 1rem;
+        border-radius: 6px;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+        animation: slideIn 0.3s ease;
+    }
+
+    .message-error {
+        background: #fef2f2;
+        color: #dc2626;
+        border-left: 3px solid #dc2626;
+    }
+
+    .message-success {
+        background: #f0fdf4;
+        color: #16a34a;
+        border-left: 3px solid #16a34a;
+    }
+
+    .message-icon {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+    }
+
+    /* Content sections */
+    .content-section {
+        padding: 3rem 1rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-bottom: 0.75rem;
+        line-height: 1.2;
+    }
+
+    .section-subtitle {
+        font-size: 1.1rem;
+        color: var(--gray-600);
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.5;
+    }
+
+    /* Instructions grid */
+    .instructions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .instruction-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: var(--shadow-md);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        text-align: center;
+        border: 1px solid var(--gray-200);
+    }
+
+    .instruction-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .instruction-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(67, 97, 238, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+    }
+
+    .instruction-icon svg {
+        width: 28px;
+        height: 28px;
+        color: var(--primary-color);
+    }
+
+    .instruction-card h3 {
+        font-size: 1.2rem;
+        color: var(--gray-900);
+        margin-bottom: 0.75rem;
+        font-weight: 600;
+    }
+
+    .instruction-card p {
+        color: var(--gray-600);
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    /* Features grid */
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .feature-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: var(--shadow-md);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        text-align: center;
+        border: 1px solid var(--gray-200);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .feature-card::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .feature-card:hover::after {
+        transform: scaleX(1);
+    }
+
+    .feature-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(67, 97, 238, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        transition: all 0.2s ease;
+    }
+
+    .feature-card:hover .feature-icon {
+        background: rgba(67, 97, 238, 0.15);
+        transform: scale(1.05);
+    }
+
+    .feature-icon svg {
+        width: 28px;
+        height: 28px;
+        color: var(--primary-color);
+    }
+
+    .feature-card h3 {
+        font-size: 1.2rem;
+        color: var(--gray-900);
+        margin-bottom: 0.75rem;
+        font-weight: 600;
+    }
+
+    .feature-card p {
+        color: var(--gray-600);
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+        .main-wrapper {
+            padding: 0.5rem;
+        }
+        
+        .tool-header {
+            padding: 1rem 0.75rem;
+        }
+        
+        .tool-header h1 {
+            font-size: 1.5rem;
+        }
+        
+        .tool-header p {
+            font-size: 0.85rem;
+        }
+        
+        .content-area {
+            padding: 0.75rem;
+        }
+        
+        .upload-area {
+            padding: 1.5rem 0.75rem;
+        }
+        
+        .upload-icon {
+            width: 50px;
+            height: 50px;
+        }
+        
+        .upload-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .upload-text h3 {
+            font-size: 1.1rem;
+        }
+
+        .upload-text p {
+            font-size: 0.85rem;
+        }
+
+        .options-section {
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            padding: 0.75rem;
+        }
+        
+        .action-buttons, .download-section {
+            flex-direction: column;
+        }
+        
+        .result-section {
+            padding: 1rem;
+        }
+        
+        .result-info {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .content-section {
+            padding: 2rem 0.75rem;
+        }
+        
+        .section-title {
+            font-size: 1.6rem;
+        }
+        
+        .section-subtitle {
+            font-size: 1rem;
+        }
+        
+        .instructions-grid, .features-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        
+        .instruction-card, .feature-card {
+            padding: 1.25rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .tool-header h1 {
+            font-size: 1.3rem;
+        }
+        
+        .upload-area {
+            padding: 1rem 0.5rem;
+        }
+        
+        .options-section {
+            grid-template-columns: 1fr;
+        }
+        
+        .section-title {
+            font-size: 1.4rem;
+        }
+    }
+
+    /* Performance optimizations */
+    .file-input {
+        display: none;
+    }
+
+    /* Image preview */
+    .image-preview {
+        width: 48px;
+        height: 48px;
+        border-radius: 8px;
+        object-fit: cover;
+        border: 2px solid var(--gray-200);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="main-wrapper">
+    <div class="converter-container">
+        <!-- Header -->
+        <div class="tool-header">
+            <h1>PNG to WebP Converter - SmallPDF.us</h1>
+            <p>Convert PNG to WebP online free. Transform PNG images to modern WebP format with smaller file sizes</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content-area">
+            <!-- Upload Area -->
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                </div>
+                <div class="upload-text">
+                    <h3>Upload PNG Images</h3>
+                    <p>Drag & drop or click to browse<br>PNG files supported (Max 25MB each)</p>
+                    <button class="upload-btn" id="selectFileBtn">Select PNG Files</button>
+                </div>
+                <input type="file" id="fileInput" class="file-input" accept=".png,image/png" multiple>
+            </div>
+
+            <!-- File Preview Container -->
+            <div class="file-container" id="fileContainer">
+                <div class="file-header">
+                    <h3>Selected PNG Images</h3>
+                    <button class="add-more-btn" id="addMoreBtn">
+                        <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Add More
+                    </button>
+                </div>
+
+                <!-- Files Grid -->
+                <div class="files-grid" id="filesGrid">
+                    <!-- File items will be dynamically added here -->
+                </div>
+
+                <!-- Options Section -->
+                <div class="options-section">
+                    <div class="option-group">
+                        <label class="option-label" for="quality">WebP Quality</label>
+                        <select class="option-select" id="quality">
+                            <option value="85" selected>High Quality (85%)</option>
+                            <option value="90">Very High (90%)</option>
+                            <option value="80">Good Quality (80%)</option>
+                            <option value="75">Medium Quality (75%)</option>
+                            <option value="60">Small Size (60%)</option>
+                        </select>
+                        <div class="quality-info">Higher quality = larger file size</div>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label class="option-label" for="compression">Compression</label>
+                        <select class="option-select" id="compression">
+                            <option value="lossy" selected>Lossy (Smaller)</option>
+                            <option value="lossless">Lossless (Larger)</option>
+                        </select>
+                        <div class="quality-info">Lossy saves more space</div>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label class="option-label" for="resizeOption">Resize</label>
+                        <select class="option-select" id="resizeOption">
+                            <option value="none" selected>No Resize</option>
+                            <option value="width">By Width</option>
+                            <option value="height">By Height</option>
+                            <option value="percentage">By Percentage</option>
+                        </select>
+                    </div>
+
+                    <div class="option-group" id="resizeValueGroup" style="display: none;">
+                        <label class="option-label" for="resizeValue">Resize Value</label>
+                        <input type="number" class="option-input" id="resizeValue" min="1" max="5000" placeholder="Enter value">
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="action-btn secondary-btn" id="clearBtn">
+                        <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                        Clear All
+                    </button>
+                    <button class="action-btn primary-btn" id="convertBtn">
+                        <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        Convert to WebP
+                    </button>
+                </div>
+            </div>
+
+            <!-- Result Section -->
+            <div class="result-section" id="resultSection">
+                <div class="result-header">
+                    <h2 class="result-title">
+                        <div class="success-icon">
+                            <svg style="width: 14px; height: 14px; color: white;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        WebP Images Created Successfully!
+                    </h2>
+                    <p style="color: #64748b; font-size: 0.9rem; margin: 0;">Your PNG images have been converted to WebP format</p>
+                </div>
+
+                <div class="result-info" id="resultInfo">
+                    <div class="result-info-item">
+                        <div class="result-info-label">Files Converted</div>
+                        <div class="result-info-value" id="resultFileCount">0</div>
+                    </div>
+                    <div class="result-info-item">
+                        <div class="result-info-label">Quality</div>
+                        <div class="result-info-value" id="resultQuality">85%</div>
+                    </div>
+                    <div class="result-info-item">
+                        <div class="result-info-label">Compression</div>
+                        <div class="result-info-value" id="resultCompression">Lossy</div>
+                    </div>
+                    <div class="result-info-item">
+                        <div class="result-info-label">Size Saved</div>
+                        <div class="result-info-value" id="resultSizeSaved">-</div>
+                    </div>
+                </div>
+
+                <div class="download-section">
+                    <button class="download-btn" id="downloadBtn">
+                        <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        Download WebP Images
+                    </button>
+                    <button class="action-btn secondary-btn" id="startOverBtn">
+                        <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        Convert More
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-content">
+        <div class="loader"></div>
+        <h3 style="font-size: 1.1rem; font-weight: 600; color: #1e293b; margin-bottom: 0.5rem;">Converting PNG to WebP...</h3>
+        <p style="color: #64748b; margin-bottom: 1rem; font-size: 0.9rem;">Processing your PNG images</p>
+        <div class="loading-progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <p style="font-size: 0.8rem; color: #64748b; margin: 0.5rem 0 0;" id="loadingStatus">Preparing...</p>
+    </div>
+</div>
+
+<!-- Instructions Section -->
+<section class="content-section" style="background: white;">
+    <div class="section-header">
+        <h2 class="section-title">How to Convert PNG to WebP with SmallPDF.us</h2>
+        <p class="section-subtitle">Learn how to convert PNG to WebP online free, transform PNG images to WebP format using our PNG to WebP converter</p>
+    </div>
+    
+    <div class="instructions-grid">
+        <div class="instruction-card">
+            <div class="instruction-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+            </div>
+            <h3>1. Upload PNG Images</h3>
+            <p>Select your PNG files to convert to WebP using our SmallPDF.us converter. Upload multiple PNG images up to 25MB each for batch conversion to WebP format.</p>
+        </div>
+        
+        <div class="instruction-card">
+            <div class="instruction-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+            </div>
+            <h3>2. Configure WebP Settings</h3>
+            <p>Choose your preferred quality level, compression type (lossy/lossless), and resize options. Select optimal settings for your use case - web, storage, or quality.</p>
+        </div>
+        
+        <div class="instruction-card">
+            <div class="instruction-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+            </div>
+            <h3>3. Download WebP Images</h3>
+            <p>Complete your PNG to WebP conversion and download your optimized WebP images. SmallPDF.us ensures maximum compression while maintaining quality.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="content-section" style="background: #f8fafc;">
+    <div class="section-header">
+        <h2 class="section-title">Why SmallPDF.us is the Best PNG to WebP Converter</h2>
+        <p class="section-subtitle">Discover why millions choose SmallPDF.us to convert PNG to WebP, compress images, and create optimized WebP files</p>
+    </div>
+    
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                    <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                    <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                </svg>
+            </div>
+            <h3>Superior File Size Reduction</h3>
+            <p>SmallPDF.us converts PNG to WebP with up to 90% file size reduction while maintaining excellent visual quality. Perfect for web optimization and storage savings.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                </svg>
+            </div>
+            <h3>Batch PNG Processing</h3>
+            <p>Convert multiple PNG images to WebP format simultaneously. SmallPDF.us supports batch processing for efficient PNG to WebP conversion of entire image collections.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+            </div>
+            <h3>Lightning-Fast Processing</h3>
+            <p>Experience instant PNG to WebP conversion with SmallPDF.us. Our optimized servers process your PNG images and create WebP files in seconds.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+            </div>
+            <h3>Secure PNG to WebP Conversion</h3>
+            <p>SmallPDF.us protects your privacy during PNG to WebP conversion. All uploaded PNG files are encrypted and automatically deleted after processing.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                </svg>
+            </div>
+            <h3>Advanced WebP Optimization</h3>
+            <p>Create modern WebP images from PNG files with advanced compression options. SmallPDF.us offers both lossy and lossless WebP conversion for optimal results.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                </svg>
+            </div>
+            <h3>Free PNG to WebP Converter</h3>
+            <p>Convert PNG to WebP completely free with SmallPDF.us. No hidden costs, no watermarks, no registration required. Enjoy unlimited PNG to WebP conversions.</p>
+        </div>
+    </div>
+</section>
+
+<!-- SEO Content Section -->
+<section class="seo-content" style="background: #f8fafc; padding: 3rem 1rem; border-top: 1px solid var(--gray-200);">
+    <div class="content-section">
+        <h2 style="font-size: 1.8rem; color: var(--gray-900); margin-bottom: 1rem; font-weight: 700;">SmallPDF.us - The Ultimate PNG to WebP Converter Online</h2>
+        <p style="color: var(--gray-700); font-size: 1rem; line-height: 1.7; margin-bottom: 1rem;">SmallPDF.us is the leading online platform to <strong>convert PNG to WebP</strong> with exceptional compression results. Our advanced <strong>PNG to WebP converter</strong> allows you to effortlessly transform PNG images into modern <strong>WebP</strong> files, creating optimized images with up to 90% file size reduction while maintaining excellent visual quality. Whether you need to convert a single PNG file or optimize entire image collections, SmallPDF.us delivers superior compression and reliability.</p>
+        
+        <h3 style="font-size: 1.4rem; color: var(--gray-900); margin: 2rem 0 1rem; font-weight: 600;">Why Choose SmallPDF.us for PNG to WebP Conversion?</h3>
+        <p style="color: var(--gray-700); font-size: 1rem; line-height: 1.7; margin-bottom: 1rem;">When you need to <strong>convert PNG to WebP</strong>, SmallPDF.us stands out as the premier choice among online converters. Our <strong>PNG to WebP converter</strong> combines cutting-edge compression technology with intelligent image processing to deliver exceptional results. Here's what makes SmallPDF.us the best solution to <strong>convert PNG to WebP</strong> format:</p>
+        <ul style="margin-left: 1.5rem; margin-bottom: 1.5rem;">
+            <li style="color: var(--gray-700); margin-bottom: 0.5rem; line-height: 1.6;"><strong>Advanced WebP Compression:</strong> Our proprietary algorithms ensure maximum file size reduction while maintaining image quality during PNG to WebP conversion</li>
+            <li style="color: var(--gray-700); margin-bottom: 0.5rem; line-height: 1.6;"><strong>Flexible Compression Options:</strong> Choose between lossy compression for maximum space savings or lossless compression for perfect quality retention</li>
+            <li style="color: var(--gray-700); margin-bottom: 0.5rem; line-height: 1.6;"><strong>Quality Control Settings:</strong> Adjust quality levels from 60% to 90% to balance file size and visual fidelity for your specific needs</li>
+            <li style="color: var(--gray-700); margin-bottom: 0.5rem; line-height: 1.6;"><strong>Batch Processing Capability:</strong> Convert multiple PNG images to WebP format simultaneously for improved efficiency</li>
+            <li style="color: var(--gray-700); margin-bottom: 0.5rem; line-height: 1.6;"><strong>Resize During Conversion:</strong> Optimize images further by resizing during PNG to WebP conversion</li>
+            <li style="color: var(--gray-700); margin-bottom: 0.5rem; line-height: 1.6;"><strong>Modern Browser Support:</strong> SmallPDF.us creates WebP files compatible with all modern browsers and platforms</li>
+        </ul>
+        
+        <h3 style="font-size: 1.4rem; color: var(--gray-900); margin: 2rem 0 1rem; font-weight: 600;">Professional PNG to WebP Conversion for Every Need</h3>
+        <p style="color: var(--gray-700); font-size: 1rem; line-height: 1.7; margin-bottom: 1rem;">SmallPDF.us serves web developers, designers, and content creators who need efficient <strong>PNG to WebP conversion</strong>. Our versatile <strong>PNG to WebP converter</strong> handles diverse requirements, from simple image optimization to complex batch processing with advanced compression options:</p>
+        <ol style="margin-left: 1.5rem; margin-bottom: 1.5rem;">
+            <li style="color: var(--gray-700); margin-bottom: 0.5rem; line-height: 1.6;"><strong>Web Performance Optimization:</strong> Convert PNG images to WebP format for faster website loading and improved user experience</li>
+            <li style="color: var(--gray-700); margin-bottom: 0.5rem; line-height: 1.6;"><strong>E-commerce Product Images:</strong> Transform PNG product photos to WebP for faster page loads and better SEO performance</li>
+            <li style="color: var(--gray-700); margin-bottom: 0.5rem; line-height: 1.6;"><strong>Content Management:</strong> Convert PNG blog images and media to WebP for reduced bandwidth usage and storage costs</li>
+            <li style="color: var(--gray-700); margin-bottom: 0.5rem; line-height: 1.6;"><strong>Mobile App Development:</strong> Transform PNG assets to WebP for smaller app sizes and faster downloads</li>
+            <li style="color: var(--gray-700); margin-bottom: 0.5rem; line-height: 1.6;"><strong>Social Media Content:</strong> Convert PNG graphics to WebP for optimized social media posting and sharing</li>
+            <li style="color: var(--gray-700); margin-bottom: 0.5rem; line-height: 1.6;"><strong>Cloud Storage Optimization:</strong> Transform PNG archives to WebP format for massive storage space savings</li>
+        </ol>
+        
+        <h3 style="font-size: 1.4rem; color: var(--gray-900); margin: 2rem 0 1rem; font-weight: 600;">Start Converting PNG to WebP with SmallPDF.us Today</h3>
+        <p style="color: var(--gray-700); font-size: 1rem; line-height: 1.7; margin-bottom: 1rem;">Experience the difference with SmallPDF.us, the most advanced <strong>PNG to WebP converter</strong> available online. Whether you need to convert a single PNG image, <strong>transform PNG to WebP</strong> format, or <strong>convert PNG to WebP</strong> for web optimization, SmallPDF.us delivers exceptional results every time. Our commitment to creating <strong>high-quality WebP images</strong> with maximum compression makes us the preferred choice for millions of users worldwide.</p>
+        
+        <p style="color: var(--gray-700); font-size: 1rem; line-height: 1.7; margin-bottom: 1rem;">Join the SmallPDF.us community today and discover why we're the leading platform to <strong>convert PNG to WebP</strong> online. With our free, secure, and feature-rich <strong>PNG to WebP converter</strong>, you'll never need another image optimization tool. Start your <strong>PNG to WebP conversion</strong> now and experience the SmallPDF.us difference!</p>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="content-section" style="background: white;">
+    <div class="section-header">
+        <h2 class="section-title">PNG to WebP Converter FAQ - SmallPDF.us</h2>
+        <p class="section-subtitle">Get answers to common questions about converting PNG to WebP, image formats, and using SmallPDF.us</p>
+    </div>
+    
+    <div style="max-width: 800px; margin: 2rem auto 0;">
+        <div style="border-bottom: 1px solid var(--gray-200); margin-bottom: 0.75rem;" class="faq-item">
+            <div style="font-size: 1rem; color: var(--gray-900); font-weight: 600; padding: 1rem 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: color 0.2s ease;" class="faq-question">
+                How do I convert PNG to WebP online free with SmallPDF.us?
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px; color: var(--gray-500); transition: transform 0.2s ease;">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; padding: 0;" class="faq-answer">
+                <p style="color: var(--gray-600); font-size: 0.95rem; line-height: 1.6; margin-bottom: 0.75rem;">To convert PNG to WebP with SmallPDF.us, simply upload your PNG files using our free PNG to WebP converter above. Choose your quality settings, compression type (lossy/lossless), and any resize options, then click "Convert to WebP". Your PNG to WebP conversion will be completed in seconds.</p>
+            </div>
+        </div>
+        
+        <div style="border-bottom: 1px solid var(--gray-200); margin-bottom: 0.75rem;" class="faq-item">
+            <div style="font-size: 1rem; color: var(--gray-900); font-weight: 600; padding: 1rem 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: color 0.2s ease;" class="faq-question">
+                What's the difference between PNG and WebP image formats?
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px; color: var(--gray-500); transition: transform 0.2s ease;">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; padding: 0;" class="faq-answer">
+                <p style="color: var(--gray-600); font-size: 0.95rem; line-height: 1.6; margin-bottom: 0.75rem;">PNG is a lossless format with larger file sizes, while WebP is a modern format offering superior compression with up to 90% smaller files. SmallPDF.us converts PNG to WebP to dramatically reduce file sizes while maintaining excellent image quality for faster web performance.</p>
+            </div>
+        </div>
+        
+        <div style="border-bottom: 1px solid var(--gray-200); margin-bottom: 0.75rem;" class="faq-item">
+            <div style="font-size: 1rem; color: var(--gray-900); font-weight: 600; padding: 1rem 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: color 0.2s ease;" class="faq-question">
+                Can I convert multiple PNG images to WebP at once?
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px; color: var(--gray-500); transition: transform 0.2s ease;">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; padding: 0;" class="faq-answer">
+                <p style="color: var(--gray-600); font-size: 0.95rem; line-height: 1.6; margin-bottom: 0.75rem;">Yes! SmallPDF.us supports batch PNG to WebP conversion. Upload multiple PNG files simultaneously and convert them all to WebP format in one operation. This saves time and ensures consistent compression settings across all your images.</p>
+            </div>
+        </div>
+        
+        <div style="border-bottom: 1px solid var(--gray-200); margin-bottom: 0.75rem;" class="faq-item">
+            <div style="font-size: 1rem; color: var(--gray-900); font-weight: 600; padding: 1rem 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: color 0.2s ease;" class="faq-question">
+                Is SmallPDF.us PNG to WebP converter secure and private?
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px; color: var(--gray-500); transition: transform 0.2s ease;">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; padding: 0;" class="faq-answer">
+                <p style="color: var(--gray-600); font-size: 0.95rem; line-height: 1.6; margin-bottom: 0.75rem;">Absolutely. SmallPDF.us uses SSL encryption for all PNG to WebP conversions. Your PNG files are automatically deleted after processing, and we never access or store your images. Convert PNG to WebP with complete confidence in your privacy and security.</p>
+            </div>
+        </div>
+        
+        <div style="border-bottom: 1px solid var(--gray-200); margin-bottom: 0.75rem;" class="faq-item">
+            <div style="font-size: 1rem; color: var(--gray-900); font-weight: 600; padding: 1rem 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: color 0.2s ease;" class="faq-question">
+                What file size reduction can I expect when converting PNG to WebP?
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px; color: var(--gray-500); transition: transform 0.2s ease;">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; padding: 0;" class="faq-answer">
+                <p style="color: var(--gray-600); font-size: 0.95rem; line-height: 1.6; margin-bottom: 0.75rem;">SmallPDF.us typically achieves 60-90% file size reduction when converting PNG to WebP, depending on the image content and quality settings chosen. Photos with many colors compress more, while graphics with few colors compress less, but all see significant size reduction.</p>
+            </div>
+        </div>
+        
+        <div style="border-bottom: 1px solid var(--gray-200); margin-bottom: 0.75rem;" class="faq-item">
+            <div style="font-size: 1rem; color: var(--gray-900); font-weight: 600; padding: 1rem 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: color 0.2s ease;" class="faq-question">
+                Should I choose lossy or lossless WebP compression?
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px; color: var(--gray-500); transition: transform 0.2s ease;">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; padding: 0;" class="faq-answer">
+                <p style="color: var(--gray-600); font-size: 0.95rem; line-height: 1.6; margin-bottom: 0.75rem;">Choose lossy compression for maximum file size reduction (recommended for web use), or lossless compression when you need perfect quality retention. SmallPDF.us offers both options - lossy typically reduces files by 80-90%, while lossless still provides 20-50% reduction compared to PNG.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section style="background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)); color: white; text-align: center; padding: 2rem 1rem;">
+    <div class="content-section">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.75rem;">Ready to Convert PNG to WebP with SmallPDF.us?</h2>
+        <p style="margin-bottom: 1.5rem; opacity: 0.9;">Join millions who trust SmallPDF.us for professional PNG to WebP conversion. Transform PNG images to optimized WebP format - all free!</p>
+        <a href="#uploadArea" style="background: white; color: var(--primary-dark); font-weight: 600; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; transition: all 0.2s ease; display: inline-block; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);">Start Converting PNG to WebP Now</a>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Performance optimized JavaScript
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const selectFileBtn = document.getElementById('selectFileBtn');
+    const fileContainer = document.getElementById('fileContainer');
+    const filesGrid = document.getElementById('filesGrid');
+    const addMoreBtn = document.getElementById('addMoreBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const convertBtn = document.getElementById('convertBtn');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const resultSection = document.getElementById('resultSection');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const startOverBtn = document.getElementById('startOverBtn');
+    const progressBar = document.getElementById('progressBar');
+    const loadingStatus = document.getElementById('loadingStatus');
+    
+    // Options elements
+    const quality = document.getElementById('quality');
+    const compression = document.getElementById('compression');
+    const resizeOption = document.getElementById('resizeOption');
+    const resizeValue = document.getElementById('resizeValue');
+    const resizeValueGroup = document.getElementById('resizeValueGroup');
+    
+    // Result elements
+    const resultFileCount = document.getElementById('resultFileCount');
+    const resultQuality = document.getElementById('resultQuality');
+    const resultCompression = document.getElementById('resultCompression');
+    const resultSizeSaved = document.getElementById('resultSizeSaved');
+    
+    // State
+    let selectedFiles = [];
+    let isConverting = false;
+    let convertedFiles = [];
+    let conversionSettings = {};
+
+    // Event Listeners
+    selectFileBtn.addEventListener('click', () => fileInput.click());
+    addMoreBtn.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', handleFileSelection);
+    clearBtn.addEventListener('click', clearAllFiles);
+    convertBtn.addEventListener('click', convertImages);
+    downloadBtn.addEventListener('click', downloadImages);
+    startOverBtn.addEventListener('click', startOver);
+    resizeOption.addEventListener('change', toggleResizeValue);
+
+    // Drag and drop
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, preventDefaults, { passive: false });
+    });
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, () => uploadArea.classList.add('dragover'), { passive: true });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, () => uploadArea.classList.remove('dragover'), { passive: true });
+    });
+
+    uploadArea.addEventListener('drop', handleDrop, { passive: false });
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files && files.length > 0) {
+            handleFiles(files);
+        }
+    }
+
+    function handleFileSelection(e) {
+        const files = e.target.files;
+        if (files && files.length > 0) {
+            handleFiles(files);
+            fileInput.value = '';
+        }
+    }
+
+    function handleFiles(files) {
+        const validFiles = [];
+        
+        for (let file of files) {
+            // Validate file
+            if (!file.type.includes('png') && !file.name.toLowerCase().endsWith('.png')) {
+                showMessage(`${file.name} is not a valid PNG file.`, 'error');
+                continue;
+            }
+
+            const maxFileSize = 25 * 1024 * 1024; // 25MB
+            if (file.size > maxFileSize) {
+                showMessage(`${file.name} exceeds 25MB limit.`, 'error');
+                continue;
+            }
+
+            // Check for duplicates
+            const isDuplicate = selectedFiles.some(f => f.name === file.name && f.size === file.size);
+            if (isDuplicate) {
+                showMessage(`${file.name} is already selected.`, 'error');
+                continue;
+            }
+
+            validFiles.push(file);
+        }
+
+        if (validFiles.length > 0) {
+            selectedFiles = [...selectedFiles, ...validFiles];
+            updateFileGrid();
+            showFileContainer();
+            showMessage(`${validFiles.length} PNG image(s) loaded successfully!`, 'success');
+        }
+    }
+
+    function updateFileGrid() {
+        filesGrid.innerHTML = '';
+        
+        selectedFiles.forEach((file, index) => {
+            const fileItem = createFileItem(file, index);
+            filesGrid.appendChild(fileItem);
+        });
+    }
+
+    function createFileItem(file, index) {
+        const fileItem = document.createElement('div');
+        fileItem.className = 'file-preview-item';
+        fileItem.dataset.index = index;
+
+        // Create image preview
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = fileItem.querySelector('.image-preview');
+            if (img) {
+                img.src = e.target.result;
+            }
+        };
+        reader.readAsDataURL(file);
+
+        fileItem.innerHTML = `
+            <img class="image-preview" src="" alt="PNG preview" style="width: 48px; height: 48px; border-radius: 8px; object-fit: cover; border: 2px solid var(--gray-200);">
+            <div class="file-info">
+                <div class="file-name">${file.name}</div>
+                <div class="file-size">${formatFileSize(file.size)}</div>
+                <div class="file-dimensions">PNG Image</div>
+            </div>
+            <button class="remove-btn" onclick="removeFile(${index})" aria-label="Remove file">×</button>
+        `;
+
+        return fileItem;
+    }
+
+    function removeFile(index) {
+        selectedFiles.splice(index, 1);
+        updateFileGrid();
+        
+        if (selectedFiles.length === 0) {
+            showUploadArea();
+            hideResult();
+        }
+        
+        showMessage('File removed.', 'success');
+    }
+
+    function clearAllFiles() {
+        selectedFiles = [];
+        showUploadArea();
+        hideResult();
+        clearMessages();
+    }
+
+    function startOver() {
+        selectedFiles = [];
+        convertedFiles = [];
+        conversionSettings = {};
+        showUploadArea();
+        hideResult();
+        clearMessages();
+    }
+
+    function toggleResizeValue() {
+        if (resizeOption.value === 'none') {
+            resizeValueGroup.style.display = 'none';
+        } else {
+            resizeValueGroup.style.display = 'block';
+            resizeValue.placeholder = resizeOption.value === 'percentage' ? 'Enter percentage (1-200)' : 'Enter pixels';
+        }
+    }
+
+    function updateProgress(percentage, status) {
+        progressBar.style.width = percentage + '%';
+        loadingStatus.textContent = status;
+    }
+
+    function convertImages() {
+        if (selectedFiles.length === 0) {
+            showMessage('Please select PNG images first.', 'error');
+            return;
+        }
+
+        if (isConverting) return;
+
+        // Validate resize value if needed
+        if (resizeOption.value !== 'none') {
+            const value = parseInt(resizeValue.value);
+            if (!value || value <= 0) {
+                showMessage('Please enter a valid resize value.', 'error');
+                return;
+            }
+            if (resizeOption.value === 'percentage' && (value < 1 || value > 200)) {
+                showMessage('Percentage must be between 1 and 200.', 'error');
+                return;
+            }
+            if (resizeOption.value !== 'percentage' && value > 5000) {
+                showMessage('Maximum dimension is 5000 pixels.', 'error');
+                return;
+            }
+        }
+
+        isConverting = true;
+        convertBtn.disabled = true;
+        showLoading();
+
+        // Store conversion settings
+        conversionSettings = {
+            quality: quality.value,
+            compression: compression.value,
+            resizeOption: resizeOption.value,
+            resizeValue: resizeValue.value
+        };
+
+        // Simulate progress updates
+        let progress = 0;
+        const progressInterval = setInterval(() => {
+            progress += Math.random() * 10;
+            if (progress > 85) {
+                progress = 85;
+                clearInterval(progressInterval);
+            }
+            
+            let status = 'Preparing...';
+            if (progress > 15) status = 'Processing PNG images...';
+            if (progress > 35) status = 'Converting to WebP format...';
+            if (progress > 60) status = 'Optimizing compression...';
+            if (progress > 80) status = 'Finalizing conversion...';
+            
+            updateProgress(progress, status);
+        }, 300);
+
+        const formData = new FormData();
+        selectedFiles.forEach(file => {
+            formData.append('images', file);
+        });
+        formData.append('quality', conversionSettings.quality);
+        formData.append('compression', conversionSettings.compression);
+        formData.append('resize_option', conversionSettings.resizeOption);
+        formData.append('resize_value', conversionSettings.resizeValue || '0');
+
+        fetch('/api/png-to-webp/', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            clearInterval(progressInterval);
+            updateProgress(100, 'Complete!');
+            
+            if (!response.ok) {
+                return response.json().then(err => Promise.reject(err));
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            convertedFiles = [{
+                blob: blob,
+                filename: selectedFiles.length === 1 ? 
+                    `converted_${selectedFiles[0].name.replace('.png', '')}.webp` :
+                    `converted_images.zip`
+            }];
+            
+            setTimeout(() => {
+                hideLoading();
+                showResult();
+                updateResultInfo();
+            }, 1000);
+        })
+        .catch(error => {
+            clearInterval(progressInterval);
+            hideLoading();
+            console.error('Conversion error:', error);
+            showMessage(error.error || 'Conversion failed. Please try again.', 'error');
+        })
+        .finally(() => {
+            isConverting = false;
+            convertBtn.disabled = false;
+        });
+    }
+
+    function updateResultInfo() {
+        if (resultFileCount) {
+            resultFileCount.textContent = selectedFiles.length;
+        }
+
+        if (resultQuality) {
+            resultQuality.textContent = `${conversionSettings.quality}%`;
+        }
+
+        if (resultCompression) {
+            resultCompression.textContent = conversionSettings.compression.charAt(0).toUpperCase() + conversionSettings.compression.slice(1);
+        }
+
+        if (resultSizeSaved && convertedFiles.length > 0) {
+            const originalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+            const compressedSize = convertedFiles[0].blob.size;
+            const savedPercentage = Math.round((1 - compressedSize / originalSize) * 100);
+            resultSizeSaved.textContent = `${savedPercentage}%`;
+        }
+    }
+
+    function downloadImages() {
+        if (convertedFiles.length === 0) {
+            showMessage('No converted images available for download.', 'error');
+            return;
+        }
+
+        const file = convertedFiles[0];
+        const url = window.URL.createObjectURL(file.blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = file.filename;
+        
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+        showMessage('WebP images downloaded successfully!', 'success');
+    }
+
+    function showFileContainer() {
+        uploadArea.style.display = 'none';
+        fileContainer.style.display = 'block';
+    }
+
+    function showUploadArea() {
+        uploadArea.style.display = 'block';
+        fileContainer.style.display = 'none';
+    }
+
+    function showLoading() {
+        loadingOverlay.style.display = 'flex';
+        updateProgress(0, 'Preparing...');
+    }
+
+    function hideLoading() {
+        loadingOverlay.style.display = 'none';
+    }
+
+    function showResult() {
+        resultSection.style.display = 'block';
+        fileContainer.style.display = 'none';
+    }
+
+    function hideResult() {
+        resultSection.style.display = 'none';
+    }
+
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function showMessage(message, type = 'error') {
+        clearMessages();
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message message-${type}`;
+        
+        const iconSvg = type === 'error' ? 
+            `<svg class="message-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>` :
+            `<svg class="message-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>`;
+        
+        messageDiv.innerHTML = `${iconSvg}<span>${message}</span>`;
+        
+        const contentArea = document.querySelector('.content-area');
+        contentArea.insertBefore(messageDiv, contentArea.firstChild);
+        
+        setTimeout(() => {
+            if (messageDiv.parentNode) {
+                messageDiv.remove();
+            }
+        }, 5000);
+    }
+
+    function clearMessages() {
+        const messages = document.querySelectorAll('.message');
+        messages.forEach(msg => msg.remove());
+    }
+
+    // Make removeFile globally accessible
+    window.removeFile = removeFile;
+
+    // Initialize FAQ functionality
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        if (question) {
+            question.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                
+                // Close all other FAQ items
+                faqItems.forEach(otherItem => {
+                    otherItem.classList.remove('active');
+                    const answer = otherItem.querySelector('.faq-answer');
+                    const icon = otherItem.querySelector('.faq-question svg');
+                    if (answer && icon) {
+                        answer.style.maxHeight = '0';
+                        answer.style.paddingBottom = '0';
+                        icon.style.transform = 'rotate(0deg)';
+                    }
+                });
+                
+                // Toggle current item
+                if (!isActive) {
+                    item.classList.add('active');
+                    const answer = item.querySelector('.faq-answer');
+                    const icon = item.querySelector('.faq-question svg');
+                    if (answer && icon) {
+                        answer.style.maxHeight = '300px';
+                        answer.style.paddingBottom = '1rem';
+                        icon.style.transform = 'rotate(180deg)';
+                    }
+                }
+            });
+        }
+    });
+
+    // Initialize
+    showUploadArea();
+    toggleResizeValue();
+});
+
+// Service Worker for caching (optional performance enhancement)
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => console.log('SW registered'))
+            .catch(error => console.log('SW registration failed'));
+    });
+}
+</script>
+
+{% endblock %}

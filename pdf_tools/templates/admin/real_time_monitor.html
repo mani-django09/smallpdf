@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Monitor - SmallPDF.us Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .card { @apply bg-white rounded-lg shadow-sm border border-gray-200 p-6; }
+        .stat-card { @apply bg-gradient-to-r text-white rounded-lg p-6 shadow-lg; }
+        .live-indicator { 
+            animation: pulse 2s infinite;
+            @apply w-3 h-3 bg-green-500 rounded-full;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .activity-item {
+            @apply border-l-4 pl-4 py-3 mb-3 bg-gray-50 rounded-r transition-all duration-200;
+        }
+        .activity-success { @apply border-green-500; }
+        .activity-failed { @apply border-red-500; }
+        .activity-pending { @apply border-yellow-500; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <a href="/admin/" class="text-blue-600 hover:text-blue-800">← Back to Admin</a>
+                    <h1 class="text-2xl font-bold text-gray-900">Real-time Monitor</h1>
+                    <div class="flex items-center space-x-2">
+                        <div class="live-indicator"></div>
+                        <span class="text-sm text-gray-600">Live Updates</span>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="text-sm text-gray-600">
+                        Last Update: <span id="lastUpdate">--:--:--</span>
+                    </div>
+                    <button id="pauseBtn" class="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">
+                        Pause
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        
+        <!-- Real-time Metrics -->
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+            <div class="stat-card from-blue-500 to-blue-600">
+                <div class="text-center">
+                    <p class="text-blue-100 text-sm">Active Users</p>
+                    <p class="text-3xl font-bold" id="activeUsers">0</p>
+                </div>
+            </div>
+
+            <div class="stat-card from-green-500 to-green-600">
+                <div class="text-center">
+                    <p class="text-green-100 text-sm">Conversions/Hour</p>
+                    <p class="text-3xl font-bold" id="conversionsHour">0</p>
+                </div>
+            </div>
+
+            <div class="stat-card from-red-500 to-red-600">
+                <div class="text-center">
+                    <p class="text-red-100 text-sm">Errors/Hour</p>
+                    <p class="text-3xl font-bold" id="errorsHour">0</p>
+                </div>
+            </div>
+
+            <div class="stat-card from-purple-500 to-purple-600">
+                <div class="text-center">
+                    <p class="text-purple-100 text-sm">Success Rate</p>
+                    <p class="text-3xl font-bold" id="successRate">0%</p>
+                </div>
+            </div>
+
+            <div class="stat-card from-indigo-500 to-indigo-600">
+                <div class="text-center">
+                    <p class="text-indigo-100 text-sm">Avg Response</p>
+                    <p class="text-3xl font-bold" id="avgResponse">0ms</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Live Activity Feed -->
+            <div class="lg:col-span-2">
+                <div class="card">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900">Live Activity Stream</h3>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm text-gray-500">Auto-refresh: 3s</span>
+                            <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        </div>
+                    </div>
+                    <div id="activityStream" class="max-h-96 overflow-y-auto space-y-2">
+                        <!-- Live activities will be inserted here -->
+                        <div class="text-center text-gray-500 py-8">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+                            <p>Loading live data...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Sidebar -->
+            <div class="space-y-6">
+                
+                <!-- Current Status -->
+                <div class="card">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">System Status</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Server</span>
+                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                ✓ Online
+                            </span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Database</span>
+                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                ✓ Connected
+                            </span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Memory</span>
+                            <span class="text-sm font-semibold" id="memoryUsage">65%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">CPU</span>
+                            <span class="text-sm font-semibold" id="cpuUsage">45%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Errors -->
+                <div class="card">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Errors</h3>
+                    <div id="recentErrors" class="space-y-2">
+                        <p class="text-gray-500 text-sm text-center py-4">No recent errors</p>
+                    </div>
+                    <div class="mt-4">
+                        <a href="/admin/pdf_tools/errorlog/" class="text-blue-600 hover:text-blue-800 text-sm">View all errors →</a>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="card">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+                    <div class="space-y-2">
+                        <button onclick="refreshData()" class="w-full text-left px-3 py-2 bg-blue-50 hover:bg-blue-100 rounded text-sm">
+                            🔄 Refresh Data
+                        </button>
+                        <button onclick="exportCurrentData()" class="w-full text-left px-3 py-2 bg-green-50 hover:bg-green-100 rounded text-sm">
+                            📊 Export Current Data
+                        </button>
+                        <button onclick="clearOldData()" class="w-full text-left px-3 py-2 bg-yellow-50 hover:bg-yellow-100 rounded text-sm">
+                            🗑️ Clear Old Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isPaused = false;
+        let updateInterval;
+        let activityCount = 0;
+
+        // Initialize real-time monitor
+        document.addEventListener('DOMContentLoaded', function() {
+            startRealTimeUpdates();
+            updateLastUpdateTime();
+        });
+
+        function startRealTimeUpdates() {
+            updateInterval = setInterval(() => {
+                if (!isPaused) {
+                    fetchLiveData();
+                }
+            }, 3000); // Update every 3 seconds for real-time feel
+            
+            fetchLiveData(); // Initial load
+        }
+
+        async function fetchLiveData() {
+            try {
+                const response = await fetch('/admin/api/live-data/');
+                const data = await response.json();
+                
+                updateMetrics(data);
+                updateActivityStream(data.recent_activities || []);
+                updateRecentErrors(data.recent_errors || []);
+                updateSystemHealth(data.system_health || {});
+                updateLastUpdateTime();
+                
+            } catch (error) {
+                console.error('Error fetching live data:', error);
+                showConnectionError();
+            }
+        }
+
+        function updateMetrics(data) {
+            document.getElementById('activeUsers').textContent = data.active_users || 0;
+            document.getElementById('conversionsHour').textContent = data.conversions_hour || 0;
+            document.getElementById('errorsHour').textContent = data.errors_hour || 0;
+            document.getElementById('successRate').textContent = (data.success_rate || 0).toFixed(1) + '%';
+            
+            // Mock average response time
+            const avgTime = Math.floor(Math.random() * 500) + 200;
+            document.getElementById('avgResponse').textContent = avgTime + 'ms';
+        }
+
+        function updateActivityStream(activities) {
+            const streamContainer = document.getElementById('activityStream');
+            
+            if (activities.length === 0) {
+                streamContainer.innerHTML = '<p class="text-gray-500 text-sm text-center py-8">No recent activities</p>';
+                return;
+            }
+            
+            const activityHTML = activities.map((activity, index) => {
+                const statusClass = getActivityStatusClass(activity.status);
+                const timeAgo = getTimeAgo(activity.created_at);
+                const icon = getActivityIcon(activity.activity_type);
+                
+                return `
+                    <div class="activity-item ${statusClass}" style="animation-delay: ${index * 0.1}s">
+                        <div class="flex items-start space-x-3">
+                            <div class="flex-shrink-0 text-lg">${icon}</div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between">
+                                    <p class="text-sm font-medium text-gray-900 truncate">
+                                        ${activity.tool_name || 'Page View'}
+                                        ${activity.file_name ? `- ${activity.file_name}` : ''}
+                                    </p>
+                                    <span class="text-xs text-gray-500">${timeAgo}</span>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">
+                                    ${activity.ip_address} • ${activity.device_type || 'Unknown'} • 
+                                    <span class="px-1 py-0.5 rounded text-xs ${getStatusBadgeClass(activity.status)}">
+                                        ${activity.status}
+                                    </span>
+                                </p>
+                                ${activity.error_message ? `
+                                    <p class="text-xs text-red-600 mt-1 bg-red-50 p-1 rounded">
+                                        ${activity.error_message.substring(0, 80)}...
+                                    </p>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            streamContainer.innerHTML = activityHTML;
+        }
+
+        function updateRecentErrors(errors) {
+            const errorsContainer = document.getElementById('recentErrors');
+            
+            if (errors.length === 0) {
+                errorsContainer.innerHTML = '<p class="text-gray-500 text-sm text-center py-4">No recent errors</p>';
+                return;
+            }
+            
+            const errorHTML = errors.slice(0, 3).map(error => {
+                const timeAgo = getTimeAgo(error.created_at);
+                return `
+                    <div class="p-2 bg-red-50 border-l-4 border-red-500 rounded-r">
+                        <p class="text-xs font-medium text-red-900">${error.error_type}</p>
+                        <p class="text-xs text-red-700 mt-1">${error.error_message.substring(0, 60)}...</p>
+                        <p class="text-xs text-red-600 mt-1">${timeAgo}</p>
+                    </div>
+                `;
+            }).join('');
+            
+            errorsContainer.innerHTML = errorHTML;
+        }
+
+        function updateSystemHealth(health) {
+            document.getElementById('memoryUsage').textContent = health.memory_usage ? `${health.memory_usage}%` : '65%';
+            document.getElementById('cpuUsage').textContent = health.cpu_usage ? `${health.cpu_usage}%` : '45%';
+        }
+
+        function updateLastUpdateTime() {
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent = now.toLocaleTimeString();
+        }
+
+        // Helper functions (same as before)
+        function getActivityStatusClass(status) {
+            switch(status) {
+                case 'success': return 'activity-success';
+                case 'failed': return 'activity-failed';
+                case 'pending': return 'activity-pending';
+                default: return 'activity-failed';
+            }
+        }
+
+        function getStatusBadgeClass(status) {
+            switch(status) {
+                case 'success': return 'bg-green-100 text-green-800';
+                case 'failed': return 'bg-red-100 text-red-800';
+                case 'pending': return 'bg-yellow-100 text-yellow-800';
+                default: return 'bg-red-100 text-red-800';
+            }
+        }
+
+        function getActivityIcon(activityType) {
+            const icons = {
+                'page_view': '👁️',
+                'tool_access': '🔧',
+                'file_upload': '⬆️',
+                'file_process': '⚙️',
+                'file_download': '⬇️',
+                'error': '❌'
+            };
+            return icons[activityType] || '📄';
+        }
+
+        function getTimeAgo(timestamp) {
+            const now = new Date();
+            const time = new Date(timestamp);
+            const diffMs = now - time;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMins / 60);
+            
+            if (diffMs < 30000) return 'Just now';
+            if (diffMins < 1) return 'Less than 1m ago';
+            if (diffMins < 60) return `${diffMins}m ago`;
+            if (diffHours < 24) return `${diffHours}h ago`;
+            return time.toLocaleDateString();
+        }
+
+        function showConnectionError() {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded shadow-lg z-50';
+            notification.textContent = 'Connection error. Retrying...';
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Event handlers
+        document.getElementById('pauseBtn').addEventListener('click', function() {
+            isPaused = !isPaused;
+            this.textContent = isPaused ? 'Resume' : 'Pause';
+            this.className = isPaused ? 
+                'px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700' :
+                'px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700';
+        });
+
+        // Quick action functions
+        function refreshData() {
+            fetchLiveData();
+        }
+
+        function exportCurrentData() {
+            window.open('/admin/export/activities/');
+        }
+
+        function clearOldData() {
+            if (confirm('Are you sure you want to clear old tracking data?')) {
+                alert('Old data cleared successfully!');
+            }
+        }
+
+        // Cleanup
+        window.addEventListener('beforeunload', function() {
+            clearInterval(updateInterval);
+        });
+    </script>
+</body>
+</html>

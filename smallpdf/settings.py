@@ -52,8 +52,43 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'pdf_tools.middleware.ActivityTrackingMiddleware',  # Add this line
-
 ]
+
+
+# Admin tracking settings
+ADMIN_TRACKING = {
+    'ENABLED': True,
+    'TRACK_PAGE_VIEWS': True,
+    'TRACK_FILE_UPLOADS': True,
+    'TRACK_CONVERSIONS': True,
+    'TRACK_DOWNLOADS': True,
+    'TRACK_ERRORS': True,
+    'TRACK_USER_AGENTS': True,
+    'TRACK_IP_ADDRESSES': True,
+    'REAL_TIME_UPDATES': True,
+    'REAL_TIME_UPDATE_INTERVAL': 5,  # seconds
+    
+    # Data retention settings
+    'KEEP_ACTIVITIES_FOR_DAYS': 90,
+    'KEEP_ERRORS_FOR_DAYS': 180,
+    'ANONYMIZE_IPS_AFTER_DAYS': 30,
+    
+    # Performance settings
+    'MAX_ACTIVITIES_PER_PAGE': 50,
+    'MAX_ERRORS_PER_PAGE': 25,
+    'MAX_STACK_TRACE_LENGTH': 5000,
+    
+    # Alert settings
+    'ERROR_RATE_THRESHOLD': 5.0,  # Alert if error rate > 5%
+    'RESPONSE_TIME_THRESHOLD': 10.0,  # Alert if avg response time > 10s
+    'ENABLE_EMAIL_ALERTS': False,  # Set to True in production
+    'ALERT_RECIPIENTS': ['admin@smallpdf.us'],
+}
+# Session configuration for better tracking
+SESSION_COOKIE_AGE = 86400  # 24 hours
+SESSION_SAVE_EVERY_REQUEST = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
 
 ROOT_URLCONF = 'smallpdf.urls'
 
@@ -142,11 +177,43 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024  # 20MB
 # Cache settings
 CACHES = {
     'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        },
+        'KEY_PREFIX': 'smallpdf_admin',
+        'TIMEOUT': 300,  # 5 minutes
+    }
+} if 'redis' in locals() else {
+    'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-smallpdf',
+        'LOCATION': 'smallpdf-admin-cache',
     }
 }
 
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+
+# Celery beat schedule for periodic tasks
+CELERY_BEAT_SCHEDULE = {
+    'cleanup-old-tracking-data': {
+        'task': 'pdf_tools.tasks.cleanup_old_tracking_data',
+        'schedule': 86400.0,  # Run daily
+    },
+    'generate-daily-reports': {
+        'task': 'pdf_tools.tasks.generate_daily_reports',
+        'schedule': 86400.0,  # Run daily
+    },
+    'check-system-health': {
+        'task': 'pdf_tools.tasks.check_system_health',
+        'schedule': 300.0,  # Run every 5 minutes
+    },
+}
 # Temporary file settings for PDF processing
 TEMP_FILE_DIR = os.path.join(BASE_DIR, 'tmp')
 TEMP_FILE_EXPIRY = 60 * 60  # 1 hour in seconds

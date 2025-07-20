@@ -1,20 +1,15 @@
-# pdf_tools/sitemaps.py - Fixed version with correct domain
+# pdf_tools/sitemaps.py - COMPLETE FIX
 from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
 from django.utils import timezone
 from datetime import datetime, timedelta
-import pytz
 
 
 class StaticViewSitemap(Sitemap):
-    """Sitemap for static pages with correct domain"""
+    """Sitemap for static pages"""
     priority = 0.8
     changefreq = 'weekly'
     protocol = 'https'
-    
-    # Force the correct domain
-    def get_domain(self, site=None):
-        return 'smallpdf.us'
 
     def items(self):
         return [
@@ -37,7 +32,7 @@ class StaticViewSitemap(Sitemap):
         # Return a timezone-aware fixed date for static content
         return timezone.make_aware(datetime(2024, 1, 1))
 
-    def priority(self, item):
+    def priority_func(self, item):
         # Higher priority for important pages
         priorities = {
             'home': 1.0,
@@ -52,14 +47,10 @@ class StaticViewSitemap(Sitemap):
 
 
 class PDFToolsSitemap(Sitemap):
-    """Sitemap for PDF tools pages with correct domain"""
+    """Sitemap for PDF tools pages"""
     priority = 0.9
     changefreq = 'monthly'
     protocol = 'https'
-    
-    # Force the correct domain
-    def get_domain(self, site=None):
-        return 'smallpdf.us'
 
     def items(self):
         return [
@@ -69,6 +60,11 @@ class PDFToolsSitemap(Sitemap):
             'word_to_pdf',
             'pdf_to_jpg',
             'jpg_to_pdf',
+            'webp_to_png',
+            'png_to_webp',
+            'pdf_to_png',
+            'png_to_pdf',
+            'split_pdf',
             'compress_image',
             'convert_pdf'
         ]
@@ -80,7 +76,7 @@ class PDFToolsSitemap(Sitemap):
         # Return timezone-aware datetime (7 days ago)
         return timezone.now() - timedelta(days=7)
 
-    def priority(self, item):
+    def priority_func(self, item):
         # Higher priority for popular tools
         high_priority_tools = ['merge_pdf', 'compress_pdf', 'pdf_to_word', 'word_to_pdf']
         return 0.9 if item in high_priority_tools else 0.8
